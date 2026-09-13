@@ -1,0 +1,129 @@
+import React, { useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { LivelyOrderButton } from "./LivelyOrderButton";
+import { Analytics } from "../utils/analytics";
+
+interface FAQProps {
+  onOrderClick?: () => void;
+}
+
+export const FAQ: React.FC<FAQProps> = ({ onOrderClick }) => {
+  // All FAQ answers remain hidden by default
+  const [openIndices, setOpenIndices] = useState<number[]>([]);
+
+  const toggleFAQ = (idx: number) => {
+    setOpenIndices((prev) =>
+      prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
+    );
+  };
+
+  const faqs = [
+    {
+      q: "Q1: Does it have a timer feature and automatic off key?",
+      a: "Yes! The cooker features a built-in digital countdown timer (1 to 99 minutes) with automatic power cutoff on the touch display, as well as a dedicated master Automatic Off key and safety child lock for instant 1-touch emergency shutdown.",
+    },
+    {
+      q: "Q2: What are the exact dimensions and countertop cutout size?",
+      a: "According to official manufacturer specs (Model Combined Gas-Ceramic Hob):\n• Panel Dimensions: 900 × 510 mm\n• Cutout Dimensions: 870 × 480 mm\n• Package Dimensions: 970 × 570 × 250 mm\nThis fits standard 90cm kitchen cabinets across Nigeria.",
+    },
+    {
+      q: "Q3: Will I pay for delivery?",
+      a: "Delivery is free nationwide. You are only required to pay on delivery/confirmation when the item gets to your address or local logistics hub.",
+    },
+    {
+      q: "Q4: What happens if there’s no electricity?",
+      a: "The cooktop has 4 high-speed gas burners that operate 100% off-grid with instant battery-less impulse ignition, so cooking never stops even during power blackouts.",
+    },
+    {
+      q: "Q5: How do the flip-up hinged burners work?",
+      a: "The gas burners tilt upward on articulated heavy-duty hinges. You can lift each burner to wipe under it in seconds, eliminating baked-on food or grease traps.",
+    },
+    {
+      q: "Q6: What is the price breakdown?",
+      a: "Pricing is transparent with tiered quantity discounts:\n• 1 Unit: ₦280,000\n• 2 Units: ₦550,000 (₦275,000 each — Save ₦10,000)\n• 3 Units: ₦810,000 (₦270,000 each — Save ₦30,000)\n• 4+ Units: ₦1,060,000 (₦265,000 each — Save ₦60,000)",
+    },
+  ];
+
+  const handleOrderClick = () => {
+    Analytics.trackCTAClick("Order Now (FAQ Section)", "#order-form-section");
+    if (onOrderClick) {
+      onOrderClick();
+    } else {
+      document.getElementById("order-form-section")?.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  return (
+    <section id="faq" className="py-12 sm:py-16 bg-white border-b border-slate-100 overflow-hidden">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6">
+        
+        {/* Section Heading with Slide-in Animation */}
+        <div className="text-center mb-8 animate-slide-in-up">
+          <h2 className="font-extrabold text-2xl sm:text-3xl text-slate-900 tracking-tight uppercase">
+            FREQUENTLY ASKED QUESTIONS
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            Click on any question below to reveal the answer.
+          </p>
+        </div>
+
+        {/* Accordion List - Answers hidden until clicked */}
+        <div className="space-y-3 mb-10">
+          {faqs.map((item, idx) => {
+            const isOpen = openIndices.includes(idx);
+            return (
+              <div
+                key={idx}
+                className={`rounded-xl border transition-all duration-200 overflow-hidden ${
+                  isOpen
+                    ? "bg-slate-50/90 border-slate-300 shadow-sm"
+                    : "bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/50"
+                }`}
+              >
+                <button
+                  type="button"
+                  onClick={() => toggleFAQ(idx)}
+                  aria-expanded={isOpen}
+                  aria-controls={`faq-answer-${idx}`}
+                  className="w-full text-left p-4 sm:p-5 flex items-center justify-between gap-4 cursor-pointer select-none"
+                >
+                  <h3 className="font-heading font-bold text-sm sm:text-base text-slate-900 leading-snug">
+                    {item.q}
+                  </h3>
+                  <span
+                    className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center transition-transform duration-200 ${
+                      isOpen
+                        ? "bg-emerald-100 text-emerald-700 rotate-180"
+                        : "bg-slate-100 text-slate-500"
+                    }`}
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                  </span>
+                </button>
+
+                {isOpen && (
+                  <div
+                    id={`faq-answer-${idx}`}
+                    className="px-4 sm:px-5 pb-5 pt-1 border-t border-slate-100/80 animate-slide-in-up [animation-duration:200ms]"
+                  >
+                    <p className="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-line">
+                      {item.a}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Second Direct Response CTA Button matching reference site with lively animation */}
+        <LivelyOrderButton
+          onClick={handleOrderClick}
+          subtext="Nationwide Delivery Across Nigeria • Pay on Confirmation / Delivery"
+          className="animate-slide-in-up [animation-delay:300ms]"
+        />
+
+      </div>
+    </section>
+  );
+};
