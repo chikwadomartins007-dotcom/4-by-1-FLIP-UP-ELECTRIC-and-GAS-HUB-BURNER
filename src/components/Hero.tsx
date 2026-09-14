@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowDown, MessageCircle, Flame, Zap, Timer, Power, Check, Phone, Clock } from "lucide-react";
+import { motion } from "motion/react";
 import { ProductImage } from "./ProductImage";
 import { LivelyOrderButton } from "./LivelyOrderButton";
 import { getWhatsAppOrderUrl, WHATSAPP_PHONE_DISPLAY, CALL_PHONE_TEL } from "../utils/whatsapp";
@@ -174,10 +175,14 @@ export const Hero: React.FC<HeroProps> = ({ onOrderClick, currentQuantity }) => 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-10 text-left">
           <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-50 shadow-xs flex flex-col">
             <div className="aspect-[4/3] bg-white relative overflow-hidden flex items-center justify-center p-2">
-              <img
+              <motion.img
+                initial={{ opacity: 0, x: -35, scale: 0.95 }}
+                whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
                 src="/Hd84f5f7654644224945b4ea055aa07a1Y.png"
                 alt="5-Burner Cooktop Layout Diagram"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain animate-image-slide-in"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "/assets/Hd84f5f7654644224945b4ea055aa07a1Y.png";
                 }}

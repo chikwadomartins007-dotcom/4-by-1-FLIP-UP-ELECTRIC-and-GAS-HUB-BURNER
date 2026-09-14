@@ -1,5 +1,6 @@
 import React from "react";
 import { ArrowDown, AlertTriangle, CheckCircle2, Clock } from "lucide-react";
+import { motion } from "motion/react";
 import { WHATSAPP_PHONE_DISPLAY } from "../utils/whatsapp";
 import { useCountdown3Days } from "../utils/countdown";
 
@@ -53,10 +54,14 @@ export const FinalSalesSection: React.FC<FinalSalesSectionProps> = ({ onOrderCli
         {/* Product Photo Box with Specs Banner */}
         <div className="max-w-lg mx-auto mb-8 rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 p-3 shadow-xs animate-slide-in-up [animation-delay:250ms]">
           <div className="aspect-[16/10] bg-white rounded-xl overflow-hidden flex items-center justify-center p-2 mb-3">
-            <img
+            <motion.img
+              initial={{ opacity: 0, y: 35, scale: 0.95 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
               src="/Hd84f5f7654644224945b4ea055aa07a1Y.png"
               alt="5-Burner Cooktop Promo Diagram"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain animate-image-slide-in"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "/assets/Hd84f5f7654644224945b4ea055aa07a1Y.png";
               }}

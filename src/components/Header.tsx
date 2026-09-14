@@ -1,6 +1,6 @@
 import React from "react";
-import { Phone, MessageCircle, ArrowRight } from "lucide-react";
-import { WHATSAPP_PHONE_DISPLAY, CALL_PHONE_TEL, getWhatsAppInquiryUrl } from "../utils/whatsapp";
+import { Phone, ArrowRight } from "lucide-react";
+import { WHATSAPP_PHONE_DISPLAY, CALL_PHONE_TEL } from "../utils/whatsapp";
 import { Analytics } from "../utils/analytics";
 
 interface HeaderProps {
@@ -10,10 +10,6 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ onOrderClick }) => {
   const handlePhoneClick = () => {
     Analytics.trackContact("phone", "header_call_button");
-  };
-
-  const handleWhatsAppClick = () => {
-    Analytics.trackContact("whatsapp", "header_chat_button");
   };
 
   const handleOrderClick = () => {
@@ -36,7 +32,7 @@ export const Header: React.FC<HeaderProps> = ({ onOrderClick }) => {
 
         {/* Contact & CTA Buttons */}
         <div className="flex items-center gap-3 sm:gap-5">
-          {/* Phone / WhatsApp Quick Contact */}
+          {/* Phone Quick Contact */}
           <div className="hidden md:flex items-center gap-4 text-xs">
             <a
               href={CALL_PHONE_TEL}
@@ -45,16 +41,6 @@ export const Header: React.FC<HeaderProps> = ({ onOrderClick }) => {
             >
               <Phone className="w-3.5 h-3.5 text-[#B8860B]" />
               <span>{WHATSAPP_PHONE_DISPLAY}</span>
-            </a>
-            <a
-              href={getWhatsAppInquiryUrl("header inquiry")}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleWhatsAppClick}
-              className="flex items-center gap-1.5 text-emerald-600 hover:text-emerald-700 font-bold transition-colors"
-            >
-              <MessageCircle className="w-3.5 h-3.5" />
-              <span>WhatsApp Us</span>
             </a>
           </div>
 

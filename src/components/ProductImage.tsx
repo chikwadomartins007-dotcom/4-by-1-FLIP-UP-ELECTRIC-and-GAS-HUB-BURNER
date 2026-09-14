@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "motion/react";
 import { Flame, Zap, Shield, Sparkles, Timer, Power, Lock, Check, Eye, Maximize2, AlertCircle } from "lucide-react";
 
 interface ProductImageProps {
@@ -215,13 +216,17 @@ export const ProductImage: React.FC<ProductImageProps> = ({
 
         {/* Direct Image Rendering with multiple path fallbacks */}
         {!hasError ? (
-          <img
+          <motion.img
+            key={currentSrc}
+            initial={{ opacity: 0, y: 30, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             src={currentSrc}
             alt={alt}
             loading={priority ? "eager" : "lazy"}
             decoding={priority ? "sync" : "async"}
             onError={() => handleImageError(currentAsset.id, currentAsset.fallbackPaths.length)}
-            className="max-h-[380px] w-auto max-w-full object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)] transition-transform duration-500 hover:scale-[1.02]"
+            className="max-h-[380px] w-auto max-w-full object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)] transition-transform duration-500 hover:scale-[1.02] animate-image-slide-in"
           />
         ) : (
           /* High-Fidelity Technical Visualization of the exact product view */
