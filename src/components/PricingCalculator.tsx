@@ -1,7 +1,6 @@
 import React from "react";
-import { Plus, Minus, Check, ArrowRight, MessageCircle, Sparkles, Tag } from "lucide-react";
+import { Plus, Minus, Check, ArrowRight, Sparkles, Tag } from "lucide-react";
 import { calculatePricing, formatNaira } from "../utils/pricing";
-import { getWhatsAppOrderUrl } from "../utils/whatsapp";
 import { Analytics } from "../utils/analytics";
 
 interface PricingCalculatorProps {
@@ -43,10 +42,6 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({
     Analytics.trackCTAClick(`Order Now (Pricing Calculator - Qty ${quantity})`, "#order-form-section");
     Analytics.trackInitiateCheckout(quantity, pricing.total);
     onOrderClick();
-  };
-
-  const handleWhatsApp = () => {
-    Analytics.trackContact("whatsapp", `pricing_calculator_whatsapp_qty_${quantity}`, quantity, pricing.total);
   };
 
   return (
@@ -297,27 +292,16 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({
                 )}
               </div>
 
-              {/* Action Buttons */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-6">
+              {/* Action Button */}
+              <div className="mt-6">
                 <button
                   type="button"
                   onClick={handleOrderNow}
-                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl font-heading font-bold text-sm bg-slate-900 hover:bg-slate-800 text-white shadow-md transition-all cursor-pointer"
+                  className="w-full inline-flex items-center justify-center gap-2 py-4 px-6 rounded-xl font-heading font-black text-sm sm:text-base bg-slate-900 hover:bg-slate-800 text-white shadow-xl transition-all cursor-pointer animate-action-blink"
                 >
                   <span>PROCEED WITH {pricing.quantity} {pricing.quantity === 1 ? "UNIT" : "UNITS"}</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4 text-yellow-400" />
                 </button>
-
-                <a
-                  href={getWhatsAppOrderUrl(pricing.quantity)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={handleWhatsApp}
-                  className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl font-heading font-bold text-sm bg-emerald-600 hover:bg-emerald-700 text-white shadow-md transition-all cursor-pointer"
-                >
-                  <MessageCircle className="w-4 h-4 text-white" />
-                  <span>ORDER {pricing.quantity} ON WHATSAPP</span>
-                </a>
               </div>
 
             </div>

@@ -19,7 +19,7 @@ import { calculatePricing, formatNaira } from "../utils/pricing";
 import { getAttribution } from "../utils/attribution";
 import { Analytics } from "../utils/analytics";
 import {
-  getWhatsAppOrderUrl,
+  getWhatsAppConfirmationUrl,
   WHATSAPP_PHONE_DISPLAY,
   CALL_PHONE_TEL,
 } from "../utils/whatsapp";
@@ -166,12 +166,12 @@ export const OrderForm: React.FC<OrderFormProps> = ({ quantity, onQuantityChange
       } else {
         const errorData = await response.json().catch(() => ({}));
         setSubmitError(
-          errorData?.error || "We could not submit your order online right now. Please tap WhatsApp below to send your order directly."
+          errorData?.error || "We could not submit your order online right now. Please check your details or call our hotline directly."
         );
       }
     } catch (err: any) {
       setSubmitError(
-        "Network connection delay. You can complete your order directly via WhatsApp in 1 click below without losing any details."
+        "Network connection delay. Please try submitting again or call our hotline directly."
       );
     } finally {
       setIsSubmitting(false);
@@ -181,12 +181,12 @@ export const OrderForm: React.FC<OrderFormProps> = ({ quantity, onQuantityChange
   const handleWhatsAppInstant = () => {
     Analytics.trackContact(
       "whatsapp",
-      "order_form_tab_whatsapp",
+      "order_form_success_whatsapp",
       formData.quantity,
       pricing.total
     );
     window.open(
-      getWhatsAppOrderUrl(formData.quantity, {
+      getWhatsAppConfirmationUrl(orderReference, formData.quantity, {
         name: formData.fullName,
         phone: formData.phone,
         state: formData.state,
@@ -194,36 +194,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({ quantity, onQuantityChange
       }),
       "_blank"
     );
-  };
-
-  const handleWhatsAppWithAddress = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!validate()) {
-      setSubmitError(
-        "Please fill in your Full Name, Active Phone Number, and Delivery Address above first before ordering via WhatsApp."
-      );
-      const firstErr = document.querySelector(".border-red-500");
-      if (firstErr) {
-        firstErr.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-      return;
-    }
-
-    Analytics.trackContact(
-      "whatsapp",
-      "order_form_after_address_whatsapp",
-      formData.quantity,
-      pricing.total
-    );
-
-    const url = getWhatsAppOrderUrl(formData.quantity, {
-      name: formData.fullName.trim(),
-      phone: formData.phone.trim(),
-      state: formData.state,
-      address: formData.deliveryAddress.trim(),
-    });
-
-    window.open(url, "_blank");
   };
 
   return (
@@ -296,14 +266,21 @@ export const OrderForm: React.FC<OrderFormProps> = ({ quantity, onQuantityChange
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto">
+                <div className="bg-emerald-50 border-2 border-emerald-500/30 rounded-2xl p-5 mb-6 max-w-md mx-auto text-center space-y-3">
+                  <div className="flex items-center justify-center gap-2 text-emerald-800 font-extrabold text-sm">
+                    <MessageCircle className="w-5 h-5 text-emerald-600" />
+                    <span>Track or Speed Up Dispatch on WhatsApp</span>
+                  </div>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    Have questions about your delivery schedule or want to send a live location pin? Connect with our dispatch team on WhatsApp:
+                  </p>
                   <button
                     type="button"
                     onClick={handleWhatsAppInstant}
-                    className="w-full inline-flex items-center justify-center gap-2 py-4 px-6 rounded-xl font-heading font-bold text-sm bg-emerald-600 hover:bg-emerald-700 text-white shadow-md transition-all cursor-pointer"
+                    className="w-full inline-flex items-center justify-center gap-2.5 py-4 px-6 rounded-xl font-heading font-black text-sm bg-emerald-600 hover:bg-emerald-700 text-white shadow-xl transition-all cursor-pointer active:scale-98 animate-action-blink"
                   >
                     <MessageCircle className="w-5 h-5" />
-                    <span>NOTIFY DISPATCH VIA WHATSAPP</span>
+                    <span>CHAT ON WHATSAPP (ORDER REF: {orderReference})</span>
                   </button>
                 </div>
 
@@ -706,7 +683,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ quantity, onQuantityChange
                     type="submit"
                     id="submit-order-form-btn"
                     disabled={isSubmitting}
-                    className="w-full py-4 px-6 rounded-xl font-heading font-black text-sm sm:text-base bg-emerald-500 hover:bg-emerald-400 active:scale-[0.99] disabled:opacity-50 text-slate-950 shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+                    className="w-full py-4 px-6 rounded-xl font-heading font-black text-sm sm:text-base bg-emerald-500 hover:bg-emerald-400 active:scale-[0.99] disabled:opacity-50 text-slate-950 shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 animate-action-blink"
                   >
                     {isSubmitting ? (
                       <>
@@ -722,45 +699,17 @@ export const OrderForm: React.FC<OrderFormProps> = ({ quantity, onQuantityChange
                   </button>
                 </div>
 
-                {/* ORDER MODE 2: Order via WhatsApp (With Filled Address Details) */}
-                <div className="rounded-2xl p-4 sm:p-5 bg-emerald-50/80 border-2 border-emerald-500/70 shadow-sm space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-emerald-600 text-white">
-                      MODE 2: WHATSAPP DIRECT
-                    </span>
-                    <span className="text-xs text-emerald-800 font-bold">
-                      Live Chat Dispatch
-                    </span>
-                  </div>
-                  <div>
-                    <h4 className="font-heading font-black text-base text-slate-900">
-                      Send Order to WhatsApp (With Your Filled Address)
-                    </h4>
-                    <p className="text-xs text-slate-600 mt-0.5">
-                      Opens WhatsApp with your name, phone, and delivery address pre-filled so our desk receives your order details instantly.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={handleWhatsAppWithAddress}
-                    className="w-full py-3.5 px-6 rounded-xl font-heading font-black text-sm sm:text-base bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
-                  >
-                    <MessageCircle className="w-5 h-5" />
-                    <span>SEND ORDER VIA WHATSAPP (WITH MY DETAILS)</span>
-                  </button>
-                </div>
-
-                {/* ORDER MODE 3: Call Hotline Directly */}
+                {/* Option to Call Hotline Directly */}
                 <div className="rounded-2xl p-4 sm:p-5 bg-slate-50 border-2 border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div>
                     <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-amber-100 text-[#8D6D27] inline-block mb-1">
-                      MODE 3: PHONE CALL
+                      QUESTIONS BEFORE ORDERING?
                     </span>
                     <h4 className="font-heading font-black text-sm sm:text-base text-slate-900">
-                      Call Dispatch Hotline to Order
+                      Call Customer Care Hotline
                     </h4>
                     <p className="text-xs text-slate-600">
-                      Prefer talking on the phone? Speak with our customer care representative directly.
+                      Prefer speaking with an agent before ordering? Call our Lagos office directly.
                     </p>
                   </div>
                   <a

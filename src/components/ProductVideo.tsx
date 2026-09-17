@@ -7,7 +7,7 @@ interface ProductVideoProps {
 }
 
 export const ProductVideo: React.FC<ProductVideoProps> = ({ onOrderClick }) => {
-  const videoEmbedUrl = "https://www.youtube.com/embed/V5kzO0CiMeI?rel=0&modestbranding=1&controls=1&showinfo=1&fs=1&wmode=transparent";
+  const videoEmbedUrl = "https://www.youtube.com/embed/V5kzO0CiMeI?autoplay=1&mute=1&playsinline=1&loop=1&playlist=V5kzO0CiMeI&rel=0&modestbranding=1&controls=1&showinfo=1&fs=1&wmode=transparent";
   const videoDirectUrl = "https://youtube.com/shorts/V5kzO0CiMeI?feature=share";
 
   const handleOrderClick = () => {
@@ -45,7 +45,6 @@ export const ProductVideo: React.FC<ProductVideoProps> = ({ onOrderClick }) => {
             className="w-full h-full border-0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
-            loading="lazy"
           />
         </div>
 

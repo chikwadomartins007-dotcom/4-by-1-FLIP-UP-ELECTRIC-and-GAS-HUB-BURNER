@@ -1,6 +1,22 @@
-import React, { useState } from "react";
-import { motion } from "motion/react";
-import { Flame, Zap, Shield, Sparkles, Timer, Power, Lock, Check, Eye, Maximize2, AlertCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import {
+  Flame,
+  Zap,
+  Shield,
+  Sparkles,
+  Timer,
+  Power,
+  Lock,
+  Check,
+  Eye,
+  Maximize2,
+  AlertCircle,
+  ChevronLeft,
+  ChevronRight,
+  Play,
+  Pause,
+} from "lucide-react";
 
 interface ProductImageProps {
   className?: string;
@@ -89,6 +105,11 @@ export const ProductImage: React.FC<ProductImageProps> = ({
   const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({});
   const [fallbackIndices, setFallbackIndices] = useState<Record<string, number>>({});
 
+  // Auto-slide state
+  const [isAutoPlay, setIsAutoPlay] = useState<boolean>(true);
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [slideDirection, setSlideDirection] = useState<number>(1); // 1 for next, -1 for prev
+
   // Interactive Digital Burner Simulator States (Demonstrating Timer & Automatic Off Key)
   const [powerOn, setPowerOn] = useState<boolean>(true);
   const [wattage, setWattage] = useState<number>(3000);
@@ -100,6 +121,35 @@ export const ProductImage: React.FC<ProductImageProps> = ({
   const hasError = imgErrors[currentAsset.id];
   const currentPathIdx = fallbackIndices[currentAsset.id] || 0;
   const currentSrc = currentAsset.fallbackPaths[Math.min(currentPathIdx, currentAsset.fallbackPaths.length - 1)];
+
+  // Continuous auto-slide timer (cycles every 4 seconds unless hovered or paused)
+  useEffect(() => {
+    if (!isAutoPlay || isHovered) return;
+
+    const interval = setInterval(() => {
+      setSlideDirection(1);
+      setSelectedAssetIndex((prev) => (prev + 1) % PRODUCT_ASSETS.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [isAutoPlay, isHovered]);
+
+  const handlePrev = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setSlideDirection(-1);
+    setSelectedAssetIndex((prev) => (prev === 0 ? PRODUCT_ASSETS.length - 1 : prev - 1));
+  };
+
+  const handleNext = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setSlideDirection(1);
+    setSelectedAssetIndex((prev) => (prev + 1) % PRODUCT_ASSETS.length);
+  };
+
+  const handleSelectAsset = (idx: number) => {
+    setSlideDirection(idx >= selectedAssetIndex ? 1 : -1);
+    setSelectedAssetIndex(idx);
+  };
 
   const handleImageError = (id: string, totalFallbacks: number) => {
     setFallbackIndices((prev) => {
@@ -154,7 +204,19 @@ export const ProductImage: React.FC<ProductImageProps> = ({
       {/* Top Header Strip with View Selector Tabs */}
       <div className="bg-slate-50 border-b border-slate-200 px-4 py-3 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+          <button
+            type="button"
+            onClick={() => setIsAutoPlay((prev) => !prev)}
+            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer border ${
+              isAutoPlay
+                ? "bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100"
+                : "bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200"
+            }`}
+            title={isAutoPlay ? "Click to pause auto-slide" : "Click to resume auto-slide"}
+          >
+            <span className={`w-2 h-2 rounded-full ${isAutoPlay ? "bg-emerald-500 animate-pulse" : "bg-slate-400"}`} />
+            <span>{isAutoPlay ? "Auto-Slide ON" : "Auto-Slide Paused"}</span>
+          </button>
           <span className="text-xs font-bold text-slate-800 tracking-wide">
             {currentAsset.title}
           </span>
@@ -168,10 +230,10 @@ export const ProductImage: React.FC<ProductImageProps> = ({
           {PRODUCT_ASSETS.map((asset, idx) => (
             <button
               key={asset.id}
-              onClick={() => setSelectedAssetIndex(idx)}
+              onClick={() => handleSelectAsset(idx)}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
                 selectedAssetIndex === idx
-                  ? "bg-[#0F172A] text-white shadow-sm"
+                  ? "bg-[#0F172A] text-white shadow-sm ring-1 ring-slate-800"
                   : "bg-white text-slate-600 hover:bg-slate-100 border border-slate-200"
               }`}
             >
@@ -190,10 +252,36 @@ export const ProductImage: React.FC<ProductImageProps> = ({
       </div>
 
       {/* Main Image Display Area */}
-      <div className="relative bg-slate-950 min-h-[340px] sm:min-h-[440px] flex items-center justify-center p-4 sm:p-8 overflow-hidden group">
-        
+      <div
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onTouchStart={() => setIsHovered(true)}
+        onTouchEnd={() => setIsHovered(false)}
+        className="relative bg-slate-950 min-h-[340px] sm:min-h-[440px] flex items-center justify-center p-4 sm:p-8 overflow-hidden group select-none"
+      >
         {/* Subtle radial glow representing the central electric burner */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
+
+        {/* Previous and Next Navigation Arrows */}
+        <button
+          type="button"
+          onClick={handlePrev}
+          aria-label="Previous Slide"
+          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 p-2 sm:p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white/90 hover:text-white border border-white/20 backdrop-blur-md shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer"
+          title="Previous Slide"
+        >
+          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+        </button>
+
+        <button
+          type="button"
+          onClick={handleNext}
+          aria-label="Next Slide"
+          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 p-2 sm:p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white/90 hover:text-white border border-white/20 backdrop-blur-md shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer"
+          title="Next Slide"
+        >
+          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+        </button>
 
         {/* Feature Badges floating on image */}
         <div className="absolute top-4 left-4 z-20 flex flex-wrap gap-2">
@@ -214,21 +302,27 @@ export const ProductImage: React.FC<ProductImageProps> = ({
           </span>
         </div>
 
-        {/* Direct Image Rendering with multiple path fallbacks */}
-        {!hasError ? (
-          <motion.img
-            key={currentSrc}
-            initial={{ opacity: 0, y: 30, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            src={currentSrc}
-            alt={alt}
-            loading={priority ? "eager" : "lazy"}
-            decoding={priority ? "sync" : "async"}
-            onError={() => handleImageError(currentAsset.id, currentAsset.fallbackPaths.length)}
-            className="max-h-[380px] w-auto max-w-full object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)] transition-transform duration-500 hover:scale-[1.02] animate-image-slide-in"
-          />
-        ) : (
+        {/* Direct Image Rendering with AnimatePresence slide transition */}
+        <AnimatePresence mode="wait" custom={slideDirection}>
+          <motion.div
+            key={currentAsset.id + "-" + currentSrc}
+            custom={slideDirection}
+            initial={{ opacity: 0, x: slideDirection > 0 ? 50 : -50, scale: 0.98 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: slideDirection > 0 ? -50 : 50, scale: 0.98 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full flex items-center justify-center"
+          >
+            {!hasError ? (
+              <img
+                src={currentSrc}
+                alt={alt}
+                loading={priority ? "eager" : "lazy"}
+                decoding={priority ? "sync" : "async"}
+                onError={() => handleImageError(currentAsset.id, currentAsset.fallbackPaths.length)}
+                className="max-h-[380px] w-auto max-w-full object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.9)] transition-transform duration-500 hover:scale-[1.02]"
+              />
+            ) : (
           /* High-Fidelity Technical Visualization of the exact product view */
           <div className="w-full max-w-2xl py-4 flex flex-col items-center justify-center text-center">
             {selectedAssetIndex === 0 ? (
@@ -407,6 +501,58 @@ export const ProductImage: React.FC<ProductImageProps> = ({
                 </p>
               </div>
             )}
+          </div>
+        )}
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Bottom Floating Auto-slide Control Bar */}
+        <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/75 border border-white/20 backdrop-blur-md shadow-lg">
+          <button
+            type="button"
+            onClick={() => setIsAutoPlay((prev) => !prev)}
+            className="p-1 rounded-full text-slate-300 hover:text-white hover:bg-white/10 transition-all cursor-pointer"
+            title={isAutoPlay ? "Pause Auto-Slide" : "Resume Auto-Slide"}
+            aria-label={isAutoPlay ? "Pause Auto-Slide" : "Resume Auto-Slide"}
+          >
+            {isAutoPlay ? <Pause className="w-3.5 h-3.5 text-amber-400" /> : <Play className="w-3.5 h-3.5 text-emerald-400" />}
+          </button>
+
+          <span className="w-px h-3 bg-white/20" />
+
+          {/* Slide indicator dots */}
+          <div className="flex items-center gap-1.5">
+            {PRODUCT_ASSETS.map((asset, idx) => (
+              <button
+                key={asset.id}
+                type="button"
+                onClick={() => handleSelectAsset(idx)}
+                aria-label={`Slide ${idx + 1}`}
+                className={`transition-all duration-300 rounded-full cursor-pointer ${
+                  selectedAssetIndex === idx
+                    ? "w-6 h-2 bg-[#E5C378] shadow-xs"
+                    : "w-2 h-2 bg-white/40 hover:bg-white/75"
+                }`}
+                title={asset.title}
+              />
+            ))}
+          </div>
+
+          <span className="text-[10px] font-mono text-slate-300 pl-1 font-bold">
+            {selectedAssetIndex + 1}/{PRODUCT_ASSETS.length}
+          </span>
+        </div>
+
+        {/* Auto-Slide Progress Bar line at the bottom */}
+        {isAutoPlay && (
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10 z-20 overflow-hidden">
+            <motion.div
+              key={`progress-${selectedAssetIndex}-${isHovered}`}
+              initial={{ width: "0%" }}
+              animate={{ width: isHovered ? "0%" : "100%" }}
+              transition={{ duration: 4, ease: "linear" }}
+              className="h-full bg-gradient-to-r from-amber-400 via-[#C5A059] to-emerald-400"
+            />
           </div>
         )}
       </div>

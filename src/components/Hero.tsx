@@ -1,9 +1,9 @@
 import React from "react";
-import { ArrowDown, MessageCircle, Flame, Zap, Timer, Power, Check, Phone, Clock } from "lucide-react";
+import { ArrowDown, Flame, Zap, Timer, Power, Check, Phone, Clock } from "lucide-react";
 import { motion } from "motion/react";
 import { ProductImage } from "./ProductImage";
 import { LivelyOrderButton } from "./LivelyOrderButton";
-import { getWhatsAppOrderUrl, WHATSAPP_PHONE_DISPLAY, CALL_PHONE_TEL } from "../utils/whatsapp";
+import { WHATSAPP_PHONE_DISPLAY, CALL_PHONE_TEL } from "../utils/whatsapp";
 import { Analytics } from "../utils/analytics";
 import { useCountdown3Days } from "../utils/countdown";
 
@@ -19,10 +19,6 @@ export const Hero: React.FC<HeroProps> = ({ onOrderClick, currentQuantity }) => 
   const handleOrderClick = () => {
     Analytics.trackCTAClick("Order Now (Hero Main Button)", "#order-form-section");
     onOrderClick();
-  };
-
-  const handleWhatsAppClick = () => {
-    Analytics.trackContact("whatsapp", "hero_whatsapp_btn", currentQuantity);
   };
 
   return (
@@ -81,27 +77,16 @@ export const Hero: React.FC<HeroProps> = ({ onOrderClick, currentQuantity }) => 
             No upfront card payment required. Inspect your unit on arrival before paying!
           </p>
 
-          {/* Dual Action Buttons for Ultra-Easy Ordering */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-lg mx-auto">
+          {/* Primary Action Button for Ultra-Easy Ordering */}
+          <div className="max-w-md mx-auto">
             <button
               type="button"
               onClick={handleOrderClick}
-              className="w-full py-3.5 px-4 rounded-xl font-heading font-black text-xs sm:text-sm bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-lg hover:shadow-emerald-500/30 transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-[0.98]"
+              className="w-full py-4 px-6 rounded-xl font-heading font-black text-sm sm:text-base bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-[0.98] animate-action-blink"
             >
-              <Zap className="w-4 h-4 text-yellow-300 animate-pulse" />
-              <span>⚡ ORDER NOW (30 SECONDS)</span>
+              <Zap className="w-5 h-5 text-yellow-300 animate-pulse" />
+              <span>⚡ ORDER NOW — PAY ON DELIVERY</span>
             </button>
-
-            <a
-              href={getWhatsAppOrderUrl(currentQuantity)}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={handleWhatsAppClick}
-              className="w-full py-3.5 px-4 rounded-xl font-heading font-bold text-xs sm:text-sm bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all cursor-pointer flex items-center justify-center gap-2 active:scale-[0.98]"
-            >
-              <MessageCircle className="w-4 h-4 text-emerald-400" />
-              <span>1-CLICK WHATSAPP ORDER</span>
-            </a>
           </div>
 
           <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-center gap-3 text-[11px] text-slate-400">
@@ -175,14 +160,10 @@ export const Hero: React.FC<HeroProps> = ({ onOrderClick, currentQuantity }) => 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto mb-10 text-left">
           <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-50 shadow-xs flex flex-col">
             <div className="aspect-[4/3] bg-white relative overflow-hidden flex items-center justify-center p-2">
-              <motion.img
-                initial={{ opacity: 0, x: -35, scale: 0.95 }}
-                whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+              <img
                 src="/Hd84f5f7654644224945b4ea055aa07a1Y.png"
                 alt="5-Burner Cooktop Layout Diagram"
-                className="w-full h-full object-contain animate-image-slide-in"
+                className="w-full h-full object-contain animate-zoom-in-out"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "/assets/Hd84f5f7654644224945b4ea055aa07a1Y.png";
                 }}
@@ -203,7 +184,7 @@ export const Hero: React.FC<HeroProps> = ({ onOrderClick, currentQuantity }) => 
               <img
                 src="/H6d042f563b4c47b08ba59b298031b8c1A.jpg"
                 alt="Physical Cooktop 2000W Active Burner"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain animate-zoom-in-out-delayed"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "https://sc04.alicdn.com/kf/H6d042f563b4c47b08ba59b298031b8c1A.jpg";
                 }}
@@ -224,7 +205,7 @@ export const Hero: React.FC<HeroProps> = ({ onOrderClick, currentQuantity }) => 
               <img
                 src="/H4183961f34a64d47a5f116fa6bfddf7eE.png"
                 alt="Flip-Up Hinged Burner Detail"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain animate-zoom-in-out-alt"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "https://sc04.alicdn.com/kf/H4183961f34a64d47a5f116fa6bfddf7eE.png";
                 }}

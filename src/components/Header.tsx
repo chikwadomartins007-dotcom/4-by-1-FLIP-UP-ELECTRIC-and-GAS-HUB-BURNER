@@ -48,10 +48,10 @@ export const Header: React.FC<HeaderProps> = ({ onOrderClick }) => {
           <button
             id="header-order-btn"
             onClick={handleOrderClick}
-            className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-xs sm:text-sm font-bold bg-[#0F172A] hover:bg-slate-800 text-white shadow-md transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-lg text-xs sm:text-sm font-bold bg-[#0F172A] hover:bg-slate-800 text-white shadow-md transition-all cursor-pointer animate-action-blink"
           >
             <span>ORDER NOW</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 text-yellow-400" />
           </button>
         </div>
       </div>

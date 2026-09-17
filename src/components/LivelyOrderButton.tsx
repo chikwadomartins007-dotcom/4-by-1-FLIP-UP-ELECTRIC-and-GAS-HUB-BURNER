@@ -29,7 +29,7 @@ export const LivelyOrderButton: React.FC<LivelyOrderButtonProps> = ({
         type="button"
         onClick={onClick}
         aria-label="Click here to order plus free delivery"
-        className="group relative w-full overflow-hidden py-4 sm:py-5 px-6 rounded-2xl font-bold text-base sm:text-lg md:text-xl text-white bg-gradient-to-r from-[#16a085] via-[#1abc9c] to-[#16a085] hover:from-[#138871] hover:to-[#16a085] shadow-[0_10px_25px_rgba(26,188,156,0.4)] animate-lively-btn cursor-pointer uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all duration-300 border-2 border-emerald-300/40 active:scale-[0.98]"
+        className="group relative w-full overflow-hidden py-4 sm:py-5 px-6 rounded-2xl font-bold text-base sm:text-lg md:text-xl text-white bg-gradient-to-r from-[#16a085] via-[#1abc9c] to-[#16a085] hover:from-[#138871] hover:to-[#16a085] shadow-[0_10px_25px_rgba(26,188,156,0.4)] animate-action-blink cursor-pointer uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all duration-300 border-2 border-emerald-300/40 active:scale-[0.98]"
       >
         {/* Shimmer Light Sweeping Effect */}
         <div className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/35 to-transparent pointer-events-none animate-shimmer-sweep" />

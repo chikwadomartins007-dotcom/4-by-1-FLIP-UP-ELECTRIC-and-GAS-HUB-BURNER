@@ -37,9 +37,28 @@ Please confirm my order and dispatch timeline.`;
 }
 
 /**
- * WhatsApp inquiry URL for general questions.
+ * WhatsApp confirmation URL for placed orders.
  */
-export function getWhatsAppInquiryUrl(topic: string = "cooktop inquiry"): string {
-  const message = `Hello MAX Luxury Bathrooms, I have a question about the 5-Burner Built-In Gas + Electric Cooker regarding ${topic}.`;
+export function getWhatsAppConfirmationUrl(
+  orderRef: string,
+  quantity: number = 1,
+  details?: { name?: string; phone?: string; state?: string; address?: string }
+): string {
+  const pricing = calculatePricing(quantity);
+  const formattedTotal = formatNaira(pricing.total);
+  const message = `Hello MAX Luxury Bathrooms, I just placed an order on your website!
+
+📦 ORDER VERIFICATION:
+• Order Ref: ${orderRef}
+• Product: 5-Burner Built-In Gas + Electric Cooktop
+• Quantity: ${quantity} unit(s)
+• Total Payable: ${formattedTotal} (Payment on Delivery)
+• Customer Name: ${details?.name || "Valued Customer"}
+• Phone: ${details?.phone || "Not provided"}
+• Delivery Address: ${details?.address || ""}, ${details?.state || ""}
+
+Please confirm my order and let me know when it will be dispatched. Thank you!`;
+
   return `https://wa.me/${WHATSAPP_PHONE_RAW}?text=${encodeURIComponent(message)}`;
 }
+

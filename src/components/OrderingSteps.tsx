@@ -13,13 +13,13 @@ export const OrderingSteps: React.FC = () => {
     {
       num: "2",
       title: "PLACE YOUR ORDER",
-      description: "Enter your name, phone number, and delivery location into the quick order form below, or tap WhatsApp to message us instantly.",
+      description: "Enter your name, phone number, and delivery address into the secure order form below to place your order with 100% Payment on Delivery.",
       icon: Send,
     },
     {
       num: "3",
       title: "ORDER CONFIRMATION",
-      description: `A MAX Luxury Bathrooms representative will promptly call or WhatsApp you on ${WHATSAPP_PHONE_DISPLAY} to confirm your order and delivery timetable.`,
+      description: `A MAX Luxury Bathrooms representative will promptly call you on ${WHATSAPP_PHONE_DISPLAY} to confirm your order details and delivery timetable.`,
       icon: PhoneCall,
     },
     {

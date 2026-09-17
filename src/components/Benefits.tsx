@@ -72,7 +72,7 @@ export const Benefits: React.FC = () => {
               <img
                 src="/H4183961f34a64d47a5f116fa6bfddf7eE.png"
                 alt="Flip-Up Hinged Burner Detail"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain animate-zoom-in-out"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "https://sc04.alicdn.com/kf/H4183961f34a64d47a5f116fa6bfddf7eE.png";
                 }}
@@ -96,7 +96,7 @@ export const Benefits: React.FC = () => {
               <img
                 src="/images.jpeg"
                 alt="Modern Built-In Kitchen Countertop Installation"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-contain animate-zoom-in-out-delayed"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "/H6d042f563b4c47b08ba59b298031b8c1A.jpg";
                 }}

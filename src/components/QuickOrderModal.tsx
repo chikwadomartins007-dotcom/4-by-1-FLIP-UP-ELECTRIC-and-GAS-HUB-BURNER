@@ -20,7 +20,7 @@ import { calculatePricing, formatNaira } from "../utils/pricing";
 import { getAttribution } from "../utils/attribution";
 import { Analytics } from "../utils/analytics";
 import {
-  getWhatsAppOrderUrl,
+  getWhatsAppConfirmationUrl,
   WHATSAPP_PHONE_DISPLAY,
   CALL_PHONE_TEL,
 } from "../utils/whatsapp";
@@ -177,12 +177,12 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
       } else {
         const err = await response.json().catch(() => ({}));
         setSubmitError(
-          err?.error || "Unable to submit online. Please tap the WhatsApp button to place your order directly."
+          err?.error || "Unable to submit online right now. Please check your network or call our customer hotline directly."
         );
       }
     } catch (err: any) {
       setSubmitError(
-        "Network delay. You can complete your order instantly via WhatsApp below without retyping."
+        "Network delay. Please try submitting again or call our customer hotline directly."
       );
     } finally {
       setIsSubmitting(false);
@@ -192,12 +192,12 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
   const handleWhatsAppInstantOrder = () => {
     Analytics.trackContact(
       "whatsapp",
-      "quick_modal_whatsapp_click",
+      "quick_modal_success_whatsapp_click",
       formData.quantity,
       pricing.total
     );
     window.open(
-      getWhatsAppOrderUrl(formData.quantity, {
+      getWhatsAppConfirmationUrl(orderRef, formData.quantity, {
         name: formData.fullName,
         phone: formData.phone,
         state: formData.state,
@@ -205,32 +205,6 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
       }),
       "_blank"
     );
-  };
-
-  const handleWhatsAppWithAddress = (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!validate()) {
-      setSubmitError(
-        "Please fill in your Full Name, Active Phone Number, and Delivery Address above before ordering via WhatsApp."
-      );
-      return;
-    }
-
-    Analytics.trackContact(
-      "whatsapp",
-      "quick_modal_after_address_whatsapp",
-      formData.quantity,
-      pricing.total
-    );
-
-    const url = getWhatsAppOrderUrl(formData.quantity, {
-      name: formData.fullName.trim(),
-      phone: formData.phone.trim(),
-      state: formData.state,
-      address: formData.deliveryAddress.trim(),
-    });
-
-    window.open(url, "_blank");
   };
 
   return (
@@ -328,10 +302,10 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
                     <button
                       type="button"
                       onClick={handleWhatsAppInstantOrder}
-                      className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm transition-colors"
+                      className="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 cursor-pointer shadow-xl transition-colors active:scale-98 animate-action-blink"
                     >
                       <MessageCircle className="w-4 h-4" />
-                      <span>Speed Up Dispatch via WhatsApp</span>
+                      <span>Chat on WhatsApp (Order #{orderRef})</span>
                     </button>
                     <button
                       type="button"
@@ -608,7 +582,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full py-3.5 px-4 rounded-xl font-heading font-black text-xs sm:text-sm bg-slate-900 hover:bg-slate-800 active:scale-[0.99] disabled:opacity-50 text-white shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
+                      className="w-full py-3.5 px-4 rounded-xl font-heading font-black text-xs sm:text-sm bg-slate-900 hover:bg-slate-800 active:scale-[0.99] disabled:opacity-50 text-white shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 animate-action-blink"
                     >
                       {isSubmitting ? (
                         <>
@@ -623,17 +597,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
                       )}
                     </button>
 
-                    {/* Mode 2: WhatsApp with filled address */}
-                    <button
-                      type="button"
-                      onClick={handleWhatsAppWithAddress}
-                      className="w-full py-3 px-4 rounded-xl font-heading font-black text-xs sm:text-sm bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2"
-                    >
-                      <MessageCircle className="w-4 h-4" />
-                      <span>SEND ORDER VIA WHATSAPP (WITH MY DETAILS)</span>
-                    </button>
-
-                    {/* Mode 3: Call Hotline */}
+                    {/* Mode 2: Call Hotline */}
                     <a
                       href={CALL_PHONE_TEL}
                       onClick={() => Analytics.trackContact("phone", "quick_modal_call_after_address")}

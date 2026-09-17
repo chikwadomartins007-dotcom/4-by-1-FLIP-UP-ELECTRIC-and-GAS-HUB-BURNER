@@ -16,7 +16,7 @@ export const FeaturesGrid: React.FC = () => {
             <img
               src="/Hfcba7190a6324ecf8c6f0db5852a902fC.jpg"
               alt="Dimensions Spec Sheet 900x510mm"
-              className="w-full h-full object-contain"
+              className="w-full h-full object-contain animate-zoom-in-out"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = "https://sc04.alicdn.com/kf/Hfcba7190a6324ecf8c6f0db5852a902fC.jpg";
               }}
@@ -58,7 +58,7 @@ export const FeaturesGrid: React.FC = () => {
           </div>
           <div className="text-left">
             <span className="text-[11px] text-slate-500 block font-semibold">
-              DIRECT CUSTOMER CARE & WHATSAPP
+              DIRECT CUSTOMER CARE HOTLINE
             </span>
             <a
               href={CALL_PHONE_TEL}

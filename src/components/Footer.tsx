@@ -1,6 +1,6 @@
 import React from "react";
-import { Phone, MessageCircle } from "lucide-react";
-import { WHATSAPP_PHONE_DISPLAY, CALL_PHONE_TEL, getWhatsAppInquiryUrl } from "../utils/whatsapp";
+import { Phone, ShieldCheck } from "lucide-react";
+import { WHATSAPP_PHONE_DISPLAY, CALL_PHONE_TEL } from "../utils/whatsapp";
 import { Analytics } from "../utils/analytics";
 
 export const Footer: React.FC = () => {
@@ -27,18 +27,7 @@ export const Footer: React.FC = () => {
               className="flex items-center gap-2 text-slate-700 hover:text-slate-900 font-medium transition-colors"
             >
               <Phone className="w-4 h-4 text-[#8D6D27]" />
-              <span>Call: {WHATSAPP_PHONE_DISPLAY}</span>
-            </a>
-
-            <a
-              href={getWhatsAppInquiryUrl("footer contact")}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => Analytics.trackContact("whatsapp", "footer_whatsapp_link")}
-              className="flex items-center gap-2 text-emerald-700 hover:text-emerald-800 font-bold transition-colors"
-            >
-              <MessageCircle className="w-4 h-4" />
-              <span>WhatsApp: {WHATSAPP_PHONE_DISPLAY}</span>
+              <span>Customer Care Hotline: {WHATSAPP_PHONE_DISPLAY}</span>
             </a>
           </div>
         </div>

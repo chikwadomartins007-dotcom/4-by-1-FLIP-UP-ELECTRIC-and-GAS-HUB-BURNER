@@ -138,10 +138,10 @@ export const UpgradeComparison: React.FC<UpgradeComparisonProps> = ({ onOrderCli
             <div className="mt-8 pt-4 border-t border-slate-100">
               <button
                 onClick={handleCta}
-                className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl font-heading font-bold text-sm bg-[#0F172A] hover:bg-slate-800 text-white transition-all cursor-pointer shadow-md"
+                className="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl font-heading font-black text-sm bg-[#0F172A] hover:bg-slate-800 text-white transition-all cursor-pointer shadow-xl animate-action-blink"
               >
                 <span>CLAIM YOUR KITCHEN UPGRADE</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 text-yellow-400" />
               </button>
             </div>
 
