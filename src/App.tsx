@@ -14,6 +14,7 @@ import { OrderForm } from "./components/OrderForm";
 import { Footer } from "./components/Footer";
 import { MobileStickyBar } from "./components/MobileStickyBar";
 import { QuickOrderModal } from "./components/QuickOrderModal";
+import { FloatingSupportButton } from "./components/FloatingSupportButton";
 import { useExitIntent } from "./hooks/useExitIntent";
 import { initAttribution } from "./utils/attribution";
 import { Analytics } from "./utils/analytics";
@@ -130,6 +131,9 @@ export const App: React.FC = () => {
         onQuantityChange={setQuantity}
         isExitIntent={isExitIntentTriggered}
       />
+
+      {/* 16. Floating Support & Quick FAQ Button */}
+      <FloatingSupportButton />
     </div>
   );
 };

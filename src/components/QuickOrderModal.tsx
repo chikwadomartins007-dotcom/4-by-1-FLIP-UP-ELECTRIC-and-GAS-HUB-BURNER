@@ -14,6 +14,7 @@ import {
   Tag,
   Plus,
   Minus,
+  HelpCircle,
 } from "lucide-react";
 import { OrderFormData } from "../types";
 import { calculatePricing, formatNaira } from "../utils/pricing";
@@ -132,6 +133,13 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
       const currentPricing = calculatePricing(formData.quantity);
       const submissionTimestamp = new Date().toISOString();
       const generatedRef = `MAX-${Date.now().toString().slice(-6)}`;
+
+      // Track Payment Info selection in TikTok & Meta funnel
+      Analytics.trackAddPaymentInfo(
+        currentPricing.quantity,
+        currentPricing.total,
+        formData.paymentPreference || "Payment on Delivery"
+      );
 
       const payload = {
         order_source: "Quick Order Popup (Express Checkout)",
@@ -628,18 +636,38 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
             </div>
 
         {/* Footer Trust Bar */}
-        <div className="bg-slate-50 px-4 sm:px-6 py-3 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
+        <div className="bg-slate-50 px-4 sm:px-6 py-3 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500">
           <div className="flex items-center gap-1.5 text-slate-700 font-semibold">
             <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>Pay on Delivery • 100% Free Nationwide Delivery</span>
           </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="text-slate-500 hover:text-slate-800 font-medium cursor-pointer"
-          >
-            Close
-          </button>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                if (typeof window !== "undefined") {
+                  window.dispatchEvent(new CustomEvent("open-faq-section"));
+                }
+                setTimeout(() => {
+                  document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
+                }, 150);
+              }}
+              className="text-[#8D6D27] hover:text-[#5E4717] font-bold flex items-center gap-1 cursor-pointer underline"
+            >
+              <HelpCircle className="w-3.5 h-3.5 text-[#C5A059]" />
+              <span>Questions? View FAQs</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={onClose}
+              className="text-slate-500 hover:text-slate-800 font-medium cursor-pointer"
+            >
+              Close
+            </button>
+          </div>
         </div>
 
       </div>

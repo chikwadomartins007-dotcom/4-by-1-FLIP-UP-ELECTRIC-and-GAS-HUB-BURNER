@@ -3,6 +3,7 @@ import { ArrowDown, Flame, Zap, Timer, Power, Check, Phone, Clock } from "lucide
 import { motion } from "motion/react";
 import { ProductImage } from "./ProductImage";
 import { LivelyOrderButton } from "./LivelyOrderButton";
+import { TrustBadges } from "./TrustBadges";
 import { WHATSAPP_PHONE_DISPLAY, CALL_PHONE_TEL } from "../utils/whatsapp";
 import { Analytics } from "../utils/analytics";
 import { useCountdown3Days } from "../utils/countdown";
@@ -87,6 +88,11 @@ export const Hero: React.FC<HeroProps> = ({ onOrderClick, currentQuantity }) => 
               <Zap className="w-5 h-5 text-yellow-300 animate-pulse" />
               <span>⚡ ORDER NOW — PAY ON DELIVERY</span>
             </button>
+          </div>
+
+          {/* Trust Badges directly below the Hero Promo Box CTA */}
+          <div className="mt-4 pt-4 border-t border-white/10">
+            <TrustBadges variant="dark" className="border-0 !p-0 !bg-transparent shadow-none" />
           </div>
 
           <div className="mt-3 pt-2.5 border-t border-white/10 flex items-center justify-center gap-3 text-[11px] text-slate-400">
@@ -225,8 +231,13 @@ export const Hero: React.FC<HeroProps> = ({ onOrderClick, currentQuantity }) => 
         {/* Primary Direct Response CTA Button with Lively Animation */}
         <LivelyOrderButton
           onClick={handleOrderClick}
-          className="mb-6 animate-slide-in-up [animation-delay:450ms]"
+          className="mb-4 animate-slide-in-up [animation-delay:450ms]"
         />
+
+        {/* Dedicated Trust Badges Section Below Main Hero CTA Button */}
+        <div className="mb-6 animate-slide-in-up [animation-delay:500ms]">
+          <TrustBadges variant="light" />
+        </div>
 
       </div>
     </section>

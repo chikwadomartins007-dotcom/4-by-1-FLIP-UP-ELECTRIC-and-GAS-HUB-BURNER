@@ -1,6 +1,7 @@
 import React from "react";
 import { Check, X, ArrowRight, Sparkles } from "lucide-react";
 import { Analytics } from "../utils/analytics";
+import { BeforeAfterSlider } from "./BeforeAfterSlider";
 
 interface UpgradeComparisonProps {
   onOrderClick: () => void;
@@ -60,6 +61,9 @@ export const UpgradeComparison: React.FC<UpgradeComparisonProps> = ({ onOrderCli
             See how upgrading to this 5-burner gas + electric cooktop with digital timer transforms everyday kitchen safety, convenience, and home value.
           </p>
         </div>
+
+        {/* Interactive Before vs After Kitchen Counter Transformation Slider */}
+        <BeforeAfterSlider onOrderClick={handleCta} className="mb-12 sm:mb-16" />
 
         {/* Comparison Table / Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">

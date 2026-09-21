@@ -45,11 +45,19 @@ export const TrustSection: React.FC = () => {
           <h2 className="font-extrabold text-2xl sm:text-3xl text-slate-900 tracking-tight uppercase">
             OUR HAPPY CUSTOMERS REVIEWS
           </h2>
-          <div className="flex items-center justify-center gap-1 mt-2 text-amber-500">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-5 h-5 fill-amber-400 text-amber-400" />
-            ))}
-            <span className="text-xs font-bold text-slate-700 ml-2">5.0 / 5.0 Rating</span>
+          <div className="inline-flex items-center justify-center gap-1.5 mt-2.5 px-3 py-1.5 rounded-full bg-amber-50/70 border border-amber-200/80 text-amber-500 shadow-2xs group cursor-default transition-all duration-300 hover:bg-amber-100/80 hover:border-amber-300 hover:shadow-xs">
+            <div className="flex items-center gap-1">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className="w-5 h-5 fill-amber-400 text-amber-400 star-interactive group-hover:drop-shadow-[0_0_6px_rgba(245,158,11,0.6)]"
+                  title="5.0 / 5.0 Star Customer Rating"
+                />
+              ))}
+            </div>
+            <span className="text-xs font-bold text-slate-800 ml-1.5 tracking-tight group-hover:text-amber-900 transition-colors">
+              5.0 / 5.0 Rating (2,800+ Orders)
+            </span>
           </div>
         </div>
 
@@ -58,7 +66,7 @@ export const TrustSection: React.FC = () => {
           {reviews.map((rev, idx) => (
             <div
               key={idx}
-              className="p-4 rounded-xl bg-slate-50 border border-slate-200 shadow-xs flex flex-col justify-between"
+              className="group p-4 rounded-xl bg-slate-50 hover:bg-white border border-slate-200 hover:border-amber-300/80 shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-2">
@@ -75,9 +83,15 @@ export const TrustSection: React.FC = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="flex text-amber-400">
+                  <div
+                    className="flex items-center gap-0.5 text-amber-400 p-1 -m-1 rounded-md transition-all group-hover:drop-shadow-[0_0_4px_rgba(251,191,36,0.7)]"
+                    title="Verified 5-Star Customer"
+                  >
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />
+                      <Star
+                        key={i}
+                        className="w-3.5 h-3.5 fill-amber-400 star-interactive"
+                      />
                     ))}
                   </div>
                 </div>

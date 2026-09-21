@@ -13,6 +13,7 @@ import {
   Minus,
   Clock,
   Check,
+  HelpCircle,
 } from "lucide-react";
 import { OrderFormData } from "../types";
 import { calculatePricing, formatNaira } from "../utils/pricing";
@@ -113,6 +114,13 @@ export const OrderForm: React.FC<OrderFormProps> = ({ quantity, onQuantityChange
       const currentPricing = calculatePricing(formData.quantity);
       const submissionTimestamp = new Date().toISOString();
       const generatedOrderRef = `MAX-${Date.now().toString().slice(-6)}`;
+
+      // Track Payment Info selection in TikTok & Meta funnel
+      Analytics.trackAddPaymentInfo(
+        currentPricing.quantity,
+        currentPricing.total,
+        formData.paymentPreference || "Payment on Delivery"
+      );
 
       const payload = {
         product: "Premium 5-Burner Built-In Gas + Electric Cooktop (Timer & Auto-Off Key)",
@@ -725,10 +733,27 @@ export const OrderForm: React.FC<OrderFormProps> = ({ quantity, onQuantityChange
               </div>
 
               {/* Trust Guarantees */}
-              <div className="pt-2 text-center text-xs text-slate-500 space-y-1">
+              <div className="pt-2 text-center text-xs text-slate-500 space-y-2">
                 <div className="flex items-center justify-center gap-2 text-slate-700 font-semibold">
                   <ShieldCheck className="w-4 h-4 text-emerald-600" />
                   <span>Zero Risk • Pay upon Delivery / Verification • Inspection Allowed</span>
+                </div>
+                <div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (typeof window !== "undefined") {
+                        window.dispatchEvent(new CustomEvent("open-faq-section"));
+                      }
+                      setTimeout(() => {
+                        document.getElementById("faq")?.scrollIntoView({ behavior: "smooth" });
+                      }, 100);
+                    }}
+                    className="text-xs text-[#8D6D27] hover:text-[#5E4717] font-bold underline inline-flex items-center gap-1 cursor-pointer"
+                  >
+                    <HelpCircle className="w-3.5 h-3.5" />
+                    <span>Have questions before ordering? View Frequently Asked Questions</span>
+                  </button>
                 </div>
               </div>
             </div>

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { ChevronDown } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { ChevronDown, HelpCircle, CheckCircle2 } from "lucide-react";
 import { LivelyOrderButton } from "./LivelyOrderButton";
 import { Analytics } from "../utils/analytics";
 
@@ -8,8 +8,23 @@ interface FAQProps {
 }
 
 export const FAQ: React.FC<FAQProps> = ({ onOrderClick }) => {
-  // All FAQ answers remain hidden by default
+  // All FAQ answers remain hidden by default unless opened
   const [openIndices, setOpenIndices] = useState<number[]>([]);
+  const [isHighlighted, setIsHighlighted] = useState<boolean>(false);
+
+  useEffect(() => {
+    const handleOpenFaqEvent = () => {
+      // Expand all FAQs
+      setOpenIndices([0, 1, 2, 3, 4, 5, 6, 7]);
+      setIsHighlighted(true);
+      setTimeout(() => {
+        setIsHighlighted(false);
+      }, 3500);
+    };
+
+    window.addEventListener("open-faq-section", handleOpenFaqEvent);
+    return () => window.removeEventListener("open-faq-section", handleOpenFaqEvent);
+  }, []);
 
   const toggleFAQ = (idx: number) => {
     setOpenIndices((prev) =>
@@ -17,29 +32,45 @@ export const FAQ: React.FC<FAQProps> = ({ onOrderClick }) => {
     );
   };
 
+  const toggleAllFAQs = () => {
+    if (openIndices.length === faqs.length) {
+      setOpenIndices([]);
+    } else {
+      setOpenIndices(faqs.map((_, i) => i));
+    }
+  };
+
   const faqs = [
     {
-      q: "Q1: Does it have a timer feature and automatic off key?",
+      q: "Q1: Can I inspect the cooktop before making payment?",
+      a: "Yes, 100%! We operate a zero-risk Payment on Delivery policy. When our courier brings the cooker to your doorstep, you are permitted and encouraged to open the heavy-duty packaging, inspect the tempered glass, burners, digital timer, and all accessories before handing over cash or transferring funds.",
+    },
+    {
+      q: "Q2: Does it have a timer feature and automatic off key?",
       a: "Yes! The cooker features a built-in digital countdown timer (1 to 99 minutes) with automatic power cutoff on the touch display, as well as a dedicated master Automatic Off key and safety child lock for instant 1-touch emergency shutdown.",
     },
     {
-      q: "Q2: What are the exact dimensions and countertop cutout size?",
+      q: "Q3: What are the exact dimensions and countertop cutout size?",
       a: "According to official manufacturer specs (Model Combined Gas-Ceramic Hob):\n• Panel Dimensions: 900 × 510 mm\n• Cutout Dimensions: 870 × 480 mm\n• Package Dimensions: 970 × 570 × 250 mm\nThis fits standard 90cm kitchen cabinets across Nigeria.",
     },
     {
-      q: "Q3: Will I pay for delivery?",
-      a: "Delivery is free nationwide. You are only required to pay on delivery/confirmation when the item gets to your address or local logistics hub.",
+      q: "Q4: Will I pay for delivery?",
+      a: "Delivery is 100% FREE nationwide across all 36 states including Lagos, Abuja, Port Harcourt, and regional capitals. You are only required to pay on delivery when the item arrives at your address or local logistics center.",
     },
     {
-      q: "Q4: What happens if there’s no electricity?",
-      a: "The cooktop has 4 high-speed gas burners that operate 100% off-grid with instant battery-less impulse ignition, so cooking never stops even during power blackouts.",
+      q: "Q5: What happens if there’s no electricity (NEPA blackout)?",
+      a: "The cooktop has 4 high-speed gas burners that operate 100% off-grid with instant battery-less impulse ignition, so cooking never stops even during power blackouts. The 5th ceramic electric plate can be used whenever grid or solar power is available.",
     },
     {
-      q: "Q5: How do the flip-up hinged burners work?",
-      a: "The gas burners tilt upward on articulated heavy-duty hinges. You can lift each burner to wipe under it in seconds, eliminating baked-on food or grease traps.",
+      q: "Q6: How do the flip-up hinged burners work?",
+      a: "The gas burners tilt upward on articulated heavy-duty hinges. You can lift each burner 90 degrees to wipe under it in seconds, eliminating baked-on food or grease traps.",
     },
     {
-      q: "Q6: What is the price breakdown?",
+      q: "Q7: What warranty and technical support is included?",
+      a: "Every unit comes with a 12-Month Replacement Warranty and dedicated technical customer support across Nigeria. If any factory defect arises, we handle replacement or repairs promptly.",
+    },
+    {
+      q: "Q8: What is the price breakdown?",
       a: "Pricing is transparent with tiered quantity discounts:\n• 1 Unit: ₦280,000\n• 2 Units: ₦550,000 (₦275,000 each — Save ₦10,000)\n• 3 Units: ₦810,000 (₦270,000 each — Save ₦30,000)\n• 4+ Units: ₦1,060,000 (₦265,000 each — Save ₦60,000)",
     },
   ];
@@ -54,17 +85,38 @@ export const FAQ: React.FC<FAQProps> = ({ onOrderClick }) => {
   };
 
   return (
-    <section id="faq" className="py-12 sm:py-16 bg-white border-b border-slate-100 overflow-hidden">
+    <section
+      id="faq"
+      className={`py-12 sm:py-16 bg-white border-b border-slate-100 overflow-hidden transition-all duration-500 rounded-3xl ${
+        isHighlighted
+          ? "ring-4 ring-[#C5A059] shadow-2xl bg-amber-50/20"
+          : ""
+      }`}
+    >
       <div className="max-w-3xl mx-auto px-4 sm:px-6">
         
         {/* Section Heading with Slide-in Animation */}
         <div className="text-center mb-8 animate-slide-in-up">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold mb-2 border border-slate-200">
+            <HelpCircle className="w-3.5 h-3.5 text-[#C5A059]" />
+            <span>Buyer Assurance & Answers</span>
+          </div>
           <h2 className="font-extrabold text-2xl sm:text-3xl text-slate-900 tracking-tight uppercase">
             FREQUENTLY ASKED QUESTIONS
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Click on any question below to reveal the answer.
-          </p>
+          <div className="flex items-center justify-center gap-3 mt-1.5">
+            <p className="text-xs sm:text-sm text-slate-500">
+              Click on any question below to reveal the answer.
+            </p>
+            <span className="text-slate-300">•</span>
+            <button
+              type="button"
+              onClick={toggleAllFAQs}
+              className="text-xs font-bold text-[#8D6D27] hover:text-[#5E4717] underline cursor-pointer"
+            >
+              {openIndices.length === faqs.length ? "Collapse All" : "Expand All"}
+            </button>
+          </div>
         </div>
 
         {/* Accordion List - Answers hidden until clicked */}
