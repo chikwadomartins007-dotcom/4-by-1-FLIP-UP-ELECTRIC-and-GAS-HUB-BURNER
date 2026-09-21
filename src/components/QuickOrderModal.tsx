@@ -31,6 +31,7 @@ interface QuickOrderModalProps {
   onClose: () => void;
   quantity: number;
   onQuantityChange: (qty: number) => void;
+  isExitIntent?: boolean;
 }
 
 export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
@@ -38,6 +39,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
   onClose,
   quantity,
   onQuantityChange,
+  isExitIntent = false,
 }) => {
   const [formData, setFormData] = useState<OrderFormData>({
     fullName: "",
@@ -221,6 +223,19 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
         className="relative w-full max-w-xl bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 overflow-hidden my-auto animate-scale-up"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Special Exit-Intent Urgency Bar */}
+        {isExitIntent && (
+          <div className="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-500 text-slate-950 px-4 py-2.5 text-xs sm:text-sm font-bold flex items-center justify-between gap-2 border-b border-amber-600 shadow-inner">
+            <div className="flex items-center gap-2">
+              <span className="text-base animate-bounce">⏳</span>
+              <span>WAIT! Before You Leave — Lock in Today's ₦280,000 Special &amp; Free Delivery!</span>
+            </div>
+            <span className="hidden sm:inline-block px-2 py-0.5 rounded-full bg-slate-950 text-yellow-300 text-[10px] font-extrabold uppercase tracking-wide shrink-0">
+              Exit Special
+            </span>
+          </div>
+        )}
+
         {/* Top Header Banner */}
         <div className="bg-slate-900 text-white px-4 sm:px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">

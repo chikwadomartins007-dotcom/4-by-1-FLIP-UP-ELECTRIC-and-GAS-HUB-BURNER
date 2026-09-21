@@ -14,6 +14,7 @@ import { OrderForm } from "./components/OrderForm";
 import { Footer } from "./components/Footer";
 import { MobileStickyBar } from "./components/MobileStickyBar";
 import { QuickOrderModal } from "./components/QuickOrderModal";
+import { useExitIntent } from "./hooks/useExitIntent";
 import { initAttribution } from "./utils/attribution";
 import { Analytics } from "./utils/analytics";
 import { calculatePricing } from "./utils/pricing";
@@ -21,6 +22,19 @@ import { calculatePricing } from "./utils/pricing";
 export const App: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(1);
   const [isQuickOrderOpen, setIsQuickOrderOpen] = useState<boolean>(false);
+  const [isExitIntentTriggered, setIsExitIntentTriggered] = useState<boolean>(false);
+
+  // Exit-intent detection: opens the QuickOrderModal when cursor moves towards top edge
+  useExitIntent({
+    enabled: !isQuickOrderOpen,
+    threshold: 35,
+    dwellTimeMs: 2000,
+    onExitIntent: () => {
+      setIsExitIntentTriggered(true);
+      setIsQuickOrderOpen(true);
+      Analytics.trackCTAClick("Exit Intent Triggered", "#quick-order-modal");
+    },
+  });
 
   useEffect(() => {
     // 1. Initialize attribution (UTMs, fbclid, cookies)
@@ -34,6 +48,7 @@ export const App: React.FC = () => {
   const pricing = calculatePricing(quantity);
 
   const handleOpenOrder = () => {
+    setIsExitIntentTriggered(false);
     setIsQuickOrderOpen(true);
   };
 
@@ -107,9 +122,13 @@ export const App: React.FC = () => {
       {/* 15. Fast 30-Second Express Quick Order Modal */}
       <QuickOrderModal
         isOpen={isQuickOrderOpen}
-        onClose={() => setIsQuickOrderOpen(false)}
+        onClose={() => {
+          setIsQuickOrderOpen(false);
+          setIsExitIntentTriggered(false);
+        }}
         quantity={quantity}
         onQuantityChange={setQuantity}
+        isExitIntent={isExitIntentTriggered}
       />
     </div>
   );
