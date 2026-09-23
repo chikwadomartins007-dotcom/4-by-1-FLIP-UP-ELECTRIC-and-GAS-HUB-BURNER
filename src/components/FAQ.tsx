@@ -46,31 +46,35 @@ export const FAQ: React.FC<FAQProps> = ({ onOrderClick }) => {
       a: "Yes, 100%! We operate a zero-risk Payment on Delivery policy. When our courier brings the cooker to your doorstep, you are permitted and encouraged to open the heavy-duty packaging, inspect the tempered glass, burners, digital timer, and all accessories before handing over cash or transferring funds.",
     },
     {
-      q: "Q2: Does it have a timer feature and automatic off key?",
+      q: "Q2: How does delivery work from order placement to doorstep?",
+      a: "Here is exactly how our transparent nationwide delivery works:\n\n1. Fast Confirmation: As soon as you submit the order form, our dispatch manager calls or WhatsApps you within 30 minutes to verify your exact delivery address and phone number.\n\n2. Secure Packaging: Your unit is dispatched from our nearest hub in a shock-absorbent reinforced shipping carton with dense corner guards.\n\n3. Transit Timelines:\n• Lagos, Abuja & Port Harcourt: 24 to 48 Hours\n• Other State Capitals & Towns: 2 to 4 Working Days\n\n4. Doorstep Inspection: Our delivery rider contacts you before arriving. Upon arrival, you unbox and physically inspect the cooktop to verify the tempered glass, burners, digital timer, and accessories.\n\n5. Payment on Delivery: You only make payment (via Cash or Instant Bank Transfer) after you are 100% satisfied. Delivery is 100% FREE with zero hidden fees.",
+    },
+    {
+      q: "Q3: Will I pay for delivery?",
+      a: "No! Delivery is 100% FREE nationwide across all 36 states and the FCT. You will not pay any shipping, transit, or logistics fees whatsoever. You only pay the exact promo price for your cooker when it arrives at your doorstep.",
+    },
+    {
+      q: "Q4: Does it have a timer feature and automatic off key?",
       a: "Yes! The cooker features a built-in digital countdown timer (1 to 99 minutes) with automatic power cutoff on the touch display, as well as a dedicated master Automatic Off key and safety child lock for instant 1-touch emergency shutdown.",
     },
     {
-      q: "Q3: What are the exact dimensions and countertop cutout size?",
+      q: "Q5: What are the exact dimensions and countertop cutout size?",
       a: "According to official manufacturer specs (Model Combined Gas-Ceramic Hob):\n• Panel Dimensions: 900 × 510 mm\n• Cutout Dimensions: 870 × 480 mm\n• Package Dimensions: 970 × 570 × 250 mm\nThis fits standard 90cm kitchen cabinets across Nigeria.",
     },
     {
-      q: "Q4: Will I pay for delivery?",
-      a: "Delivery is 100% FREE nationwide across all 36 states including Lagos, Abuja, Port Harcourt, and regional capitals. You are only required to pay on delivery when the item arrives at your address or local logistics center.",
-    },
-    {
-      q: "Q5: What happens if there’s no electricity (NEPA blackout)?",
+      q: "Q6: What happens if there’s no electricity (NEPA blackout)?",
       a: "The cooktop has 4 high-speed gas burners that operate 100% off-grid with instant battery-less impulse ignition, so cooking never stops even during power blackouts. The 5th ceramic electric plate can be used whenever grid or solar power is available.",
     },
     {
-      q: "Q6: How do the flip-up hinged burners work?",
+      q: "Q7: How do the flip-up hinged burners work?",
       a: "The gas burners tilt upward on articulated heavy-duty hinges. You can lift each burner 90 degrees to wipe under it in seconds, eliminating baked-on food or grease traps.",
     },
     {
-      q: "Q7: What warranty and technical support is included?",
+      q: "Q8: What warranty and technical support is included?",
       a: "Every unit comes with a 12-Month Replacement Warranty and dedicated technical customer support across Nigeria. If any factory defect arises, we handle replacement or repairs promptly.",
     },
     {
-      q: "Q8: What is the price breakdown?",
+      q: "Q9: What is the price breakdown?",
       a: "Pricing is transparent with tiered quantity discounts:\n• 1 Unit: ₦280,000\n• 2 Units: ₦550,000 (₦275,000 each — Save ₦10,000)\n• 3 Units: ₦810,000 (₦270,000 each — Save ₦30,000)\n• 4+ Units: ₦1,060,000 (₦265,000 each — Save ₦60,000)",
     },
   ];

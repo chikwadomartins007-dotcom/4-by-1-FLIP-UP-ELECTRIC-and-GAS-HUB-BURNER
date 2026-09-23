@@ -3,6 +3,7 @@ import { ArrowDown, AlertTriangle, CheckCircle2, Clock } from "lucide-react";
 import { motion } from "motion/react";
 import { WHATSAPP_PHONE_DISPLAY } from "../utils/whatsapp";
 import { useCountdown3Days } from "../utils/countdown";
+import { StockUrgencyWidget } from "./StockUrgencyWidget";
 
 interface FinalSalesSectionProps {
   quantity: number;
@@ -79,6 +80,8 @@ export const FinalSalesSection: React.FC<FinalSalesSectionProps> = ({ onOrderCli
             <AlertTriangle className="w-5 h-5 shrink-0" />
             <span>CRITICAL ORDER NOTICE:</span>
           </div>
+
+          <StockUrgencyWidget variant="compact" className="w-full justify-center" />
 
           <p className="font-heading font-extrabold text-xs sm:text-sm text-red-700 uppercase leading-snug">
             PLEASE DO NOT FILL THIS FORM BELOW IF YOUR MONEY IS NOT READILY AVAILABLE.

@@ -26,6 +26,7 @@ import {
   CALL_PHONE_TEL,
 } from "../utils/whatsapp";
 import { NIGERIAN_STATES } from "../data/states";
+import { StockUrgencyWidget } from "./StockUrgencyWidget";
 
 interface QuickOrderModalProps {
   isOpen: boolean;
@@ -341,6 +342,9 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                  {/* Real-time Limited Stock Alert */}
+                  <StockUrgencyWidget variant="compact" className="w-full justify-center" />
+
                   {/* Visual Quantity Selection Cards */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
@@ -352,7 +356,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                       {/* 1 Unit */}
                       <button
                         type="button"
@@ -413,6 +417,28 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
                         </span>
                         <span className={`text-[10px] block mt-1 ${formData.quantity === 3 ? "text-emerald-300" : "text-emerald-700 font-bold"}`}>
                           Save ₦30,000
+                        </span>
+                      </button>
+
+                      {/* 4+ Units */}
+                      <button
+                        type="button"
+                        onClick={() => handleSelectQuantity(4)}
+                        className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-between relative overflow-hidden ${
+                          formData.quantity >= 4
+                            ? "bg-slate-900 text-white border-slate-900 shadow-sm ring-2 ring-emerald-500"
+                            : "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-800"
+                        }`}
+                      >
+                        <span className="absolute top-0 right-0 bg-emerald-600 text-white text-[9px] font-black px-1.5 rounded-bl">
+                          SAVE ₦60k+
+                        </span>
+                        <span className="text-xs font-bold block">4+ Cooktops</span>
+                        <span className={`text-xs font-extrabold block mt-0.5 ${formData.quantity >= 4 ? "text-yellow-300" : "text-slate-900"}`}>
+                          {formData.quantity >= 4 ? formatNaira(pricing.total) : "₦1,060,000"}
+                        </span>
+                        <span className={`text-[10px] block mt-1 ${formData.quantity >= 4 ? "text-emerald-300" : "text-emerald-700 font-bold"}`}>
+                          Save ₦60,000+
                         </span>
                       </button>
                     </div>

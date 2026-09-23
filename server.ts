@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import path from "path";
+import fs from "fs";
 import crypto from "crypto";
 import { createServer as createViteServer } from "vite";
 import dotenv from "dotenv";
@@ -9,7 +10,18 @@ dotenv.config();
 const app = express();
 const PORT = 3000;
 
-app.use(express.json({ limit: "1mb" }));
+app.use(express.json({ limit: "25mb" }));
+app.use(express.urlencoded({ extended: true, limit: "25mb" }));
+
+// Ensure uploads directory exists
+const uploadsDirectory = path.join(process.cwd(), "public", "uploads");
+if (!fs.existsSync(uploadsDirectory)) {
+  try {
+    fs.mkdirSync(uploadsDirectory, { recursive: true });
+  } catch (e) {
+    console.error("Failed to create uploads directory:", e);
+  }
+}
 
 // Helper to calculate pricing on the server
 export function calculatePricing(quantity: number) {
@@ -77,6 +89,51 @@ app.post("/api/verify-order", (req: Request, res: Response) => {
     });
   } catch (error: any) {
     res.status(400).json({ success: false, error: error.message });
+  }
+});
+
+// Custom Image Upload endpoint
+app.post("/api/upload-image", (req: Request, res: Response) => {
+  try {
+    const { filename, dataUrl } = req.body;
+    if (!dataUrl || typeof dataUrl !== "string") {
+      return res.status(400).json({ success: false, error: "dataUrl is required" });
+    }
+
+    const matches = dataUrl.match(/^data:([A-Za-z0-9\/-]+);base64,(.+)$/);
+    if (!matches || matches.length !== 3) {
+      return res.status(400).json({ success: false, error: "Invalid dataUrl format" });
+    }
+
+    const mimeType = matches[1];
+    const base64Data = matches[2];
+    const buffer = Buffer.from(base64Data, "base64");
+
+    let ext = "png";
+    if (mimeType.includes("jpeg") || mimeType.includes("jpg")) ext = "jpg";
+    else if (mimeType.includes("webp")) ext = "webp";
+    else if (mimeType.includes("gif")) ext = "gif";
+    else if (mimeType.includes("svg")) ext = "svg";
+
+    const uploadsDir = path.join(process.cwd(), "public", "uploads");
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
+    }
+
+    const baseName = filename ? path.parse(filename).name.replace(/[^a-zA-Z0-9_-]/g, "_") : "custom_image";
+    const safeName = `${baseName}_${Date.now()}.${ext}`;
+    const filePath = path.join(uploadsDir, safeName);
+    fs.writeFileSync(filePath, buffer);
+
+    const publicUrl = `/uploads/${safeName}`;
+    res.json({
+      success: true,
+      url: publicUrl,
+      name: safeName,
+    });
+  } catch (error: any) {
+    console.error("Error uploading image:", error);
+    res.status(500).json({ success: false, error: error.message || "Failed to upload image" });
   }
 });
 
@@ -227,6 +284,31 @@ app.post("/api/orders/confirm-purchase", async (req: Request, res: Response) => 
       amount: pricing.total,
     });
   } catch (err: any) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// Direct raw image upload endpoint to persist user's exact photo to public/exact_kitchen_after.jpg
+app.post("/api/upload-after-image", express.json({ limit: "50mb" }), (req: Request, res: Response) => {
+  try {
+    const { imageBase64 } = req.body;
+    if (!imageBase64) {
+      return res.status(400).json({ success: false, error: "No image data provided" });
+    }
+    const cleanBase64 = imageBase64.replace(/^data:image\/\w+;base64,/, "");
+    const buffer = Buffer.from(cleanBase64, "base64");
+
+    const publicPath = path.join(process.cwd(), "public", "exact_kitchen_after.jpg");
+    fs.writeFileSync(publicPath, buffer);
+
+    const distDir = path.join(process.cwd(), "dist");
+    if (fs.existsSync(distDir)) {
+      fs.writeFileSync(path.join(distDir, "exact_kitchen_after.jpg"), buffer);
+    }
+
+    res.json({ success: true, path: "/exact_kitchen_after.jpg" });
+  } catch (err: any) {
+    console.error("Failed to write uploaded image:", err);
     res.status(500).json({ success: false, error: err.message });
   }
 });

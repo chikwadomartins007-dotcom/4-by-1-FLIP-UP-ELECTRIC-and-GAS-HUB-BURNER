@@ -7,6 +7,7 @@ import { TrustBadges } from "./TrustBadges";
 import { WHATSAPP_PHONE_DISPLAY, CALL_PHONE_TEL } from "../utils/whatsapp";
 import { Analytics } from "../utils/analytics";
 import { useCountdown3Days } from "../utils/countdown";
+import { StockUrgencyWidget } from "./StockUrgencyWidget";
 
 interface HeroProps {
   onOrderClick: () => void;
@@ -39,8 +40,8 @@ export const Hero: React.FC<HeroProps> = ({ onOrderClick, currentQuantity }) => 
           This Luxury Built-In Cooktop is designed to bring speed, elegance, and peace of mind right into your kitchen. Now you can enjoy 4 high-efficiency gas burners, 1 central radiant ceramic electric hotplate, digital countdown timer with auto-cutoff, and instant 1-touch automatic off safety key.
         </p>
 
-        {/* Hero Product Image (Centered, Large, Clean Border & Shadow) */}
-        <div className="w-full max-w-2xl mx-auto mb-6 rounded-2xl overflow-hidden border border-slate-200 shadow-md bg-slate-50 p-2 sm:p-4 animate-slide-in-up [animation-delay:250ms]">
+        {/* Multi-Angle Interactive Product Gallery with Thumbnail Previews */}
+        <div className="w-full max-w-3xl sm:max-w-4xl mx-auto mb-6 rounded-2xl overflow-hidden border border-slate-200 shadow-lg bg-slate-50 p-2 sm:p-4 animate-slide-in-up [animation-delay:250ms]">
           <ProductImage priority={true} />
         </div>
 
@@ -74,9 +75,14 @@ export const Hero: React.FC<HeroProps> = ({ onOrderClick, currentQuantity }) => 
             </div>
           </div>
 
-          <p className="text-xs text-slate-300 mb-4 max-w-md mx-auto">
+          <p className="text-xs text-slate-300 mb-3 max-w-md mx-auto">
             No upfront card payment required. Inspect your unit on arrival before paying!
           </p>
+
+          {/* Real-time Units Remaining in Stock Counter */}
+          <div className="max-w-md mx-auto mb-4 text-left">
+            <StockUrgencyWidget variant="card" />
+          </div>
 
           {/* Primary Action Button for Ultra-Easy Ordering */}
           <div className="max-w-md mx-auto">

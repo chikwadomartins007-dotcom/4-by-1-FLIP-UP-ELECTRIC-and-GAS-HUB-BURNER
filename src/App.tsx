@@ -3,6 +3,7 @@ import { TopAnnouncementBar } from "./components/TopAnnouncementBar";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Benefits } from "./components/Benefits";
+import { SafetyFeatures } from "./components/SafetyFeatures";
 import { ProductVideo } from "./components/ProductVideo";
 import { FAQ } from "./components/FAQ";
 import { FeaturesGrid } from "./components/FeaturesGrid";
@@ -10,6 +11,7 @@ import { UpgradeComparison } from "./components/UpgradeComparison";
 import { OrderingSteps } from "./components/OrderingSteps";
 import { TrustSection } from "./components/TrustSection";
 import { FinalSalesSection } from "./components/FinalSalesSection";
+import { SavingsCalculator } from "./components/SavingsCalculator";
 import { OrderForm } from "./components/OrderForm";
 import { Footer } from "./components/Footer";
 import { MobileStickyBar } from "./components/MobileStickyBar";
@@ -36,6 +38,20 @@ export const App: React.FC = () => {
       Analytics.trackCTAClick("Exit Intent Triggered", "#quick-order-modal");
     },
   });
+
+  // Recurring 35-Second Timer: Automatically shows Instant Order Desk every 35 seconds
+  useEffect(() => {
+    // When modal is already open, do not schedule another popup
+    if (isQuickOrderOpen) return;
+
+    const timer = setTimeout(() => {
+      setIsExitIntentTriggered(false);
+      setIsQuickOrderOpen(true);
+      Analytics.trackCTAClick("35-Second Timed Instant Order Desk", "#quick-order-modal");
+    }, 35000);
+
+    return () => clearTimeout(timer);
+  }, [isQuickOrderOpen]);
 
   useEffect(() => {
     // 1. Initialize attribution (UTMs, fbclid, cookies)
@@ -79,7 +95,10 @@ export const App: React.FC = () => {
         {/* 4. Why You'll Love It (Checkmark Bullets) */}
         <Benefits />
 
-        {/* 5. Showroom Demonstration Video Section (16:9 Dark Bezel Container) */}
+        {/* 5. Certified Safety Features (Auto-Shutoff & Gas Leakage Protection) */}
+        <SafetyFeatures onOrderClick={handleOpenOrder} />
+
+        {/* 6. Showroom Demonstration Video Section (16:9 Dark Bezel Container) */}
         <ProductVideo onOrderClick={handleOpenOrder} />
 
         {/* 6. Frequently Asked Questions + Second CTA Button */}
@@ -103,7 +122,13 @@ export const App: React.FC = () => {
           onOrderClick={handleOpenOrder}
         />
 
-        {/* 12. Fill The Form Below To Place Order (Fluent Form Style) */}
+        {/* 12. Visual Multi-Unit Bulk Savings Calculator Widget */}
+        <SavingsCalculator
+          quantity={quantity}
+          onQuantityChange={setQuantity}
+        />
+
+        {/* 13. Fill The Form Below To Place Order (Fluent Form Style) */}
         <OrderForm
           quantity={quantity}
           onQuantityChange={setQuantity}

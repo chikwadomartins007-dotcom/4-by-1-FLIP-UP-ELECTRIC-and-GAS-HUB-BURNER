@@ -25,6 +25,7 @@ import {
   CALL_PHONE_TEL,
 } from "../utils/whatsapp";
 import { NIGERIAN_STATES } from "../data/states";
+import { StockUrgencyWidget } from "./StockUrgencyWidget";
 
 interface OrderFormProps {
   quantity: number;
@@ -303,6 +304,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({ quantity, onQuantityChange
                 noValidate
                 className="rounded-3xl p-6 sm:p-10 bg-white border border-slate-200 shadow-md space-y-6"
               >
+                {/* Real-time Limited Stock Urgency Meter */}
+                <StockUrgencyWidget variant="card" className="mb-2" />
                 
                 {/* 1-Tap Quantity Selection Packages */}
                 <div>
@@ -316,7 +319,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({ quantity, onQuantityChange
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     
                     {/* 1 Unit Card */}
                     <div
@@ -411,6 +414,39 @@ export const OrderForm: React.FC<OrderFormProps> = ({ quantity, onQuantityChange
                       </span>
                       <span className={`text-[10px] font-bold block mt-1 ${formData.quantity === 3 ? "text-emerald-300" : "text-emerald-700"}`}>
                         Estate / Contractor Deal
+                      </span>
+                    </div>
+
+                    {/* 4+ Units Card (Super Bulk Deal) */}
+                    <div
+                      onClick={() => handleSelectPackage(4)}
+                      className={`cursor-pointer rounded-2xl p-4 border-2 transition-all relative overflow-hidden ${
+                        formData.quantity >= 4
+                          ? "bg-slate-900 text-white border-slate-900 shadow-md ring-2 ring-emerald-500"
+                          : "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-800"
+                      }`}
+                    >
+                      <span className="absolute top-0 right-0 bg-emerald-600 text-white text-[9px] font-black px-2 py-0.5 rounded-bl">
+                        SAVE ₦60,000+
+                      </span>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-extrabold uppercase tracking-wide">
+                          {formData.quantity >= 4 ? `${formData.quantity} Units` : "4+ Cooktops"}
+                        </span>
+                        <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${
+                          formData.quantity >= 4 ? "bg-emerald-500 border-emerald-400 text-white" : "border-slate-300"
+                        }`}>
+                          {formData.quantity >= 4 && <Check className="w-3 h-3 stroke-[3]" />}
+                        </div>
+                      </div>
+                      <div className={`font-heading font-black text-xl mb-1 ${formData.quantity >= 4 ? "text-yellow-300" : "text-slate-900"}`}>
+                        {formData.quantity >= 4 ? formatNaira(pricing.total) : "₦1,060,000"}
+                      </div>
+                      <span className={`text-[11px] block ${formData.quantity >= 4 ? "text-slate-300" : "text-slate-500"}`}>
+                        (₦265,000 each)
+                      </span>
+                      <span className={`text-[10px] font-bold block mt-1 ${formData.quantity >= 4 ? "text-emerald-300" : "text-emerald-700"}`}>
+                        Bulk Developer Rate
                       </span>
                     </div>
 

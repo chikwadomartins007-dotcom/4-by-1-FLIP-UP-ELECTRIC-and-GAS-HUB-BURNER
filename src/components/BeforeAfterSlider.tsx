@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { ChevronsLeftRight, Sparkles, X, Check, ArrowRight } from "lucide-react";
+import { ChevronsLeftRight, Sparkles, X, Check, ArrowRight, Play, Pause } from "lucide-react";
 import beforeImg from "../assets/images/old_tabletop_cooker_1790010294841.jpg";
-import afterImg from "../assets/images/exact_after_cooktop.png";
+import defaultAfterImg from "../assets/images/exact_kitchen_after_1790091195602.jpg";
 
 interface BeforeAfterSliderProps {
   className?: string;
@@ -14,9 +14,23 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
 }) => {
   const [sliderPosition, setSliderPosition] = useState<number>(50); // percentage 0-100
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [isAutoPlaying, setIsAutoPlaying] = useState<boolean>(true);
   const [containerWidth, setContainerWidth] = useState<number>(0);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [currentAfterImg, setCurrentAfterImg] = useState<string>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("max_cooktop_exact_after") || defaultAfterImg;
+    }
+    return defaultAfterImg;
+  });
 
+  const containerRef = useRef<HTMLDivElement>(null);
+  const userInteractionTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const animFrameRef = useRef<number | null>(null);
+  const lastTimeRef = useRef<number | null>(null);
+  const statePhaseRef = useRef<"hold-after" | "sweep-to-before" | "hold-before" | "sweep-to-after">("sweep-to-before");
+  const phaseElapsedRef = useRef<number>(0);
+
+  // Measure container width for responsive image sizing
   useEffect(() => {
     if (!containerRef.current) return;
     const updateWidth = () => {
@@ -32,6 +46,88 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
     return () => observer.disconnect();
   }, []);
 
+  // Temporarily pause auto-changing when user interacts, then resume after 4 seconds
+  const registerUserInteraction = useCallback(() => {
+    if (userInteractionTimerRef.current) {
+      clearTimeout(userInteractionTimerRef.current);
+    }
+    userInteractionTimerRef.current = setTimeout(() => {
+      setIsAutoPlaying(true);
+      lastTimeRef.current = null;
+    }, 4000);
+  }, []);
+
+  // Automatic Before / After scanning & alternating animation
+  useEffect(() => {
+    if (!isAutoPlaying || isDragging) {
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
+        animFrameRef.current = null;
+      }
+      lastTimeRef.current = null;
+      return;
+    }
+
+    const HOLD_DURATION = 1400; // ms to pause and display the full view
+    const SWEEP_DURATION = 2200; // ms to smoothly glide between views
+    const MIN_POS = 15; // reveals mostly the AFTER image
+    const MAX_POS = 85; // reveals mostly the BEFORE image
+
+    const animate = (timestamp: number) => {
+      if (lastTimeRef.current === null) {
+        lastTimeRef.current = timestamp;
+      }
+      const dt = Math.min(100, timestamp - lastTimeRef.current);
+      lastTimeRef.current = timestamp;
+
+      phaseElapsedRef.current += dt;
+
+      if (statePhaseRef.current === "hold-after") {
+        setSliderPosition(MIN_POS);
+        if (phaseElapsedRef.current >= HOLD_DURATION) {
+          statePhaseRef.current = "sweep-to-before";
+          phaseElapsedRef.current = 0;
+        }
+      } else if (statePhaseRef.current === "sweep-to-before") {
+        const progress = Math.min(1, phaseElapsedRef.current / SWEEP_DURATION);
+        // smooth cosine easing
+        const eased = (1 - Math.cos(progress * Math.PI)) / 2;
+        const current = MIN_POS + (MAX_POS - MIN_POS) * eased;
+        setSliderPosition(current);
+        if (progress >= 1) {
+          statePhaseRef.current = "hold-before";
+          phaseElapsedRef.current = 0;
+        }
+      } else if (statePhaseRef.current === "hold-before") {
+        setSliderPosition(MAX_POS);
+        if (phaseElapsedRef.current >= HOLD_DURATION) {
+          statePhaseRef.current = "sweep-to-after";
+          phaseElapsedRef.current = 0;
+        }
+      } else if (statePhaseRef.current === "sweep-to-after") {
+        const progress = Math.min(1, phaseElapsedRef.current / SWEEP_DURATION);
+        const eased = (1 - Math.cos(progress * Math.PI)) / 2;
+        const current = MAX_POS - (MAX_POS - MIN_POS) * eased;
+        setSliderPosition(current);
+        if (progress >= 1) {
+          statePhaseRef.current = "hold-after";
+          phaseElapsedRef.current = 0;
+        }
+      }
+
+      animFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animFrameRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animFrameRef.current) {
+        cancelAnimationFrame(animFrameRef.current);
+        animFrameRef.current = null;
+      }
+    };
+  }, [isAutoPlaying, isDragging]);
+
   const updatePosition = useCallback((clientX: number) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -41,11 +137,13 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
   }, []);
 
   const handleMouseDown = (e: React.MouseEvent) => {
+    registerUserInteraction();
     setIsDragging(true);
     updatePosition(e.clientX);
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
+    registerUserInteraction();
     setIsDragging(true);
     if (e.touches.length > 0) {
       updatePosition(e.touches[0].clientX);
@@ -55,11 +153,13 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!isDragging) return;
+      registerUserInteraction();
       updatePosition(e.clientX);
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       if (!isDragging) return;
+      registerUserInteraction();
       if (e.touches.length > 0) {
         updatePosition(e.touches[0].clientX);
       }
@@ -67,6 +167,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
 
     const handleEnd = () => {
       setIsDragging(false);
+      registerUserInteraction();
     };
 
     if (isDragging) {
@@ -84,15 +185,33 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
       window.removeEventListener("touchend", handleEnd);
       window.removeEventListener("touchcancel", handleEnd);
     };
-  }, [isDragging, updatePosition]);
+  }, [isDragging, updatePosition, registerUserInteraction]);
 
   // Keyboard navigation for accessibility
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    registerUserInteraction();
     if (e.key === "ArrowLeft") {
       setSliderPosition((prev) => Math.max(0, prev - 5));
     } else if (e.key === "ArrowRight") {
       setSliderPosition((prev) => Math.min(100, prev + 5));
     }
+  };
+
+  const handlePresetSelect = (pos: number) => {
+    setSliderPosition(pos);
+    registerUserInteraction();
+  };
+
+  const toggleAutoPlay = () => {
+    setIsAutoPlaying((prev) => {
+      const next = !prev;
+      if (next) {
+        lastTimeRef.current = null;
+        phaseElapsedRef.current = 0;
+        statePhaseRef.current = "sweep-to-before";
+      }
+      return next;
+    });
   };
 
   return (
@@ -110,20 +229,45 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
             <h3 className="font-heading font-extrabold text-sm sm:text-base text-white tracking-tight flex items-center gap-1.5">
               <span>Kitchen Counter Transformation</span>
               <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#C5A059] text-slate-950 font-black uppercase tracking-wider hidden sm:inline-block">
-                Interactive
+                Auto-Comparing
               </span>
             </h3>
             <p className="text-[11px] text-slate-400">
-              Drag the slider to compare an ordinary tabletop cooker with the 5-burner built-in upgrade
+              Watch the automatic comparison or drag manually to reveal the 5-burner upgrade
             </p>
           </div>
         </div>
 
-        {/* Quick Preset Selector Buttons */}
-        <div className="flex items-center gap-1.5 text-xs">
+        {/* Controls: Auto-play toggle & Preset buttons */}
+        <div className="flex flex-wrap items-center gap-1.5 text-xs">
           <button
             type="button"
-            onClick={() => setSliderPosition(85)}
+            onClick={toggleAutoPlay}
+            className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 border shadow-sm ${
+              isAutoPlaying
+                ? "bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-500"
+                : "bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700"
+            }`}
+            title={isAutoPlaying ? "Pause automatic slide animation" : "Resume automatic slide animation"}
+          >
+            {isAutoPlaying ? (
+              <>
+                <Pause className="w-3 h-3" />
+                <span>Auto-Changing</span>
+              </>
+            ) : (
+              <>
+                <Play className="w-3 h-3 fill-current" />
+                <span>Resume Auto</span>
+              </>
+            )}
+          </button>
+
+          <div className="h-4 w-px bg-slate-700 mx-1 hidden sm:block" />
+
+          <button
+            type="button"
+            onClick={() => handlePresetSelect(85)}
             className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
               sliderPosition > 70
                 ? "bg-red-600 text-white shadow-sm"
@@ -135,7 +279,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
           </button>
           <button
             type="button"
-            onClick={() => setSliderPosition(50)}
+            onClick={() => handlePresetSelect(50)}
             className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
               sliderPosition >= 40 && sliderPosition <= 60
                 ? "bg-[#C5A059] text-slate-950 shadow-sm"
@@ -147,7 +291,7 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
           </button>
           <button
             type="button"
-            onClick={() => setSliderPosition(15)}
+            onClick={() => handlePresetSelect(15)}
             className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
               sliderPosition < 30
                 ? "bg-emerald-600 text-white shadow-sm"
@@ -172,32 +316,49 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label="Before and After Kitchen Counter Comparison Slider"
-        className="relative w-full aspect-[16/10] bg-slate-950 overflow-hidden select-none cursor-ew-resize focus:outline-none focus:ring-2 focus:ring-[#C5A059]"
+        className="relative w-full aspect-[4/3] sm:aspect-[1200/896] bg-slate-950 overflow-hidden select-none cursor-ew-resize focus:outline-none focus:ring-2 focus:ring-[#C5A059]"
       >
-        {/* AFTER IMAGE (Underneath layer - Exact 5-Burner Cooktop Upgrade) */}
-        <div className="absolute inset-0 w-full h-full bg-white flex items-center justify-center overflow-hidden">
+        {/* AFTER IMAGE (Underneath layer - Modern Built-In Cooktop Renovation) */}
+        <div
+          className="absolute inset-0 w-full h-full bg-slate-950 overflow-hidden isolate z-0 pointer-events-none"
+          style={{
+            clipPath: `inset(0 0 0 ${sliderPosition}%)`,
+            WebkitClipPath: `inset(0 0 0 ${sliderPosition}%)`,
+          }}
+        >
           <img
-            src={afterImg}
-            alt="After: 5-Burner Built-In Gas and Electric Hybrid Cooktop with Glowing Radiant Zone and Digital Timer"
+            src={currentAfterImg}
+            onError={() => {
+              if (currentAfterImg !== defaultAfterImg) {
+                setCurrentAfterImg(defaultAfterImg);
+              }
+            }}
+            alt="After: 5-Burner Built-In Gas and Electric Hybrid Cooktop installed flush into luxury quartz kitchen countertop island"
             referrerPolicy="no-referrer"
-            className="w-full h-full object-contain p-1 sm:p-2 pointer-events-none"
+            className="w-full h-full object-cover pointer-events-none"
           />
 
-          {/* After Tag / Annotation (Right Side) */}
-          <div className="absolute top-3 sm:top-4 right-3 sm:right-4 z-10 flex flex-col items-end gap-1.5 pointer-events-none">
+          {/* After Tag / Annotation (Right Side) — strictly clipped and hidden when Before view is active */}
+          <div
+            className="absolute top-3 sm:top-4 right-3 sm:right-4 flex flex-col items-end gap-1.5 pointer-events-none"
+            style={{
+              opacity: sliderPosition >= 65 ? 0 : 1,
+              transition: isDragging ? "none" : "opacity 0.2s ease-in-out",
+            }}
+          >
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-600 text-white font-extrabold text-xs tracking-wide uppercase shadow-lg border border-emerald-400/40">
               <Check className="w-3.5 h-3.5 stroke-[3]" />
               AFTER: 5-Burner Built-In Upgrade
             </span>
             <span className="hidden sm:inline-block px-2.5 py-1 rounded-lg bg-slate-900/90 text-emerald-300 text-[11px] font-semibold backdrop-blur-md border border-emerald-500/30 shadow">
-              ✓ 4 Flip Gas Burners + Center Radiant Electric • Digital Timer • Master Off
+              ✓ Flush 900×510mm recessed glass • Dual Gas + Electric • Digital Timer
             </span>
           </div>
         </div>
 
         {/* BEFORE IMAGE (Clipped overlay layer - Old Tabletop Cooker) */}
         <div
-          className="absolute inset-y-0 left-0 overflow-hidden pointer-events-none"
+          className="absolute inset-y-0 left-0 overflow-hidden pointer-events-none z-10 isolate"
           style={{ width: `${sliderPosition}%` }}
         >
           {/* Inner container sized to the full parent width so image does not stretch */}
@@ -212,8 +373,14 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
               className="w-full h-full object-cover"
             />
 
-            {/* Before Tag / Annotation (Left Side) */}
-            <div className="absolute top-3 sm:top-4 left-3 sm:left-4 z-10 flex flex-col items-start gap-1.5">
+            {/* Before Tag / Annotation (Left Side) — hidden when After view is active */}
+            <div
+              className="absolute top-3 sm:top-4 left-3 sm:left-4 flex flex-col items-start gap-1.5"
+              style={{
+                opacity: sliderPosition <= 35 ? 0 : 1,
+                transition: isDragging ? "none" : "opacity 0.2s ease-in-out",
+              }}
+            >
               <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-600 text-white font-extrabold text-xs tracking-wide uppercase shadow-lg border border-red-400/40">
                 <X className="w-3.5 h-3.5 stroke-[3]" />
                 BEFORE: Old Tabletop Cooker
@@ -239,10 +406,10 @@ export const BeforeAfterSlider: React.FC<BeforeAfterSliderProps> = ({
           </div>
         </div>
 
-        {/* Tap / Drag Helper Hint Pill (Disappears once user interacts) */}
+        {/* Tap / Drag Helper Hint Pill */}
         <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 pointer-events-none px-3 py-1 rounded-full bg-black/70 text-white/90 text-[11px] font-medium backdrop-blur-md border border-white/20 shadow-lg flex items-center gap-1.5">
           <ChevronsLeftRight className="w-3.5 h-3.5 text-amber-400" />
-          <span>Drag left or right to reveal transformation</span>
+          <span>{isAutoPlaying ? "Auto-changing • Drag anytime to inspect" : "Drag left or right to inspect"}</span>
         </div>
       </div>
 
