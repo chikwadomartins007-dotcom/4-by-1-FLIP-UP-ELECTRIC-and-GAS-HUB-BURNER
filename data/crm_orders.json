@@ -1,0 +1,136 @@
+[
+  {
+    "id": "MAX-849201",
+    "order_reference": "MAX-849201",
+    "order_source": "Order Form",
+    "product": "Premium 5-Burner Built-In Gas + Electric Cooktop (Timer & Auto-Off Key)",
+    "product_code": "MAX-COOKTOP-5B",
+    "customer_name": "Chief Babatunde Adeleke",
+    "customer_phone": "08033221199",
+    "customer_email": "babatunde.adeleke@gmail.com",
+    "state": "Lagos",
+    "delivery_address": "Plot 14 Admiralty Way, Lekki Phase 1, Lagos",
+    "quantity": 2,
+    "unit_price": 275000,
+    "total_amount": 550000,
+    "total_savings": 10000,
+    "payment_preference": "Payment on Delivery (Subject to Location)",
+    "additional_instructions": "Please call on arrival, security at gate will direct you to Flat 4.",
+    "delivery_estimate": "1 - 2 business days",
+    "status": "delivered_paid",
+    "created_at": "2026-09-25T22:07:31.243Z",
+    "updated_at": "2026-09-27T06:07:31.243Z",
+    "attribution": {
+      "utm_source": "facebook",
+      "utm_medium": "cpc",
+      "utm_campaign": "cooktop_lagos_conversions_q3",
+      "fbclid": "fb.1.1718000000.IwAR2_SampleClickId992",
+      "fbp": "fb.1.1718000000.1234567890",
+      "fbc": "fb.1.1718000000.IwAR2_SampleClickId992",
+      "landing_page": "https://max-cooktops.ng/"
+    },
+    "capi_events": {
+      "lead": {
+        "sent": true,
+        "event_id": "lead_MAX-849201",
+        "sent_at": "2026-09-25T22:07:31.243Z",
+        "status": "dispatched"
+      },
+      "purchase": {
+        "sent": true,
+        "event_id": "purchase_MAX-849201",
+        "sent_at": "2026-09-27T06:07:31.243Z",
+        "status": "dispatched"
+      }
+    },
+    "notes": [
+      {
+        "id": "note_1",
+        "text": "Customer confirmed 2 units for main kitchen and guest chalets. Delivered and cash paid on arrival.",
+        "author": "Lagos Dispatch Agent",
+        "created_at": "2026-09-27T06:07:31.243Z"
+      }
+    ]
+  },
+  {
+    "id": "MAX-912384",
+    "order_reference": "MAX-912384",
+    "order_source": "Quick Order Modal",
+    "product": "Premium 5-Burner Built-In Gas + Electric Cooktop (Timer & Auto-Off Key)",
+    "product_code": "MAX-COOKTOP-5B",
+    "customer_name": "Mrs. Nkechi Okafor",
+    "customer_phone": "08129988776",
+    "customer_email": "nkechi.okafor@yahoo.com",
+    "state": "Abuja (FCT)",
+    "delivery_address": "House 24, 4th Avenue, Gwarinpa Estate, Abuja",
+    "quantity": 1,
+    "unit_price": 280000,
+    "total_amount": 280000,
+    "total_savings": 70000,
+    "payment_preference": "Payment on Delivery (Subject to Location)",
+    "additional_instructions": "Kitchen renovation in progress, need delivery before weekend.",
+    "delivery_estimate": "2 - 3 business days",
+    "status": "in_transit",
+    "created_at": "2026-09-26T20:07:31.243Z",
+    "updated_at": "2026-09-27T08:07:31.243Z",
+    "attribution": {
+      "utm_source": "instagram",
+      "utm_medium": "story_ad",
+      "utm_campaign": "abuja_luxury_kitchen_upgrade",
+      "fbclid": "fb.1.1718100000.IwAR1_AbujaSampleClick",
+      "fbp": "fb.1.1718100000.9876543210"
+    },
+    "capi_events": {
+      "lead": {
+        "sent": true,
+        "event_id": "lead_MAX-912384",
+        "sent_at": "2026-09-26T20:07:31.243Z",
+        "status": "dispatched"
+      }
+    },
+    "notes": [
+      {
+        "id": "note_2",
+        "text": "Waybill dispatched via Abuja express delivery partner. Tracking code shared with customer.",
+        "author": "Logistics Team",
+        "created_at": "2026-09-27T08:07:31.243Z"
+      }
+    ]
+  },
+  {
+    "id": "MAX-748192",
+    "order_reference": "MAX-748192",
+    "order_source": "Order Form",
+    "product": "Premium 5-Burner Built-In Gas + Electric Cooktop (Timer & Auto-Off Key)",
+    "product_code": "MAX-COOKTOP-5B",
+    "customer_name": "Engr. Emeka Nwosu",
+    "customer_phone": "07065544332",
+    "customer_email": "emeka.nwosu@gmail.com",
+    "state": "Rivers",
+    "delivery_address": "18 Peter Odili Road, Trans Amadi, Port Harcourt",
+    "quantity": 1,
+    "unit_price": 280000,
+    "total_amount": 280000,
+    "total_savings": 70000,
+    "payment_preference": "Payment on Delivery (Subject to Location)",
+    "additional_instructions": "Call in the evening after 5pm.",
+    "delivery_estimate": "3 - 5 business days",
+    "status": "pending_confirmation",
+    "created_at": "2026-09-27T08:07:31.243Z",
+    "updated_at": "2026-09-27T08:07:31.243Z",
+    "attribution": {
+      "utm_source": "facebook",
+      "utm_medium": "feed",
+      "utm_campaign": "niger_delta_promo"
+    },
+    "capi_events": {
+      "lead": {
+        "sent": true,
+        "event_id": "lead_MAX-748192",
+        "sent_at": "2026-09-27T08:07:31.243Z",
+        "status": "dispatched"
+      }
+    },
+    "notes": []
+  }
+]

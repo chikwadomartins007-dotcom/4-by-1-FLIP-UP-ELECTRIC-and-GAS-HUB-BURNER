@@ -3,7 +3,11 @@ import { Phone, ShieldCheck } from "lucide-react";
 import { WHATSAPP_PHONE_DISPLAY, CALL_PHONE_TEL } from "../utils/whatsapp";
 import { Analytics } from "../utils/analytics";
 
-export const Footer: React.FC = () => {
+interface FooterProps {
+  onOpenCrm?: () => void;
+}
+
+export const Footer: React.FC<FooterProps> = ({ onOpenCrm }) => {
   return (
     <footer className="bg-slate-50 border-t border-slate-200 py-12 text-slate-600 text-xs">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -44,6 +48,19 @@ export const Footer: React.FC = () => {
             <a href="#specs" className="hover:text-slate-900 transition-colors">Specifications</a>
             <span>•</span>
             <a href="#faq" className="hover:text-slate-900 transition-colors">FAQ</a>
+            {onOpenCrm && (
+              <>
+                <span>•</span>
+                <button
+                  type="button"
+                  onClick={onOpenCrm}
+                  className="hover:text-[#8D6D27] transition-colors cursor-pointer text-slate-600 hover:underline font-bold"
+                  title="Open Staff CRM & Meta Conversions API Portal"
+                >
+                  CRM &amp; Meta CAPI
+                </button>
+              </>
+            )}
           </div>
         </div>
 
@@ -54,6 +71,19 @@ export const Footer: React.FC = () => {
           </p>
           <p>
             © {new Date().getFullYear()} MAX Luxury Bathrooms | Privacy Policy | Terms of Delivery
+            {onOpenCrm && (
+              <>
+                {" "}
+                |{" "}
+                <button
+                  type="button"
+                  onClick={onOpenCrm}
+                  className="hover:underline text-slate-400 hover:text-slate-600 cursor-pointer"
+                >
+                  Staff Portal
+                </button>
+              </>
+            )}
           </p>
         </div>
 

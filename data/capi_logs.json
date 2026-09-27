@@ -1,0 +1,95 @@
+[
+  {
+    "id": "log_1790503676312_anaud",
+    "created_at": "2026-09-27T10:07:56.312Z",
+    "event_name": "Purchase",
+    "event_id": "purchase_MAX-667043",
+    "event_time": 1790503676,
+    "order_reference": "MAX-667043",
+    "order_id": "MAX-667043",
+    "user_match_keys": [
+      "em",
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1730802201545460",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1790503667043_ynsif",
+    "created_at": "2026-09-27T10:07:47.043Z",
+    "event_name": "Lead",
+    "event_id": "lead_MAX-667043",
+    "event_time": 1790503667,
+    "order_reference": "MAX-667043",
+    "order_id": "MAX-667043",
+    "user_match_keys": [
+      "em",
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1730802201545460",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1790503655406_7zgwo",
+    "created_at": "2026-09-27T10:07:35.406Z",
+    "event_name": "TestEvent",
+    "event_id": "test_1790503655406_b5ej6",
+    "event_time": 1790503655,
+    "order_reference": "TEST-CRM-VERIFY",
+    "user_match_keys": [
+      "em",
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "fbp",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1730802201545460",
+      "testEventCode": "TEST12345"
+    }
+  }
+]

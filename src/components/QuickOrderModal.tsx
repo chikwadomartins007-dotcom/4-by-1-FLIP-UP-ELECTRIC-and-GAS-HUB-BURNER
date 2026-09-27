@@ -166,31 +166,62 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
         submission_time: submissionTimestamp,
       };
 
-      const response = await fetch("https://formspree.io/f/xaeyaklo", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
+      const leadEventId = `lead_${generatedRef}_${Date.now()}`;
+      let finalOrderRef = generatedRef;
 
-      if (response.ok) {
-        setIsSuccess(true);
-        setOrderRef(generatedRef);
-        Analytics.trackLead({
-          email: formData.email,
-          phone: formData.phone,
-          name: formData.fullName,
-          quantity: currentPricing.quantity,
-          total: currentPricing.total,
+      // 1. Submit directly to CRM & Server-side Meta Conversions API
+      try {
+        const crmResponse = await fetch("/api/orders", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...payload,
+            explicit_event_id: leadEventId,
+          }),
         });
-      } else {
-        const err = await response.json().catch(() => ({}));
-        setSubmitError(
-          err?.error || "Unable to submit online right now. Please check your network or call our customer hotline directly."
-        );
+
+        if (crmResponse.ok) {
+          const crmData = await crmResponse.json();
+          if (crmData.orderReference) {
+            finalOrderRef = crmData.orderReference;
+          }
+        } else {
+          // Backup fallback to Formspree
+          await fetch("https://formspree.io/f/xaeyaklo", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(payload),
+          }).catch(() => {});
+        }
+      } catch (crmErr) {
+        console.warn("Direct CRM route notice, utilizing backup dispatch:", crmErr);
+        await fetch("https://formspree.io/f/xaeyaklo", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(payload),
+        }).catch(() => {});
       }
+
+      setIsSuccess(true);
+      setOrderRef(finalOrderRef);
+
+      // Track browser Meta Pixel + TikTok Pixel Lead with matching deduplication eventID
+      Analytics.trackLead({
+        email: formData.email,
+        phone: formData.phone,
+        name: formData.fullName,
+        quantity: currentPricing.quantity,
+        total: currentPricing.total,
+        eventId: leadEventId,
+      });
     } catch (err: any) {
       setSubmitError(
         "Network delay. Please try submitting again or call our customer hotline directly."

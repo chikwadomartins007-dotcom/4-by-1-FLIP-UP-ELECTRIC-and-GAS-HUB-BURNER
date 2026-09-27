@@ -270,7 +270,14 @@ export const Analytics = {
     });
   },
 
-  trackLead: (formData: { email: string; phone: string; name?: string; quantity: number; total: number }) => {
+  trackLead: (formData: {
+    email?: string;
+    phone: string;
+    name?: string;
+    quantity: number;
+    total: number;
+    eventId?: string;
+  }) => {
     const names = (formData.name || "").trim().split(" ");
     const firstName = names[0] || "";
     const lastName = names.slice(1).join(" ") || "";
@@ -338,7 +345,43 @@ export const Analytics = {
         phone: formData.phone,
         first_name: firstName,
         last_name: lastName,
-      }
+      },
+      formData.eventId
+    );
+  },
+
+  trackPurchase: (orderData: {
+    orderId: string;
+    total: number;
+    quantity: number;
+    email?: string;
+    phone?: string;
+    name?: string;
+    eventId?: string;
+  }) => {
+    const names = (orderData.name || "").trim().split(" ");
+    const firstName = names[0] || "";
+    const lastName = names.slice(1).join(" ") || "";
+    const resolvedEventId = orderData.eventId || `purchase_${orderData.orderId}`;
+
+    return trackMetaEvent(
+      "Purchase",
+      {
+        content_name: "5-Burner Built-In Gas + Electric Cooktop",
+        content_ids: ["MAX-COOKTOP-5B"],
+        content_type: "product",
+        value: Number(orderData.total),
+        currency: "NGN",
+        num_items: Number(orderData.quantity),
+        order_id: orderData.orderId,
+      },
+      {
+        email: orderData.email,
+        phone: orderData.phone,
+        first_name: firstName,
+        last_name: lastName,
+      },
+      resolvedEventId
     );
   },
 

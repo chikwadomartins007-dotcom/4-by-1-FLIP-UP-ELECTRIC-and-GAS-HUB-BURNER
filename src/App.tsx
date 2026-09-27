@@ -13,10 +13,12 @@ import { TrustSection } from "./components/TrustSection";
 import { FinalSalesSection } from "./components/FinalSalesSection";
 import { SavingsCalculator } from "./components/SavingsCalculator";
 import { OrderForm } from "./components/OrderForm";
+import { SocialProofTicker } from "./components/SocialProofTicker";
 import { Footer } from "./components/Footer";
 import { MobileStickyBar } from "./components/MobileStickyBar";
 import { QuickOrderModal } from "./components/QuickOrderModal";
 import { FloatingSupportButton } from "./components/FloatingSupportButton";
+import { CrmPortal } from "./components/CrmPortal";
 import { useExitIntent } from "./hooks/useExitIntent";
 import { initAttribution } from "./utils/attribution";
 import { Analytics } from "./utils/analytics";
@@ -26,6 +28,19 @@ export const App: React.FC = () => {
   const [quantity, setQuantity] = useState<number>(1);
   const [isQuickOrderOpen, setIsQuickOrderOpen] = useState<boolean>(false);
   const [isExitIntentTriggered, setIsExitIntentTriggered] = useState<boolean>(false);
+  const [isCrmOpen, setIsCrmOpen] = useState<boolean>(false);
+
+  // Check URL hash for direct staff access e.g. #crm
+  useEffect(() => {
+    const handleHash = () => {
+      if (window.location.hash === "#crm" || window.location.pathname.startsWith("/crm")) {
+        setIsCrmOpen(true);
+      }
+    };
+    handleHash();
+    window.addEventListener("hashchange", handleHash);
+    return () => window.removeEventListener("hashchange", handleHash);
+  }, []);
 
   // Exit-intent detection: opens the QuickOrderModal when cursor moves towards top edge
   useExitIntent({
@@ -135,8 +150,11 @@ export const App: React.FC = () => {
         />
       </main>
 
-      {/* 13. Footer with Meta/Facebook Disclaimer & Copyright */}
-      <Footer />
+      {/* Social Proof Live Order Ticker above Footer */}
+      <SocialProofTicker />
+
+      {/* 14. Footer with Meta/Facebook Disclaimer & Staff CRM link */}
+      <Footer onOpenCrm={() => setIsCrmOpen(true)} />
 
       {/* 14. Responsive Mobile Sticky Conversion Bar */}
       <MobileStickyBar
@@ -159,6 +177,19 @@ export const App: React.FC = () => {
 
       {/* 16. Floating Support & Quick FAQ Button */}
       <FloatingSupportButton />
+
+      {/* 17. Executive Staff CRM & Meta Conversions API Hub Modal */}
+      <CrmPortal
+        isOpen={isCrmOpen}
+        onClose={() => {
+          setIsCrmOpen(false);
+          if (window.location.hash === "#crm") {
+            try {
+              history.replaceState(null, "", " ");
+            } catch {}
+          }
+        }}
+      />
     </div>
   );
 };
