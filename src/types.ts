@@ -35,8 +35,13 @@ export interface MetaEventUserData {
   phone?: string;
   first_name?: string;
   last_name?: string;
+  city?: string;
+  state?: string;
+  country?: string;
   fbp?: string;
   fbc?: string;
+  client_ip?: string;
+  client_user_agent?: string;
 }
 
 export interface MetaCustomData {

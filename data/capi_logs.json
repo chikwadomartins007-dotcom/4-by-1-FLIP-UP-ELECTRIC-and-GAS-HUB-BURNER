@@ -1,5 +1,81 @@
 [
   {
+    "id": "log_1790922077771_zmzfc",
+    "created_at": "2026-10-02T06:21:17.771Z",
+    "event_name": "Purchase",
+    "event_id": "test_1790922077770_hk7bq",
+    "event_time": 1790922077,
+    "order_reference": "TEST-CRM-VERIFY",
+    "user_match_keys": [
+      "em",
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "fbp",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1730802201545460",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1790921852194_c6apl",
+    "created_at": "2026-10-02T06:17:32.194Z",
+    "event_name": "InitiateCheckout",
+    "event_id": "initiatecheckout_1790921851994_koe89mh",
+    "event_time": 1790921852,
+    "user_match_keys": [
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1730802201545460",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1790921817426_6vows",
+    "created_at": "2026-10-02T06:16:57.426Z",
+    "event_name": "ViewContent",
+    "event_id": "viewcontent_1790921816817_kenzrl9",
+    "event_time": 1790921816,
+    "user_match_keys": [
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1730802201545460",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
     "id": "log_1790503676312_anaud",
     "created_at": "2026-09-27T10:07:56.312Z",
     "event_name": "Purchase",

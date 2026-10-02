@@ -763,22 +763,33 @@ export const CrmPortal: React.FC<CrmPortalProps> = ({ isOpen, onClose }) => {
                   <label className="block text-xs font-semibold text-slate-300 mb-1">
                     Meta Test Event Code (Optional, for Live Verification)
                   </label>
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <input
                       type="text"
                       value={testEventCodeInput}
                       onChange={(e) => setTestEventCodeInput(e.target.value)}
                       placeholder="e.g. TEST12345"
-                      className="flex-1 px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-[#C5A059] font-mono uppercase"
+                      className="flex-1 min-w-[160px] px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-[#C5A059] font-mono uppercase"
                     />
                     <button
                       type="button"
-                      onClick={() => handleSendTestEvent("TestEvent")}
+                      onClick={() => handleSendTestEvent("Purchase")}
                       disabled={isTestingCapi}
-                      className="px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0"
+                      className="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 shadow-sm"
+                      title="Send test Purchase event (₦280,000) to Meta Events Manager"
+                    >
+                      <DollarSign className="w-3.5 h-3.5" />
+                      <span>{isTestingCapi ? "Sending..." : "Test Purchase (₦280k)"}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleSendTestEvent("Lead")}
+                      disabled={isTestingCapi}
+                      className="px-3.5 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 shadow-sm"
+                      title="Send test Lead event to Meta Events Manager"
                     >
                       <Send className="w-3.5 h-3.5" />
-                      <span>{isTestingCapi ? "Sending..." : "Send Test Event"}</span>
+                      <span>{isTestingCapi ? "Sending..." : "Test Lead"}</span>
                     </button>
                   </div>
                   <span className="text-[11px] text-slate-500 mt-1 block">

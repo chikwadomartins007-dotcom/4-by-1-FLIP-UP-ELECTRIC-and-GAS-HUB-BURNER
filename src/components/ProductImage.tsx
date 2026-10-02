@@ -324,6 +324,53 @@ export const ProductImage: React.FC<ProductImageProps> = ({
     setSelectedAssetIndex((prev) => (prev + 1) % PRODUCT_GALLERY_ASSETS.length);
   };
 
+  // Touch & Swipe gestures for mobile carousel
+  const touchStartXRef = useRef<number | null>(null);
+  const touchStartYRef = useRef<number | null>(null);
+  const isSwipingRef = useRef<boolean>(false);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsHovered(true);
+    if (e.touches && e.touches.length > 0) {
+      touchStartXRef.current = e.touches[0].clientX;
+      touchStartYRef.current = e.touches[0].clientY;
+      isSwipingRef.current = false;
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartXRef.current === null || touchStartYRef.current === null) return;
+    const deltaX = e.touches[0].clientX - touchStartXRef.current;
+    const deltaY = e.touches[0].clientY - touchStartYRef.current;
+
+    // If horizontal swipe is more pronounced than vertical scroll
+    if (Math.abs(deltaX) > 15 && Math.abs(deltaX) > Math.abs(deltaY)) {
+      isSwipingRef.current = true;
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    setIsHovered(false);
+    if (touchStartXRef.current !== null && isSwipingRef.current) {
+      const deltaX = e.changedTouches[0].clientX - touchStartXRef.current;
+      const minSwipeDistance = 40;
+
+      if (deltaX > minSwipeDistance) {
+        // Swiped right -> go to previous photo
+        handlePrev();
+      } else if (deltaX < -minSwipeDistance) {
+        // Swiped left -> go to next photo
+        handleNext();
+      }
+    }
+    touchStartXRef.current = null;
+    touchStartYRef.current = null;
+    // reset swiping flag on a tick so click handlers know if it was a swipe
+    setTimeout(() => {
+      isSwipingRef.current = false;
+    }, 50);
+  };
+
   const handleSelectAsset = (idx: number) => {
     setSlideDirection(idx >= selectedAssetIndex ? 1 : -1);
     setSelectedAssetIndex(idx);
@@ -499,10 +546,15 @@ export const ProductImage: React.FC<ProductImageProps> = ({
       <div
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onTouchStart={() => setIsHovered(true)}
-        onTouchEnd={() => setIsHovered(false)}
-        onClick={openLightbox}
-        className="relative bg-slate-950 min-h-[320px] sm:min-h-[420px] flex items-center justify-center p-3 sm:p-6 overflow-hidden group select-none cursor-zoom-in"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onClick={(e) => {
+          // If user was swiping, don't open the lightbox modal
+          if (isSwipingRef.current) return;
+          openLightbox(e);
+        }}
+        className="relative bg-slate-950 min-h-[320px] sm:min-h-[420px] flex items-center justify-center p-3 sm:p-6 overflow-hidden group select-none cursor-zoom-in touch-pan-y"
       >
         {/* Subtle radial warmth for glowing ceramic effect */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
@@ -547,12 +599,35 @@ export const ProductImage: React.FC<ProductImageProps> = ({
           </span>
         </div>
 
-        {/* Click to Zoom Overlay Hint */}
-        <div className="absolute bottom-3 right-3 z-20 opacity-80 group-hover:opacity-100 transition-opacity pointer-events-none">
+        {/* Mobile Swipe Hint Badge & Click to Zoom Hint */}
+        <div className="absolute bottom-4 right-3 z-20 flex items-center gap-1.5 pointer-events-none">
+          <span className="sm:hidden inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-black/75 text-amber-300 border border-amber-500/30 backdrop-blur-md shadow">
+            ⇄ Swipe
+          </span>
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-black/75 text-slate-200 border border-white/20 backdrop-blur-md shadow">
             <Eye className="w-3 h-3 text-[#C5A059]" />
-            Click to Enlarge Details
+            Click to Enlarge
           </span>
+        </div>
+
+        {/* Carousel Pagination Dots */}
+        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 bg-black/60 px-3 py-1 rounded-full backdrop-blur-md border border-white/10">
+          {PRODUCT_GALLERY_ASSETS.map((_, dotIdx) => (
+            <button
+              key={dotIdx}
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSelectAsset(dotIdx);
+              }}
+              aria-label={`Go to photo ${dotIdx + 1}`}
+              className={`transition-all duration-200 rounded-full cursor-pointer ${
+                selectedAssetIndex === dotIdx
+                  ? "w-5 h-2 bg-[#C5A059] shadow-sm"
+                  : "w-2 h-2 bg-white/40 hover:bg-white/80"
+              }`}
+            />
+          ))}
         </div>
 
         {/* Active Stage Content (Image or Simulator) */}

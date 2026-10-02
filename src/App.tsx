@@ -19,6 +19,7 @@ import { MobileStickyBar } from "./components/MobileStickyBar";
 import { QuickOrderModal } from "./components/QuickOrderModal";
 import { FloatingSupportButton } from "./components/FloatingSupportButton";
 import { CrmPortal } from "./components/CrmPortal";
+import { ReadingProgressBar } from "./components/ReadingProgressBar";
 import { useExitIntent } from "./hooks/useExitIntent";
 import { initAttribution } from "./utils/attribution";
 import { Analytics } from "./utils/analytics";
@@ -93,6 +94,9 @@ export const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans selection:bg-slate-900 selection:text-white">
+      {/* 0. Slim Scroll Reading Progress Bar at the Very Top of Window */}
+      <ReadingProgressBar />
+
       {/* 1. Top Urgency Banner with Live Countdown Timer */}
       <TopAnnouncementBar />
 

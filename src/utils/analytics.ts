@@ -14,6 +14,50 @@ declare global {
   }
 }
 
+export const META_PIXEL_ID = "1730802201545460";
+
+/**
+ * Reconnects and guarantees Meta Pixel fbq is properly mounted, initialized, and active.
+ */
+export function reconnectMetaPixel(pixelId: string = META_PIXEL_ID) {
+  if (typeof window === "undefined") return;
+
+  try {
+    if (!window.fbq) {
+      const n: any = function (...args: any[]) {
+        if (n.callMethod) {
+          n.callMethod.apply(n, args);
+        } else {
+          n.queue.push(args);
+        }
+      };
+      n.push = n;
+      n.loaded = true;
+      n.version = "2.0";
+      n.queue = [];
+      window.fbq = n;
+      window._fbq = n;
+
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = "https://connect.facebook.net/en_US/fbevents.js";
+      const firstScript = document.getElementsByTagName("script")[0];
+      if (firstScript && firstScript.parentNode) {
+        firstScript.parentNode.insertBefore(script, firstScript);
+      } else {
+        document.head.appendChild(script);
+      }
+    }
+
+    // Re-initialize pixel with automatic advanced matching
+    if (typeof window.fbq === "function") {
+      window.fbq("init", pixelId);
+    }
+  } catch (e) {
+    console.warn("Meta Pixel reconnect notice:", e);
+  }
+}
+
 /**
  * Safely dispatches standard events to TikTok Pixel (ttq).
  */
@@ -55,6 +99,7 @@ async function sendServerCapi(
       event_source_url: window.location.href,
       user_data: {
         ...userData,
+        country: userData.country || "ng",
         fbp: userData.fbp || attribution.fbp,
         fbc: userData.fbc || attribution.fbc,
       },
@@ -64,22 +109,24 @@ async function sendServerCapi(
       },
     };
 
-    // Use sendBeacon if available, or fetch in background
-    if (typeof navigator !== "undefined" && navigator.sendBeacon) {
-      const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
-      navigator.sendBeacon("/api/track/capi", blob);
-    } else {
-      fetch("/api/track/capi", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        keepalive: true,
-      }).catch(() => {
-        // Safe silence: tracking never blocks conversion
-      });
-    }
+    // Use fetch with keepalive as primary reliable POST, fallback to sendBeacon
+    fetch("/api/track/capi", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+      keepalive: true,
+    }).catch(() => {
+      if (typeof navigator !== "undefined" && navigator.sendBeacon) {
+        try {
+          const blob = new Blob([JSON.stringify(payload)], { type: "application/json" });
+          navigator.sendBeacon("/api/track/capi", blob);
+        } catch {
+          // safe
+        }
+      }
+    });
   } catch {
-    // Non-blocking
+    // Non-blocking: analytics errors will never affect user checkout
   }
 }
 
@@ -97,8 +144,13 @@ export function trackMetaEvent(
 
   // 1. Browser Meta Pixel
   try {
-    if (typeof window !== "undefined" && typeof window.fbq === "function") {
-      window.fbq("track", eventName, customData, { eventID: eventId });
+    if (typeof window !== "undefined") {
+      if (typeof window.fbq !== "function") {
+        reconnectMetaPixel();
+      }
+      if (typeof window.fbq === "function") {
+        window.fbq("track", eventName, customData, { eventID: eventId });
+      }
     }
   } catch (err) {
     console.warn("Browser Meta Pixel tracking error:", err);
@@ -118,6 +170,9 @@ export const Analytics = {
   trackPageView: () => {
     try {
       if (typeof window !== "undefined") {
+        if (typeof window.fbq !== "function") {
+          reconnectMetaPixel();
+        }
         if (typeof window.fbq === "function") {
           window.fbq("track", "PageView");
         }
