@@ -730,7 +730,7 @@ export const CrmPortal: React.FC<CrmPortalProps> = ({ isOpen, onClose }) => {
                     type="text"
                     value={pixelIdInput}
                     onChange={(e) => setPixelIdInput(e.target.value)}
-                    placeholder="e.g. 1730802201545460"
+                    placeholder="e.g. 1690563088540181"
                     className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-700 text-xs text-white focus:outline-none focus:border-[#C5A059] font-mono"
                     required
                   />

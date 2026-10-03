@@ -582,6 +582,10 @@ export const ProductImage: React.FC<ProductImageProps> = ({
 
         {/* Floating Feature Tags */}
         <div className="absolute top-3 left-3 z-20 flex flex-wrap gap-1.5 pointer-events-none">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-gradient-to-r from-[#C5A059] via-[#E5C378] to-[#C5A059] text-slate-950 border border-white/40 shadow-[0_4px_15px_rgba(197,160,89,0.5)]">
+            <Sparkles className="w-3.5 h-3.5 text-slate-950 fill-slate-950/20" />
+            Premium Design
+          </span>
           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-black/80 text-[#E5C378] border border-[#C5A059]/40 backdrop-blur-md shadow">
             <Timer className="w-3 h-3 text-[#E5C378]" />
             Digital Timer
@@ -594,9 +598,24 @@ export const ProductImage: React.FC<ProductImageProps> = ({
 
         <div className="absolute top-3 right-3 z-20 pointer-events-none">
           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-black/80 text-white border border-white/20 backdrop-blur-md shadow">
-            <Shield className="w-3 h-3 text-slate-300" />
-            Tempered Black Glass
+            <Shield className="w-3 h-3 text-[#E5C378]" />
+            Luxury Tempered Black Glass
           </span>
+        </div>
+
+        {/* Floating Bottom-Left Luxury Aesthetic Label */}
+        <div className="hidden sm:flex absolute bottom-3.5 left-3.5 z-20 items-center gap-2 px-3 py-1.5 rounded-xl bg-black/80 border border-[#C5A059]/40 backdrop-blur-md shadow-xl pointer-events-none">
+          <div className="w-6 h-6 rounded-lg bg-[#C5A059]/20 border border-[#C5A059]/40 flex items-center justify-center">
+            <Sparkles className="w-3.5 h-3.5 text-[#E5C378]" />
+          </div>
+          <div className="text-left leading-tight">
+            <span className="block text-[9px] font-mono uppercase tracking-widest text-[#E5C378] font-bold">
+              MODERN AESTHETIC
+            </span>
+            <span className="block text-[11px] font-extrabold text-white">
+              Mirror-Polished Luxury Finish
+            </span>
+          </div>
         </div>
 
         {/* Mobile Swipe Hint Badge & Click to Zoom Hint */}

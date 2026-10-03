@@ -14,7 +14,7 @@ declare global {
   }
 }
 
-export const META_PIXEL_ID = "1730802201545460";
+export const META_PIXEL_ID = "1690563088540181";
 
 /**
  * Reconnects and guarantees Meta Pixel fbq is properly mounted, initialized, and active.

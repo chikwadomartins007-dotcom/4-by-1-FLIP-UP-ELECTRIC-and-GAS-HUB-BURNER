@@ -88,7 +88,7 @@ interface ServerCapiConfig {
 
 function getCapiConfig(): ServerCapiConfig {
   const defaultEnvConfig: ServerCapiConfig = {
-    pixelId: process.env.META_PIXEL_ID || "1730802201545460",
+    pixelId: process.env.META_PIXEL_ID || "1690563088540181",
     accessToken: process.env.META_ACCESS_TOKEN || "",
     testEventCode: process.env.META_TEST_EVENT_CODE || "",
     autoFireLeadOnOrder: true,
@@ -105,7 +105,7 @@ function getCapiConfig(): ServerCapiConfig {
         ...stored,
         // Allow env var override if stored token is empty
         accessToken: stored.accessToken || process.env.META_ACCESS_TOKEN || "",
-        pixelId: stored.pixelId || process.env.META_PIXEL_ID || "1730802201545460",
+        pixelId: stored.pixelId || process.env.META_PIXEL_ID || "1690563088540181",
         testEventCode: stored.testEventCode !== undefined ? stored.testEventCode : (process.env.META_TEST_EVENT_CODE || ""),
       };
     }
@@ -462,7 +462,7 @@ async function sendMetaCapiEvent(options: DispatchCapiOptions): Promise<{
     },
   };
 
-  const pixelId = config.pixelId || "1730802201545460";
+  const pixelId = config.pixelId || "1690563088540181";
   const accessToken = config.accessToken;
   const testEventCode = config.testEventCode;
 

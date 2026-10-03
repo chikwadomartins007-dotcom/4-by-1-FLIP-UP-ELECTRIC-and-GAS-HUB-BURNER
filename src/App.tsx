@@ -7,9 +7,11 @@ import { SafetyFeatures } from "./components/SafetyFeatures";
 import { ProductVideo } from "./components/ProductVideo";
 import { FAQ } from "./components/FAQ";
 import { FeaturesGrid } from "./components/FeaturesGrid";
+import { NationwideDeliverySection } from "./components/NationwideDeliverySection";
 import { UpgradeComparison } from "./components/UpgradeComparison";
 import { OrderingSteps } from "./components/OrderingSteps";
 import { TrustSection } from "./components/TrustSection";
+import { WarrantyAfterSales } from "./components/WarrantyAfterSales";
 import { FinalSalesSection } from "./components/FinalSalesSection";
 import { SavingsCalculator } from "./components/SavingsCalculator";
 import { OrderForm } from "./components/OrderForm";
@@ -126,6 +128,9 @@ export const App: React.FC = () => {
         {/* 7. Easy & Straightforward to Use + Technical Blueprint Specs */}
         <FeaturesGrid />
 
+        {/* 7.5. Nationwide Delivery: 24-48 Hours to Major Nigerian Cities (Map Pin & Trust Badge Style) */}
+        <NationwideDeliverySection onOrderClick={handleOpenOrder} />
+
         {/* 8. Ordinary Tabletop vs Luxury Built-In Upgrade Comparison */}
         <UpgradeComparison onOrderClick={handleOpenOrder} />
 
@@ -134,6 +139,9 @@ export const App: React.FC = () => {
 
         {/* 10. Customer Reviews + Facebook Reactions + 100% Satisfaction Guarantee */}
         <TrustSection />
+
+        {/* 10.5. 1-Year Product Warranty & Dedicated After-Sales Technical Support */}
+        <WarrantyAfterSales onOrderClick={handleOpenOrder} />
 
         {/* 11. Special Information Before You Order (Strikethrough Price, Promo Price, Dashed Red Policy Box) */}
         <FinalSalesSection
