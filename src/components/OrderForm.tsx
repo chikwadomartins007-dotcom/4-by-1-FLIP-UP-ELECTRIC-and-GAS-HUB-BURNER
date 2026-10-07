@@ -30,9 +30,14 @@ import { StockUrgencyWidget } from "./StockUrgencyWidget";
 interface OrderFormProps {
   quantity: number;
   onQuantityChange: (qty: number) => void;
+  onOrderSuccess?: (orderRef: string) => void;
 }
 
-export const OrderForm: React.FC<OrderFormProps> = ({ quantity, onQuantityChange }) => {
+export const OrderForm: React.FC<OrderFormProps> = ({
+  quantity,
+  onQuantityChange,
+  onOrderSuccess,
+}) => {
   const [formData, setFormData] = useState<OrderFormData>({
     fullName: "",
     phone: "",
@@ -199,6 +204,9 @@ export const OrderForm: React.FC<OrderFormProps> = ({ quantity, onQuantityChange
 
       setIsSuccess(true);
       setOrderReference(finalOrderRef);
+      if (onOrderSuccess) {
+        onOrderSuccess(finalOrderRef);
+      }
 
       // Track browser Meta Pixel + TikTok Pixel Lead with matching deduplication eventID
       Analytics.trackLead({

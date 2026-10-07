@@ -31,6 +31,7 @@ export const App: React.FC = () => {
   const [isQuickOrderOpen, setIsQuickOrderOpen] = useState<boolean>(false);
   const [isExitIntentTriggered, setIsExitIntentTriggered] = useState<boolean>(false);
   const [isCrmOpen, setIsCrmOpen] = useState<boolean>(false);
+  const [submittedOrderRef, setSubmittedOrderRef] = useState<string>("");
 
   // Check URL hash for direct staff access e.g. #crm
   useEffect(() => {
@@ -105,6 +106,8 @@ export const App: React.FC = () => {
       <Header
         onOrderClick={handleOpenOrder}
         onQuickOrderClick={handleOpenOrder}
+        hasSubmittedOrder={Boolean(submittedOrderRef)}
+        orderRef={submittedOrderRef}
       />
 
       {/* Main Direct-Response Landing Page Body */}
@@ -141,7 +144,10 @@ export const App: React.FC = () => {
         <TrustSection />
 
         {/* 10.5. 1-Year Product Warranty & Dedicated After-Sales Technical Support */}
-        <WarrantyAfterSales onOrderClick={handleOpenOrder} />
+        <WarrantyAfterSales
+          onOrderClick={handleOpenOrder}
+          hasSubmittedOrder={Boolean(submittedOrderRef)}
+        />
 
         {/* 11. Special Information Before You Order (Strikethrough Price, Promo Price, Dashed Red Policy Box) */}
         <FinalSalesSection
@@ -159,6 +165,7 @@ export const App: React.FC = () => {
         <OrderForm
           quantity={quantity}
           onQuantityChange={setQuantity}
+          onOrderSuccess={(ref) => setSubmittedOrderRef(ref)}
         />
       </main>
 
@@ -185,10 +192,11 @@ export const App: React.FC = () => {
         quantity={quantity}
         onQuantityChange={setQuantity}
         isExitIntent={isExitIntentTriggered}
+        onOrderSuccess={(ref) => setSubmittedOrderRef(ref)}
       />
 
       {/* 16. Floating Support & Quick FAQ Button */}
-      <FloatingSupportButton />
+      <FloatingSupportButton hasSubmittedOrder={Boolean(submittedOrderRef)} />
 
       {/* 17. Executive Staff CRM & Meta Conversions API Hub Modal */}
       <CrmPortal

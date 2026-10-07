@@ -34,6 +34,7 @@ interface QuickOrderModalProps {
   quantity: number;
   onQuantityChange: (qty: number) => void;
   isExitIntent?: boolean;
+  onOrderSuccess?: (orderRef: string) => void;
 }
 
 export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
@@ -42,6 +43,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
   quantity,
   onQuantityChange,
   isExitIntent = false,
+  onOrderSuccess,
 }) => {
   const [formData, setFormData] = useState<OrderFormData>({
     fullName: "",
@@ -212,6 +214,9 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
 
       setIsSuccess(true);
       setOrderRef(finalOrderRef);
+      if (onOrderSuccess) {
+        onOrderSuccess(finalOrderRef);
+      }
 
       // Track browser Meta Pixel + TikTok Pixel Lead with matching deduplication eventID
       Analytics.trackLead({
@@ -376,125 +381,78 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
                   {/* Real-time Limited Stock Alert */}
                   <StockUrgencyWidget variant="compact" className="w-full justify-center" />
 
-                  {/* Visual Quantity Selection Cards */}
+                  {/* Single Cooktop Option + Manual Quantity Control */}
                   <div>
                     <div className="flex items-center justify-between mb-2">
                       <label className="text-xs font-bold uppercase tracking-wider text-slate-700">
-                        1. Select Quantity Package:
+                        1. Selected Product &amp; Quantity:
                       </label>
                       <span className="text-[11px] text-emerald-700 font-semibold">
-                        ✓ Free Delivery on All
+                        ✓ Free Nationwide Delivery
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                      {/* 1 Unit */}
-                      <button
-                        type="button"
-                        onClick={() => handleSelectQuantity(1)}
-                        className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-between ${
-                          formData.quantity === 1
-                            ? "bg-slate-900 text-white border-slate-900 shadow-sm"
-                            : "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-800"
-                        }`}
-                      >
-                        <span className="text-xs font-bold block">1 Cooktop</span>
-                        <span className={`text-xs font-extrabold block mt-0.5 ${formData.quantity === 1 ? "text-yellow-300" : "text-slate-900"}`}>
-                          ₦280,000
-                        </span>
-                        <span className={`text-[10px] block mt-1 ${formData.quantity === 1 ? "text-slate-300" : "text-slate-500"}`}>
-                          Single Home
-                        </span>
-                      </button>
+                    {/* Single Burner/Cooktop Card with Manual Quantity Stepper & Input */}
+                    <div className="p-3.5 rounded-xl bg-slate-900 text-white border-2 border-yellow-400 shadow-md flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="text-left">
+                        <div className="flex items-center gap-2">
+                          <span className="inline-block w-2 h-2 rounded-full bg-yellow-400 animate-pulse" />
+                          <span className="text-xs sm:text-sm font-extrabold text-white">
+                            1 Unit — 5-Burner Hybrid Gas + Electric Cooktop
+                          </span>
+                        </div>
+                        <div className="mt-1 flex flex-wrap items-center gap-2">
+                          <span className="text-base sm:text-lg font-black text-yellow-300 font-mono">
+                            ₦280,000
+                          </span>
+                          <span className="text-xs text-slate-400 line-through">
+                            ₦350,000
+                          </span>
+                          <span className="text-[10px] font-bold bg-[#E8132E] text-white px-2 py-0.5 rounded">
+                            Pay on Delivery
+                          </span>
+                        </div>
+                      </div>
 
-                      {/* 2 Units */}
-                      <button
-                        type="button"
-                        onClick={() => handleSelectQuantity(2)}
-                        className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-between relative overflow-hidden ${
-                          formData.quantity === 2
-                            ? "bg-slate-900 text-white border-slate-900 shadow-sm ring-2 ring-emerald-500"
-                            : "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-800"
-                        }`}
-                      >
-                        <span className="absolute top-0 right-0 bg-emerald-600 text-white text-[9px] font-black px-1.5 rounded-bl">
-                          SAVE ₦10k
+                      {/* Manual Quantity Increase / Decrease Control */}
+                      <div className="flex items-center justify-between sm:justify-end gap-2.5 bg-black/50 border border-white/15 rounded-xl px-3 py-2 shrink-0">
+                        <span className="text-[11px] font-bold text-slate-300 sm:mr-1">
+                          Qty:
                         </span>
-                        <span className="text-xs font-bold block">2 Cooktops</span>
-                        <span className={`text-xs font-extrabold block mt-0.5 ${formData.quantity === 2 ? "text-yellow-300" : "text-slate-900"}`}>
-                          ₦550,000
-                        </span>
-                        <span className={`text-[10px] block mt-1 ${formData.quantity === 2 ? "text-emerald-300" : "text-emerald-700 font-bold"}`}>
-                          Save ₦10,000
-                        </span>
-                      </button>
+                        <div className="flex items-center gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => handleSelectQuantity(Math.max(1, formData.quantity - 1))}
+                            aria-label="Decrease quantity"
+                            className="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 flex items-center justify-center text-white transition-colors cursor-pointer"
+                          >
+                            <Minus className="w-3.5 h-3.5" />
+                          </button>
 
-                      {/* 3 Units */}
-                      <button
-                        type="button"
-                        onClick={() => handleSelectQuantity(3)}
-                        className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-between relative overflow-hidden ${
-                          formData.quantity === 3
-                            ? "bg-slate-900 text-white border-slate-900 shadow-sm ring-2 ring-emerald-500"
-                            : "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-800"
-                        }`}
-                      >
-                        <span className="absolute top-0 right-0 bg-emerald-600 text-white text-[9px] font-black px-1.5 rounded-bl">
-                          SAVE ₦30k
-                        </span>
-                        <span className="text-xs font-bold block">3 Cooktops</span>
-                        <span className={`text-xs font-extrabold block mt-0.5 ${formData.quantity === 3 ? "text-yellow-300" : "text-slate-900"}`}>
-                          ₦810,000
-                        </span>
-                        <span className={`text-[10px] block mt-1 ${formData.quantity === 3 ? "text-emerald-300" : "text-emerald-700 font-bold"}`}>
-                          Save ₦30,000
-                        </span>
-                      </button>
+                          <input
+                            type="number"
+                            min={1}
+                            max={50}
+                            value={formData.quantity}
+                            onChange={(e) => {
+                              const val = parseInt(e.target.value, 10);
+                              if (!isNaN(val) && val >= 1) {
+                                handleSelectQuantity(Math.min(50, val));
+                              }
+                            }}
+                            aria-label="Quantity"
+                            className="w-11 h-8 text-center rounded-lg bg-white text-slate-950 font-mono font-black text-sm border border-yellow-400 focus:outline-none"
+                          />
 
-                      {/* 4+ Units */}
-                      <button
-                        type="button"
-                        onClick={() => handleSelectQuantity(4)}
-                        className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-between relative overflow-hidden ${
-                          formData.quantity >= 4
-                            ? "bg-slate-900 text-white border-slate-900 shadow-sm ring-2 ring-emerald-500"
-                            : "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-800"
-                        }`}
-                      >
-                        <span className="absolute top-0 right-0 bg-emerald-600 text-white text-[9px] font-black px-1.5 rounded-bl">
-                          SAVE ₦60k+
-                        </span>
-                        <span className="text-xs font-bold block">4+ Cooktops</span>
-                        <span className={`text-xs font-extrabold block mt-0.5 ${formData.quantity >= 4 ? "text-yellow-300" : "text-slate-900"}`}>
-                          {formData.quantity >= 4 ? formatNaira(pricing.total) : "₦1,060,000"}
-                        </span>
-                        <span className={`text-[10px] block mt-1 ${formData.quantity >= 4 ? "text-emerald-300" : "text-emerald-700 font-bold"}`}>
-                          Save ₦60,000+
-                        </span>
-                      </button>
-                    </div>
-
-                    {/* Quantity Stepper for other numbers */}
-                    <div className="mt-2 flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5">
-                      <span className="text-xs text-slate-600">Need more? Adjust quantity:</span>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() => handleSelectQuantity(Math.max(1, formData.quantity - 1))}
-                          className="w-7 h-7 rounded-lg bg-white border border-slate-300 flex items-center justify-center text-slate-700 hover:bg-slate-100 cursor-pointer"
-                        >
-                          <Minus className="w-3.5 h-3.5" />
-                        </button>
-                        <span className="w-8 text-center text-xs font-bold text-slate-900">
-                          {formData.quantity}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => handleSelectQuantity(formData.quantity + 1)}
-                          className="w-7 h-7 rounded-lg bg-white border border-slate-300 flex items-center justify-center text-slate-700 hover:bg-slate-100 cursor-pointer"
-                        >
-                          <Plus className="w-3.5 h-3.5" />
-                        </button>
+                          <button
+                            type="button"
+                            onClick={() => handleSelectQuantity(formData.quantity + 1)}
+                            aria-label="Increase quantity"
+                            className="w-8 h-8 rounded-lg bg-yellow-400 hover:bg-yellow-300 text-slate-950 font-black flex items-center justify-center transition-colors cursor-pointer"
+                          >
+                            <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>

@@ -1,20 +1,27 @@
 import React from "react";
 import { Flame, Zap, ShieldCheck, Phone, MessageCircle } from "lucide-react";
-import { WHATSAPP_PHONE_DISPLAY, CALL_PHONE_TEL, getWhatsAppOrderUrl } from "../utils/whatsapp";
+import { WHATSAPP_PHONE_DISPLAY, CALL_PHONE_TEL, getWhatsAppConfirmationUrl } from "../utils/whatsapp";
 import { Analytics } from "../utils/analytics";
 
 interface HeaderProps {
   onOrderClick: () => void;
   onQuickOrderClick?: () => void;
+  hasSubmittedOrder?: boolean;
+  orderRef?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onOrderClick, onQuickOrderClick }) => {
+export const Header: React.FC<HeaderProps> = ({
+  onOrderClick,
+  onQuickOrderClick,
+  hasSubmittedOrder = false,
+  orderRef = "",
+}) => {
   const handlePhoneClick = () => {
     Analytics.trackContact("phone", "header_call_button");
   };
 
   const handleWhatsAppClick = () => {
-    Analytics.trackContact("whatsapp", "header_whatsapp_button");
+    Analytics.trackContact("whatsapp", "header_post_order_whatsapp_button");
   };
 
   const handleQuickOrder = () => {
@@ -44,31 +51,34 @@ export const Header: React.FC<HeaderProps> = ({ onOrderClick, onQuickOrderClick 
           </div>
         </a>
 
-        {/* Right: Action Buttons & Pay on Delivery Pill */}
+        {/* Right: Action Buttons & Pay on Delivery Pill (WhatsApp & Phone only appear AFTER submitting order) */}
         <div className="flex items-center gap-2 sm:gap-2.5">
-          {/* Call Button on larger screens */}
-          <a
-            href={CALL_PHONE_TEL}
-            onClick={handlePhoneClick}
-            className="hidden lg:inline-flex items-center gap-1.5 text-xs text-white font-extrabold bg-neutral-950 hover:bg-neutral-800 px-3 py-2 rounded-xl transition-all shadow-sm"
-            title="Call Customer Care"
-          >
-            <Phone className="w-3.5 h-3.5 text-yellow-400" />
-            <span>Call: {WHATSAPP_PHONE_DISPLAY}</span>
-          </a>
+          {hasSubmittedOrder && (
+            <>
+              <a
+                href={CALL_PHONE_TEL}
+                onClick={handlePhoneClick}
+                className="inline-flex items-center gap-1.5 text-xs text-white font-extrabold bg-neutral-950 hover:bg-neutral-800 px-3 py-2 rounded-xl transition-all shadow-sm"
+                title="Call Customer Care"
+              >
+                <Phone className="w-3.5 h-3.5 text-yellow-400" />
+                <span className="hidden sm:inline">Call: {WHATSAPP_PHONE_DISPLAY}</span>
+                <span className="sm:hidden">Call</span>
+              </a>
 
-          {/* WhatsApp Button on medium+ screens */}
-          <a
-            href={getWhatsAppOrderUrl(1)}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={handleWhatsAppClick}
-            className="hidden md:inline-flex items-center gap-1.5 text-xs font-bold text-white bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 px-3 py-2 rounded-xl transition-all shadow-sm"
-            title="Order or Chat on WhatsApp"
-          >
-            <MessageCircle className="w-3.5 h-3.5 text-yellow-400" />
-            <span>WhatsApp</span>
-          </a>
+              <a
+                href={getWhatsAppConfirmationUrl(orderRef || "NEW-ORDER", 1)}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleWhatsAppClick}
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 px-3 py-2 rounded-xl transition-all shadow-sm"
+                title="Confirm Order on WhatsApp"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span>WhatsApp</span>
+              </a>
+            </>
+          )}
 
           {/* Primary Quick Order Button (Vibrant Red + Yellow Bolt) */}
           <button

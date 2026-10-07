@@ -25,7 +25,13 @@ interface FAQItem {
   badge?: string;
 }
 
-export const FloatingSupportButton: React.FC = () => {
+interface FloatingSupportButtonProps {
+  hasSubmittedOrder?: boolean;
+}
+
+export const FloatingSupportButton: React.FC<FloatingSupportButtonProps> = ({
+  hasSubmittedOrder = false,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<"all" | "delivery" | "specs" | "safety">("all");
@@ -371,15 +377,17 @@ export const FloatingSupportButton: React.FC = () => {
               </button>
 
               {/* Direct Voice & Chat Hotline */}
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <button
-                  type="button"
-                  onClick={handleWhatsAppChat}
-                  className="py-2 px-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>WhatsApp Support</span>
-                </button>
+              <div className={`grid ${hasSubmittedOrder ? "grid-cols-2" : "grid-cols-1"} gap-2 text-xs`}>
+                {hasSubmittedOrder && (
+                  <button
+                    type="button"
+                    onClick={handleWhatsAppChat}
+                    className="py-2 px-3 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>WhatsApp Support</span>
+                  </button>
+                )}
 
                 <button
                   type="button"

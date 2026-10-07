@@ -20,6 +20,7 @@ import { Analytics } from "../utils/analytics";
 
 interface WarrantyAfterSalesProps {
   onOrderClick?: () => void;
+  hasSubmittedOrder?: boolean;
 }
 
 const WARRANTY_COVERAGE_ITEMS = [
@@ -43,6 +44,7 @@ const WARRANTY_COVERAGE_ITEMS = [
 
 export const WarrantyAfterSales: React.FC<WarrantyAfterSalesProps> = ({
   onOrderClick,
+  hasSubmittedOrder = false,
 }) => {
   const supportWhatsAppUrl = `https://wa.me/${WHATSAPP_PHONE_RAW}?text=${encodeURIComponent(
     "Hello MAX Luxury Bathrooms Technical Support, I have a question regarding the 1-Year Warranty & Installation for the 5-Burner Built-In Cooktop."
@@ -197,8 +199,8 @@ export const WarrantyAfterSales: React.FC<WarrantyAfterSalesProps> = ({
                 </div>
               </div>
 
-              {/* Action Buttons: Call Support or WhatsApp Engineer */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {/* Action Buttons: Call Support or Post-Order WhatsApp */}
+              <div className={`grid grid-cols-1 ${hasSubmittedOrder ? "sm:grid-cols-2" : ""} gap-2.5`}>
                 <a
                   href={CALL_PHONE_TEL}
                   onClick={handleCallSupport}
@@ -207,16 +209,18 @@ export const WarrantyAfterSales: React.FC<WarrantyAfterSalesProps> = ({
                   <PhoneCall className="w-3.5 h-3.5 text-emerald-700" />
                   <span>Call Tech Support</span>
                 </a>
-                <a
-                  href={supportWhatsAppUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={handleWhatsAppSupport}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold bg-emerald-600 hover:bg-emerald-500 text-white transition-all shadow-md"
-                >
-                  <MessageCircle className="w-3.5 h-3.5" />
-                  <span>WhatsApp Engineer</span>
-                </a>
+                {hasSubmittedOrder && (
+                  <a
+                    href={supportWhatsAppUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={handleWhatsAppSupport}
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold bg-emerald-600 hover:bg-emerald-500 text-white transition-all shadow-md"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>WhatsApp Engineer</span>
+                  </a>
+                )}
               </div>
             </div>
           </div>
