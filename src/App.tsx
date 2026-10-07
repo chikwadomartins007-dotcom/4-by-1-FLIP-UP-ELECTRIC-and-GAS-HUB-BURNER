@@ -4,7 +4,6 @@ import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Benefits } from "./components/Benefits";
 import { SafetyFeatures } from "./components/SafetyFeatures";
-import { ProductVideo } from "./components/ProductVideo";
 import { FAQ } from "./components/FAQ";
 import { FeaturesGrid } from "./components/FeaturesGrid";
 import { NationwideDeliverySection } from "./components/NationwideDeliverySection";
@@ -103,13 +102,17 @@ export const App: React.FC = () => {
       <TopAnnouncementBar />
 
       {/* 2. Header */}
-      <Header onOrderClick={handleOpenOrder} />
+      <Header
+        onOrderClick={handleOpenOrder}
+        onQuickOrderClick={handleOpenOrder}
+      />
 
       {/* Main Direct-Response Landing Page Body */}
       <main className="flex-1">
-        {/* 3. Hero Section (Headline, Subtitle, Centered Image, Feature Highlights, Bold Quote, 3 Photos, CTA Button) */}
+        {/* 3. Hero Section (Split 12-Col Hero, Sticky Marquee, Factory-Direct Offer Box, Dark Challenge Section) */}
         <Hero
           onOrderClick={handleOpenOrder}
+          onQuickOrderClick={handleOpenOrder}
           currentQuantity={quantity}
         />
 
@@ -118,9 +121,6 @@ export const App: React.FC = () => {
 
         {/* 5. Certified Safety Features (Auto-Shutoff & Gas Leakage Protection) */}
         <SafetyFeatures onOrderClick={handleOpenOrder} />
-
-        {/* 6. Showroom Demonstration Video Section (16:9 Dark Bezel Container) */}
-        <ProductVideo onOrderClick={handleOpenOrder} />
 
         {/* 6. Frequently Asked Questions + Second CTA Button */}
         <FAQ onOrderClick={handleOpenOrder} />

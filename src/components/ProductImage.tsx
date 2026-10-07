@@ -107,28 +107,6 @@ export const PRODUCT_GALLERY_ASSETS: GalleryAsset[] = [
     ],
   },
   {
-    id: "kitchen-install",
-    title: "Built-In Kitchen Countertop Installation",
-    angleLabel: "Countertop Fit",
-    tag: "Real Kitchen Fit",
-    src: "/kitchen-counter-view.jpg",
-    fallbackPaths: [
-      "/kitchen-counter-view.jpg",
-      "/assets/images.jpeg",
-      "/images.jpeg",
-      "/exact-cooktop-top.png",
-    ],
-    description: "Flush recessed installation into polished quartz and marble kitchen island, blending seamlessly with contemporary cabinetry.",
-    badge: "Seamless Flush Fit",
-    badgeColor: "bg-emerald-500/15 text-emerald-800 border-emerald-500/30",
-    closeUpNotes: [
-      "Beveled edge tempered glass sits flush against stone counters",
-      "Eliminates bulky tabletop box and dangling rubber hoses",
-      "Wide 900mm layout allows cooking with 5 large pots simultaneously",
-      "Heat-resistant silicone perimeter seal blocks grease infiltration",
-    ],
-  },
-  {
     id: "active-ceramic",
     title: "Active Radiant Heat & Digital Display",
     angleLabel: "Ceramic Hotplate",
@@ -233,7 +211,7 @@ export const ProductImage: React.FC<ProductImageProps> = ({
   const [fallbackIndices, setFallbackIndices] = useState<Record<string, number>>({});
 
   // Carousel & Autoplay
-  const [isAutoPlay, setIsAutoPlay] = useState<boolean>(true);
+  const [isAutoPlay, setIsAutoPlay] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [slideDirection, setSlideDirection] = useState<number>(1);
 
@@ -254,32 +232,13 @@ export const ProductImage: React.FC<ProductImageProps> = ({
   const [timerMinutes, setTimerMinutes] = useState<number>(30);
   const [isTimerMode, setIsTimerMode] = useState<boolean>(false);
   const [isLocked, setIsLocked] = useState<boolean>(false);
-  const [customKitchenImg, setCustomKitchenImg] = useState<string>(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("max_cooktop_exact_after") || "/exact_kitchen_after.jpg";
-    }
-    return "/exact_kitchen_after.jpg";
-  });
-
-  useEffect(() => {
-    const handler = (e: any) => {
-      if (e.detail) setCustomKitchenImg(e.detail);
-    };
-    window.addEventListener("exact-after-image-updated", handler);
-    return () => window.removeEventListener("exact-after-image-updated", handler);
-  }, []);
-
   const currentAsset = PRODUCT_GALLERY_ASSETS[selectedAssetIndex];
   const activeSlotKey = ASSET_ID_TO_SLOT[currentAsset.id] || "hero-main";
   const isCustom = isCustomized(activeSlotKey);
   const hasError = imgErrors[currentAsset.id];
   const currentPathIdx = fallbackIndices[currentAsset.id] || 0;
   const rawSrc = currentAsset.fallbackPaths[Math.min(currentPathIdx, currentAsset.fallbackPaths.length - 1)];
-  const currentSrc = isCustom
-    ? getImageUrl(activeSlotKey)
-    : (currentAsset.id === "kitchen-install" && customKitchenImg)
-    ? customKitchenImg
-    : rawSrc;
+  const currentSrc = isCustom ? getImageUrl(activeSlotKey) : rawSrc;
 
   // Auto-slide effect
   useEffect(() => {
@@ -554,100 +513,28 @@ export const ProductImage: React.FC<ProductImageProps> = ({
           if (isSwipingRef.current) return;
           openLightbox(e);
         }}
-        className="relative bg-slate-950 min-h-[320px] sm:min-h-[420px] flex items-center justify-center p-3 sm:p-6 overflow-hidden group select-none cursor-zoom-in touch-pan-y"
+        className="relative bg-white min-h-[340px] sm:min-h-[460px] flex items-center justify-center p-0 overflow-hidden group select-none cursor-zoom-in touch-pan-y"
       >
-        {/* Subtle radial warmth for glowing ceramic effect */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
-
         {/* Previous and Next Navigation Arrows */}
         <button
           type="button"
           onClick={handlePrev}
           aria-label="Previous Angle"
-          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 p-2 sm:p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white/90 hover:text-white border border-white/20 backdrop-blur-md shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer"
+          className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white border border-white/20 backdrop-blur-md shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer opacity-0 group-hover:opacity-100"
           title="Previous Angle (Left Arrow)"
         >
-          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+          <ChevronLeft className="w-5 h-5" />
         </button>
 
         <button
           type="button"
           onClick={handleNext}
           aria-label="Next Angle"
-          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 p-2 sm:p-2.5 rounded-full bg-black/60 hover:bg-black/90 text-white/90 hover:text-white border border-white/20 backdrop-blur-md shadow-xl transition-all duration-200 hover:scale-110 active:scale-95 cursor-pointer"
+          className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 z-30 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white border border-white/20 backdrop-blur-md shadow-lg transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer opacity-0 group-hover:opacity-100"
           title="Next Angle (Right Arrow)"
         >
-          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+          <ChevronRight className="w-5 h-5" />
         </button>
-
-        {/* Floating Feature Tags */}
-        <div className="absolute top-3 left-3 z-20 flex flex-wrap gap-1.5 pointer-events-none">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-wider bg-gradient-to-r from-[#C5A059] via-[#E5C378] to-[#C5A059] text-slate-950 border border-white/40 shadow-[0_4px_15px_rgba(197,160,89,0.5)]">
-            <Sparkles className="w-3.5 h-3.5 text-slate-950 fill-slate-950/20" />
-            Premium Design
-          </span>
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-black/80 text-[#E5C378] border border-[#C5A059]/40 backdrop-blur-md shadow">
-            <Timer className="w-3 h-3 text-[#E5C378]" />
-            Digital Timer
-          </span>
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-black/80 text-emerald-400 border border-emerald-500/30 backdrop-blur-md shadow">
-            <Power className="w-3 h-3" />
-            Automatic Off
-          </span>
-        </div>
-
-        <div className="absolute top-3 right-3 z-20 pointer-events-none">
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-black/80 text-white border border-white/20 backdrop-blur-md shadow">
-            <Shield className="w-3 h-3 text-[#E5C378]" />
-            Luxury Tempered Black Glass
-          </span>
-        </div>
-
-        {/* Floating Bottom-Left Luxury Aesthetic Label */}
-        <div className="hidden sm:flex absolute bottom-3.5 left-3.5 z-20 items-center gap-2 px-3 py-1.5 rounded-xl bg-black/80 border border-[#C5A059]/40 backdrop-blur-md shadow-xl pointer-events-none">
-          <div className="w-6 h-6 rounded-lg bg-[#C5A059]/20 border border-[#C5A059]/40 flex items-center justify-center">
-            <Sparkles className="w-3.5 h-3.5 text-[#E5C378]" />
-          </div>
-          <div className="text-left leading-tight">
-            <span className="block text-[9px] font-mono uppercase tracking-widest text-[#E5C378] font-bold">
-              MODERN AESTHETIC
-            </span>
-            <span className="block text-[11px] font-extrabold text-white">
-              Mirror-Polished Luxury Finish
-            </span>
-          </div>
-        </div>
-
-        {/* Mobile Swipe Hint Badge & Click to Zoom Hint */}
-        <div className="absolute bottom-4 right-3 z-20 flex items-center gap-1.5 pointer-events-none">
-          <span className="sm:hidden inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-black/75 text-amber-300 border border-amber-500/30 backdrop-blur-md shadow">
-            ⇄ Swipe
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold bg-black/75 text-slate-200 border border-white/20 backdrop-blur-md shadow">
-            <Eye className="w-3 h-3 text-[#C5A059]" />
-            Click to Enlarge
-          </span>
-        </div>
-
-        {/* Carousel Pagination Dots */}
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 bg-black/60 px-3 py-1 rounded-full backdrop-blur-md border border-white/10">
-          {PRODUCT_GALLERY_ASSETS.map((_, dotIdx) => (
-            <button
-              key={dotIdx}
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSelectAsset(dotIdx);
-              }}
-              aria-label={`Go to photo ${dotIdx + 1}`}
-              className={`transition-all duration-200 rounded-full cursor-pointer ${
-                selectedAssetIndex === dotIdx
-                  ? "w-5 h-2 bg-[#C5A059] shadow-sm"
-                  : "w-2 h-2 bg-white/40 hover:bg-white/80"
-              }`}
-            />
-          ))}
-        </div>
 
         {/* Active Stage Content (Image or Simulator) */}
         <AnimatePresence mode="wait" custom={slideDirection}>
@@ -661,7 +548,7 @@ export const ProductImage: React.FC<ProductImageProps> = ({
             className="w-full h-full flex items-center justify-center relative"
           >
             {currentAsset.id !== "interactive-sim" && !hasError ? (
-              <div className="relative max-h-[380px] w-full flex items-center justify-center">
+              <div className="relative w-full flex items-center justify-center">
                 <img
                   src={currentSrc}
                   alt={`${currentAsset.title} - ${alt}`}
@@ -669,7 +556,7 @@ export const ProductImage: React.FC<ProductImageProps> = ({
                   decoding={priority ? "sync" : "async"}
                   referrerPolicy="no-referrer"
                   onError={() => handleImageError(currentAsset.id, currentAsset.fallbackPaths.length)}
-                  className="max-h-[360px] sm:max-h-[380px] w-auto max-w-full object-contain filter drop-shadow-[0_20px_40px_rgba(0,0,0,0.95)] transition-transform duration-300 group-hover:scale-[1.02]"
+                  className="w-full h-auto max-h-[540px] object-contain"
                 />
 
                 {/* Hotspot Pins on the main image */}

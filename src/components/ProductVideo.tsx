@@ -37,28 +37,19 @@ export const ProductVideo: React.FC<ProductVideoProps> = ({ onOrderClick }) => {
           </p>
         </div>
 
-        {/* Exact YouTube Showroom Video Embed */}
-        <div className="relative w-full aspect-video max-w-2xl mx-auto rounded-2xl overflow-hidden bg-black border-2 border-slate-900 shadow-2xl mb-4">
-          <iframe
-            title="5-Burner Cooktop Showroom Demonstration Video"
-            src={videoEmbedUrl}
-            className="w-full h-full border-0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
+        {/* Exact Native Showroom Video Player (/cooktop-video.mp4) */}
+        <div className="relative w-full max-w-md mx-auto rounded-2xl overflow-hidden bg-black border-2 border-neutral-900 shadow-2xl mb-6">
+          <video
+            src="/cooktop-video.mp4"
+            poster="/showroom-demo.jpg"
+            controls
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            className="w-full max-h-[540px] object-contain bg-black mx-auto"
           />
-        </div>
-
-        {/* Direct Link to YouTube Shorts */}
-        <div className="mb-6 flex items-center justify-center gap-2">
-          <a
-            href={videoDirectUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-red-600 transition-colors"
-          >
-            <span>Watch directly on YouTube (Shorts)</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
         </div>
 
         {/* 4 Feature Callouts under video matching physical demonstration */}

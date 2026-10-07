@@ -2,12 +2,12 @@
 
 @layer base {
   :root {
-    --font-heading: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-body: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   }
 
   *, html, body {
-    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif !important;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
   }
 
   body {
@@ -16,9 +16,28 @@
     color: #111111;
   }
 
-  h1, h2, h3, h4, h5, h6, .font-heading {
-    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif !important;
+  h1, h2, h3, h4, h5, h6, .font-heading, .font-display {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
   }
+}
+
+@keyframes marqueeSlide {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-slide {
+  display: flex;
+  width: max-content;
+  animation: marqueeSlide 34s linear infinite;
+}
+
+.animate-marquee-slide:hover {
+  animation-play-state: paused;
 }
 
 /* Floating action button blinking alternating colors between deep black and vibrant red */

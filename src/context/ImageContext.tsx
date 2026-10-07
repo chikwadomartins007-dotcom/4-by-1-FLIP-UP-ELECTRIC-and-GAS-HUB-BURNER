@@ -19,14 +19,6 @@ export const IMAGE_SLOTS: ImageSlotInfo[] = [
     recommendedAspect: "16:9 or 4:3 (Landscape)",
   },
   {
-    key: "kitchen-install",
-    name: "Kitchen Countertop Installation",
-    category: "gallery",
-    defaultUrl: "/kitchen-counter-view.jpg",
-    description: "Showcases the cooktop installed flush into a modern marble/quartz kitchen countertop.",
-    recommendedAspect: "16:9 or 4:3 (Landscape)",
-  },
-  {
     key: "active-ceramic",
     name: "Active Radiant Ceramic Hotplate",
     category: "gallery",
@@ -84,7 +76,7 @@ export const IMAGE_SLOTS: ImageSlotInfo[] = [
   },
 ];
 
-const STORAGE_KEY = "max_luxury_custom_images_v1";
+const STORAGE_KEY = "max_luxury_custom_images_v3";
 
 interface ImageContextType {
   getImageUrl: (slotKey: string) => string;
