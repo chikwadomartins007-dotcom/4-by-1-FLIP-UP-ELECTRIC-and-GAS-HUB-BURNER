@@ -11,7 +11,7 @@ export const TopAnnouncementBar: React.FC = () => {
   return (
     <div
       id="promo-top-bar"
-      className="bg-[#E8132E] text-white py-2 px-4 shadow-md border-4 border-yellow-400 transition-all duration-200 z-50"
+      className="bg-[#E8132E] text-white py-2 px-4 shadow-sm border-b border-yellow-500/50 transition-all duration-200 z-50"
     >
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
         <div className="flex flex-wrap items-center justify-center gap-2 font-extrabold tracking-wide text-xs sm:text-sm">

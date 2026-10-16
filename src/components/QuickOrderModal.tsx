@@ -169,6 +169,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
       };
 
       const leadEventId = `lead_${generatedRef}_${Date.now()}`;
+      const purchaseEventId = `purchase_${generatedRef}_${Date.now()}`;
       let finalOrderRef = generatedRef;
 
       // 1. Submit directly to CRM & Server-side Meta Conversions API
@@ -181,6 +182,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
           body: JSON.stringify({
             ...payload,
             explicit_event_id: leadEventId,
+            explicit_purchase_event_id: purchaseEventId,
           }),
         });
 
@@ -218,11 +220,25 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
         onOrderSuccess(finalOrderRef);
       }
 
-      // Track browser Meta Pixel + TikTok Pixel Lead with matching deduplication eventID
+      // 1. Track standard Purchase across ALL pixels (Meta Pixel fbq, TikTok Pixel ttq, Google, CAPI)
+      Analytics.trackPurchase({
+        orderId: finalOrderRef,
+        total: currentPricing.total,
+        quantity: currentPricing.quantity,
+        email: formData.email,
+        phone: formData.phone,
+        name: formData.fullName,
+        state: formData.state,
+        deliveryAddress: formData.deliveryAddress,
+        eventId: purchaseEventId,
+      });
+
+      // 2. Track Lead event for dual-optimization ad campaigns
       Analytics.trackLead({
         email: formData.email,
         phone: formData.phone,
         name: formData.fullName,
+        state: formData.state,
         quantity: currentPricing.quantity,
         total: currentPricing.total,
         eventId: leadEventId,

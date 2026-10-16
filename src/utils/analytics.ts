@@ -149,6 +149,22 @@ export function trackMetaEvent(
         reconnectMetaPixel();
       }
       if (typeof window.fbq === "function") {
+        if (userData && (userData.email || userData.phone || userData.first_name)) {
+          const am: Record<string, string> = {};
+          if (userData.email) am.em = userData.email.trim().toLowerCase();
+          const p = formatPhoneForPixel(userData.phone);
+          if (p) am.ph = p;
+          if (userData.first_name) am.fn = userData.first_name.trim().toLowerCase();
+          if (userData.last_name) am.ln = userData.last_name.trim().toLowerCase();
+          if (userData.city) am.ct = userData.city.trim().toLowerCase();
+          if (userData.state) am.st = userData.state.trim().toLowerCase();
+          am.country = "ng";
+          try {
+            window.fbq("init", META_PIXEL_ID, am);
+          } catch {
+            // safe
+          }
+        }
         window.fbq("track", eventName, customData, { eventID: eventId });
       }
     }
@@ -160,6 +176,24 @@ export function trackMetaEvent(
   sendServerCapi(eventName, eventId, userData, customData);
 
   return eventId;
+}
+
+export function formatPhoneForPixel(phone?: string | null): string | undefined {
+  if (!phone) return undefined;
+  const cleaned = phone.trim();
+  if (/^[a-f0-9]{64}$/i.test(cleaned)) {
+    return cleaned;
+  }
+  let digits = cleaned.replace(/\D/g, "");
+  if (!digits) return undefined;
+  if (digits.startsWith("00234")) {
+    digits = digits.substring(2);
+  } else if (digits.startsWith("0") && digits.length === 11) {
+    digits = "234" + digits.substring(1);
+  } else if (digits.length === 10) {
+    digits = "234" + digits;
+  }
+  return digits;
 }
 
 // Session flags to prevent spamming duplicate events during same interaction
@@ -189,14 +223,16 @@ export const Analytics = {
     if (hasViewContentFired) return;
     hasViewContentFired = true;
 
+    const val = Number(price) || 280000;
+
     trackTikTokEvent("ViewContent", {
       content_id: "MAX-COOKTOP-5B",
       content_type: "product",
       content_name: "5-Burner Built-In Gas + Electric Cooktop",
       content_category: "Kitchen Appliances",
       quantity: 1,
-      price: Number(price),
-      value: Number(price),
+      price: val,
+      value: val,
       currency: "NGN",
       contents: [
         {
@@ -205,7 +241,7 @@ export const Analytics = {
           content_name: "5-Burner Built-In Gas + Electric Cooktop",
           content_category: "Kitchen Appliances",
           quantity: 1,
-          price: Number(price),
+          price: val,
         },
       ],
     });
@@ -214,22 +250,31 @@ export const Analytics = {
       content_name: "5-Burner Built-In Gas + Electric Cooktop",
       content_ids: ["MAX-COOKTOP-5B"],
       content_type: "product",
-      value: Number(price),
+      contents: [
+        {
+          id: "MAX-COOKTOP-5B",
+          quantity: 1,
+          item_price: val,
+        },
+      ],
+      value: val,
       currency: "NGN",
     });
   },
 
   trackAddToCart: (quantity: number, total: number) => {
-    const unitPrice = Number(total) / Math.max(1, Number(quantity));
+    const qty = Math.max(1, Number(quantity) || 1);
+    const totalVal = Number(total) || 280000;
+    const unitPrice = Math.round(totalVal / qty);
 
     trackTikTokEvent("AddToCart", {
       content_id: "MAX-COOKTOP-5B",
       content_type: "product",
       content_name: "5-Burner Built-In Gas + Electric Cooktop",
       content_category: "Kitchen Appliances",
-      quantity: Number(quantity),
+      quantity: qty,
       price: unitPrice,
-      value: Number(total),
+      value: totalVal,
       currency: "NGN",
       contents: [
         {
@@ -237,7 +282,7 @@ export const Analytics = {
           content_type: "product",
           content_name: "5-Burner Built-In Gas + Electric Cooktop",
           content_category: "Kitchen Appliances",
-          quantity: Number(quantity),
+          quantity: qty,
           price: unitPrice,
         },
       ],
@@ -247,9 +292,16 @@ export const Analytics = {
       content_name: "5-Burner Built-In Gas + Electric Cooktop",
       content_ids: ["MAX-COOKTOP-5B"],
       content_type: "product",
-      quantity: Number(quantity),
-      num_items: Number(quantity),
-      value: Number(total),
+      contents: [
+        {
+          id: "MAX-COOKTOP-5B",
+          quantity: qty,
+          item_price: unitPrice,
+        },
+      ],
+      quantity: qty,
+      num_items: qty,
+      value: totalVal,
       currency: "NGN",
     });
   },
@@ -257,16 +309,18 @@ export const Analytics = {
   trackInitiateCheckout: (quantity: number, total: number) => {
     if (hasInitiatedCheckoutFired) return;
     hasInitiatedCheckoutFired = true;
-    const unitPrice = Number(total) / Math.max(1, Number(quantity));
+    const qty = Math.max(1, Number(quantity) || 1);
+    const totalVal = Number(total) || 280000;
+    const unitPrice = Math.round(totalVal / qty);
 
     trackTikTokEvent("InitiateCheckout", {
       content_id: "MAX-COOKTOP-5B",
       content_type: "product",
       content_name: "5-Burner Built-In Gas + Electric Cooktop",
       content_category: "Kitchen Appliances",
-      quantity: Number(quantity),
+      quantity: qty,
       price: unitPrice,
-      value: Number(total),
+      value: totalVal,
       currency: "NGN",
       contents: [
         {
@@ -274,7 +328,7 @@ export const Analytics = {
           content_type: "product",
           content_name: "5-Burner Built-In Gas + Electric Cooktop",
           content_category: "Kitchen Appliances",
-          quantity: Number(quantity),
+          quantity: qty,
           price: unitPrice,
         },
       ],
@@ -284,23 +338,32 @@ export const Analytics = {
       content_name: "5-Burner Built-In Gas + Electric Cooktop",
       content_ids: ["MAX-COOKTOP-5B"],
       content_type: "product",
-      num_items: Number(quantity),
-      value: Number(total),
+      contents: [
+        {
+          id: "MAX-COOKTOP-5B",
+          quantity: qty,
+          item_price: unitPrice,
+        },
+      ],
+      num_items: qty,
+      value: totalVal,
       currency: "NGN",
     });
   },
 
   trackAddPaymentInfo: (quantity: number, total: number, paymentType: string = "Payment on Delivery") => {
-    const unitPrice = Number(total) / Math.max(1, Number(quantity));
+    const qty = Math.max(1, Number(quantity) || 1);
+    const totalVal = Number(total) || 280000;
+    const unitPrice = Math.round(totalVal / qty);
 
     trackTikTokEvent("AddPaymentInfo", {
       content_id: "MAX-COOKTOP-5B",
       content_type: "product",
       content_name: "5-Burner Built-In Gas + Electric Cooktop",
       content_category: "Kitchen Appliances",
-      quantity: Number(quantity),
+      quantity: qty,
       price: unitPrice,
-      value: Number(total),
+      value: totalVal,
       currency: "NGN",
       description: paymentType,
       contents: [
@@ -309,7 +372,7 @@ export const Analytics = {
           content_type: "product",
           content_name: "5-Burner Built-In Gas + Electric Cooktop",
           content_category: "Kitchen Appliances",
-          quantity: Number(quantity),
+          quantity: qty,
           price: unitPrice,
         },
       ],
@@ -319,8 +382,15 @@ export const Analytics = {
       content_name: "5-Burner Built-In Gas + Electric Cooktop",
       content_ids: ["MAX-COOKTOP-5B"],
       content_type: "product",
-      num_items: Number(quantity),
-      value: Number(total),
+      contents: [
+        {
+          id: "MAX-COOKTOP-5B",
+          quantity: qty,
+          item_price: unitPrice,
+        },
+      ],
+      num_items: qty,
+      value: totalVal,
       currency: "NGN",
     });
   },
@@ -329,23 +399,31 @@ export const Analytics = {
     email?: string;
     phone: string;
     name?: string;
+    state?: string;
     quantity: number;
     total: number;
     eventId?: string;
   }) => {
+    const qty = Math.max(1, Number(formData.quantity) || 1);
+    const totalVal = Number(formData.total) || 280000;
+    const unitPrice = Math.round(totalVal / qty);
     const names = (formData.name || "").trim().split(" ");
     const firstName = names[0] || "";
     const lastName = names.slice(1).join(" ") || "";
-    const unitPrice = Number(formData.total) / Math.max(1, Number(formData.quantity));
+    const normalizedPhone = formatPhoneForPixel(formData.phone);
+    const cleanEmail =
+      formData.email && formData.email.includes("@")
+        ? formData.email.trim().toLowerCase()
+        : undefined;
 
     // TikTok user identification & comprehensive conversion tracking
     try {
       if (typeof window !== "undefined" && window.ttq) {
         if (typeof window.ttq.identify === "function") {
           window.ttq.identify({
-            email: formData.email,
-            phone_number: formData.phone,
-            external_id: formData.phone,
+            email: cleanEmail,
+            phone_number: normalizedPhone,
+            external_id: normalizedPhone || formData.phone,
           });
         }
 
@@ -354,9 +432,9 @@ export const Analytics = {
           content_type: "product",
           content_name: "5-Burner Built-In Gas + Electric Cooktop",
           content_category: "Kitchen Appliances",
-          quantity: Number(formData.quantity),
+          quantity: qty,
           price: unitPrice,
-          value: Number(formData.total),
+          value: totalVal,
           currency: "NGN",
           contents: [
             {
@@ -364,22 +442,17 @@ export const Analytics = {
               content_type: "product",
               content_name: "5-Burner Built-In Gas + Electric Cooktop",
               content_category: "Kitchen Appliances",
-              quantity: Number(formData.quantity),
+              quantity: qty,
               price: unitPrice,
             },
           ],
         };
 
         if (typeof window.ttq.track === "function") {
-          // Standard E-commerce conversion: PlaceAnOrder
-          window.ttq.track("PlaceAnOrder", tikTokConversionData);
-          // Standard Purchase optimization goal: CompletePayment
-          window.ttq.track("CompletePayment", tikTokConversionData);
-          // Standard Form conversion goal: SubmitForm
           window.ttq.track("SubmitForm", {
             ...tikTokConversionData,
             content_name: "Cooktop Order Form Submission",
-          });
+          }, { event_id: formData.eventId });
         }
       }
     } catch {
@@ -390,16 +463,28 @@ export const Analytics = {
       "Lead",
       {
         content_name: "5-Burner Built-In Gas + Electric Cooktop",
+        content_ids: ["MAX-COOKTOP-5B"],
+        content_type: "product",
+        contents: [
+          {
+            id: "MAX-COOKTOP-5B",
+            quantity: qty,
+            item_price: unitPrice,
+          },
+        ],
         content_category: "Kitchen Appliances",
         currency: "NGN",
-        value: Number(formData.total),
-        num_items: Number(formData.quantity),
+        value: totalVal,
+        num_items: qty,
       },
       {
-        email: formData.email,
-        phone: formData.phone,
+        email: cleanEmail,
+        phone: normalizedPhone,
         first_name: firstName,
         last_name: lastName,
+        city: formData.state,
+        state: formData.state,
+        country: "ng",
       },
       formData.eventId
     );
@@ -412,30 +497,162 @@ export const Analytics = {
     email?: string;
     phone?: string;
     name?: string;
+    state?: string;
+    deliveryAddress?: string;
     eventId?: string;
   }) => {
+    const qty = Math.max(1, Number(orderData.quantity || 1));
+    const totalVal = Math.max(0, Number(orderData.total || 280000));
+    const unitPrice = Math.round(totalVal / qty);
     const names = (orderData.name || "").trim().split(" ");
     const firstName = names[0] || "";
     const lastName = names.slice(1).join(" ") || "";
-    const resolvedEventId = orderData.eventId || `purchase_${orderData.orderId}`;
+    const resolvedEventId = orderData.eventId || `purchase_${orderData.orderId}_${Date.now()}`;
+    const normalizedPhone = formatPhoneForPixel(orderData.phone);
+    const cleanEmail =
+      orderData.email && orderData.email.includes("@")
+        ? orderData.email.trim().toLowerCase()
+        : undefined;
+
+    // 1. TikTok Pixel: User Identification & Purchase Events (CompletePayment + PlaceAnOrder)
+    try {
+      if (typeof window !== "undefined" && window.ttq) {
+        if (typeof window.ttq.identify === "function") {
+          window.ttq.identify({
+            email: cleanEmail,
+            phone_number: normalizedPhone,
+            external_id: normalizedPhone || orderData.orderId,
+          });
+        }
+
+        const tikTokPurchaseData = {
+          content_id: "MAX-COOKTOP-5B",
+          content_type: "product",
+          content_name: "5-Burner Built-In Gas + Electric Cooktop",
+          content_category: "Kitchen Appliances",
+          quantity: qty,
+          price: unitPrice,
+          value: totalVal,
+          currency: "NGN",
+          contents: [
+            {
+              content_id: "MAX-COOKTOP-5B",
+              content_type: "product",
+              content_name: "5-Burner Built-In Gas + Electric Cooktop",
+              content_category: "Kitchen Appliances",
+              quantity: qty,
+              price: unitPrice,
+            },
+          ],
+        };
+
+        if (typeof window.ttq.track === "function") {
+          // Standard TikTok purchase optimization goal
+          window.ttq.track("CompletePayment", tikTokPurchaseData, {
+            event_id: resolvedEventId,
+          });
+          // Standard TikTok e-commerce order goal
+          window.ttq.track("PlaceAnOrder", tikTokPurchaseData, {
+            event_id: resolvedEventId,
+          });
+        }
+      }
+    } catch (ttErr) {
+      console.warn("TikTok Pixel purchase tracking error:", ttErr);
+    }
+
+    // 2. Google Analytics (gtag) / GTM DataLayer
+    try {
+      if (typeof window !== "undefined") {
+        const win = window as any;
+        if (typeof win.gtag === "function") {
+          win.gtag("event", "purchase", {
+            transaction_id: orderData.orderId,
+            value: totalVal,
+            currency: "NGN",
+            items: [
+              {
+                item_id: "MAX-COOKTOP-5B",
+                item_name: "5-Burner Built-In Gas + Electric Cooktop",
+                quantity: qty,
+                price: unitPrice,
+              },
+            ],
+          });
+        }
+        if (Array.isArray(win.dataLayer)) {
+          win.dataLayer.push({
+            event: "purchase",
+            ecommerce: {
+              transaction_id: orderData.orderId,
+              value: totalVal,
+              currency: "NGN",
+              items: [
+                {
+                  item_id: "MAX-COOKTOP-5B",
+                  item_name: "5-Burner Built-In Gas + Electric Cooktop",
+                  quantity: qty,
+                  price: unitPrice,
+                },
+              ],
+            },
+          });
+        }
+        if (typeof win.snaptr === "function") {
+          win.snaptr("track", "PURCHASE", {
+            currency: "NGN",
+            price: totalVal,
+            item_ids: ["MAX-COOKTOP-5B"],
+            number_items: qty,
+            transaction_id: orderData.orderId,
+          });
+        }
+        if (typeof win.pintrk === "function") {
+          win.pintrk("track", "checkout", {
+            value: totalVal,
+            order_quantity: qty,
+            currency: "NGN",
+            order_id: orderData.orderId,
+          });
+        }
+      }
+    } catch {
+      // safe
+    }
+
+    // 3. Meta Pixel (Browser fbq) + Conversions API (Server CAPI)
+    // Passes exact Meta schema: value, currency, contents array, content_ids, content_type, num_items, order_id
+    const metaCustomData = {
+      content_name: "5-Burner Built-In Gas + Electric Cooktop",
+      content_ids: ["MAX-COOKTOP-5B"],
+      content_type: "product",
+      contents: [
+        {
+          id: "MAX-COOKTOP-5B",
+          quantity: qty,
+          item_price: unitPrice,
+        },
+      ],
+      value: totalVal,
+      currency: "NGN",
+      num_items: qty,
+      order_id: orderData.orderId,
+    };
+
+    const metaUserData = {
+      email: cleanEmail,
+      phone: normalizedPhone,
+      first_name: firstName,
+      last_name: lastName,
+      city: orderData.state,
+      state: orderData.state,
+      country: "ng",
+    };
 
     return trackMetaEvent(
       "Purchase",
-      {
-        content_name: "5-Burner Built-In Gas + Electric Cooktop",
-        content_ids: ["MAX-COOKTOP-5B"],
-        content_type: "product",
-        value: Number(orderData.total),
-        currency: "NGN",
-        num_items: Number(orderData.quantity),
-        order_id: orderData.orderId,
-      },
-      {
-        email: orderData.email,
-        phone: orderData.phone,
-        first_name: firstName,
-        last_name: lastName,
-      },
+      metaCustomData,
+      metaUserData,
       resolvedEventId
     );
   },

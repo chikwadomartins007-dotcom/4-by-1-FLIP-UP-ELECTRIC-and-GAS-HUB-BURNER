@@ -86,7 +86,8 @@ export const OrderingSteps: React.FC = () => {
     {
       num: "3",
       title: "ORDER CONFIRMATION",
-      description: `A MAX Luxury Bathrooms representative will promptly call you on ${WHATSAPP_PHONE_DISPLAY} to confirm your order details and delivery timetable.`,
+      description:
+        "Our customer support team will promptly call your mobile phone to verify your delivery address and schedule your preferred arrival window.",
       icon: PhoneCall,
     },
     {

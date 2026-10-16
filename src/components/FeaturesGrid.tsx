@@ -81,21 +81,18 @@ export const FeaturesGrid: React.FC = () => {
           </p>
         </div>
 
-        {/* Customer Care Box */}
-        <div className="p-4 rounded-xl bg-white border border-slate-200 shadow-xs max-w-lg mx-auto mb-8 flex items-center justify-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-            <PhoneCall className="w-5 h-5" />
+        {/* Reassurance Box */}
+        <div className="p-3.5 rounded-xl bg-white border border-slate-200 shadow-xs max-w-lg mx-auto mb-8 flex items-center justify-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <CheckCircle2 className="w-5 h-5" />
           </div>
           <div className="text-left">
             <span className="text-[11px] text-slate-500 block font-semibold">
-              DIRECT CUSTOMER CARE HOTLINE
+              EASY DUAL INSTALLATION
             </span>
-            <a
-              href={CALL_PHONE_TEL}
-              className="font-heading font-bold text-base text-slate-900 hover:text-emerald-700 transition-colors"
-            >
-              {WHATSAPP_PHONE_DISPLAY}
-            </a>
+            <span className="font-bold text-xs sm:text-sm text-slate-900">
+              Built-In Flush Countertop Fit or Freestanding Tabletop Placement
+            </span>
           </div>
         </div>
 

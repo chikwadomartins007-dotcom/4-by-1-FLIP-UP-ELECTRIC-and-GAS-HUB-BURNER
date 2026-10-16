@@ -59,13 +59,23 @@ function hashData(value?: string | null): string | undefined {
   if (!value) return undefined;
   const cleaned = value.trim().toLowerCase();
   if (!cleaned) return undefined;
+  if (/^[a-f0-9]{64}$/i.test(cleaned)) {
+    return cleaned;
+  }
   return crypto.createHash("sha256").update(cleaned).digest("hex");
 }
 
 function hashPhone(phone?: string | null): string | undefined {
   if (!phone) return undefined;
-  let digits = phone.replace(/\D/g, "");
-  if (digits.startsWith("0") && digits.length === 11) {
+  const cleaned = phone.trim().toLowerCase();
+  if (/^[a-f0-9]{64}$/i.test(cleaned)) {
+    return cleaned;
+  }
+  let digits = cleaned.replace(/\D/g, "");
+  if (!digits) return undefined;
+  if (digits.startsWith("00234")) {
+    digits = digits.substring(2);
+  } else if (digits.startsWith("0") && digits.length === 11) {
     digits = "234" + digits.substring(1);
   } else if (digits.length === 10) {
     digits = "234" + digits;
@@ -449,6 +459,32 @@ async function sendMetaCapiEvent(options: DispatchCapiOptions): Promise<{
   if (userData.clientIp) userMatchKeys.push("client_ip");
   if (userData.clientUserAgent) userMatchKeys.push("client_user_agent");
 
+  const resolvedCustomData: Record<string, any> = {
+    currency: config.currency || "NGN",
+    ...customData,
+  };
+
+  if (eventName === "Purchase") {
+    const totalVal = Math.max(0, Number(resolvedCustomData.value || 280000));
+    resolvedCustomData.value = totalVal;
+    if (!resolvedCustomData.contents || !Array.isArray(resolvedCustomData.contents) || resolvedCustomData.contents.length === 0) {
+      const qty = Math.max(1, Number(resolvedCustomData.num_items || 1));
+      resolvedCustomData.contents = [
+        {
+          id: "MAX-COOKTOP-5B",
+          quantity: qty,
+          item_price: Math.round(totalVal / qty),
+        },
+      ];
+    }
+    if (!resolvedCustomData.content_type) {
+      resolvedCustomData.content_type = "product";
+    }
+    if (!resolvedCustomData.content_ids || !resolvedCustomData.content_ids.length) {
+      resolvedCustomData.content_ids = ["MAX-COOKTOP-5B"];
+    }
+  }
+
   const eventPayload: Record<string, any> = {
     event_name: eventName,
     event_time: Number(eventTime),
@@ -456,10 +492,7 @@ async function sendMetaCapiEvent(options: DispatchCapiOptions): Promise<{
     event_source_url: eventSourceUrl,
     action_source: "website",
     user_data: capiUserData,
-    custom_data: {
-      currency: config.currency || "NGN",
-      ...customData,
-    },
+    custom_data: resolvedCustomData,
   };
 
   const pixelId = config.pixelId || "1690563088540181";
@@ -795,6 +828,7 @@ app.post("/api/orders", async (req: Request, res: Response) => {
     const lastName = names.slice(1).join(" ") || "";
 
     const leadEventId = explicit_event_id || `lead_${orderRef}`;
+    const purchaseEventId = req.body.explicit_purchase_event_id || `purchase_${orderRef}`;
 
     const newOrder: any = {
       id: orderId,
@@ -838,6 +872,12 @@ app.post("/api/orders", async (req: Request, res: Response) => {
           sent_at: undefined,
           status: "pending",
         },
+        purchase: {
+          sent: false,
+          event_id: purchaseEventId,
+          sent_at: undefined,
+          status: "pending",
+        },
       },
       notes: [],
     };
@@ -869,6 +909,13 @@ app.post("/api/orders", async (req: Request, res: Response) => {
           value: pricing.total,
           content_name: "5-Burner Built-In Gas + Electric Cooktop",
           content_ids: ["MAX-COOKTOP-5B"],
+          contents: [
+            {
+              id: "MAX-COOKTOP-5B",
+              quantity: pricing.quantity,
+              item_price: pricing.unitPrice,
+            },
+          ],
           content_category: "Kitchen Appliances",
           num_items: pricing.quantity,
           order_id: orderRef,
@@ -886,6 +933,54 @@ app.post("/api/orders", async (req: Request, res: Response) => {
         error: capiResult.error,
       };
     }
+
+    // 1.5. Automatically fire Meta CAPI Purchase Event for unified browser/server deduplication
+    const purchaseCapiResult = await sendMetaCapiEvent({
+      eventName: "Purchase",
+      eventId: purchaseEventId,
+      eventTime: Math.floor(Date.now() / 1000),
+      eventSourceUrl: landing_page || req.headers.referer || "https://max-cooktops.ng/",
+      userData: {
+        email: customer_email,
+        phone: customer_phone,
+        firstName,
+        lastName,
+        city: state,
+        state,
+        country: "ng",
+        clientIp,
+        clientUserAgent,
+        fbp,
+        fbc,
+      },
+      customData: {
+        currency: "NGN",
+        value: pricing.total,
+        content_name: "5-Burner Built-In Gas + Electric Cooktop",
+        content_ids: ["MAX-COOKTOP-5B"],
+        contents: [
+          {
+            id: "MAX-COOKTOP-5B",
+            quantity: pricing.quantity,
+            item_price: pricing.unitPrice,
+          },
+        ],
+        content_type: "product",
+        num_items: pricing.quantity,
+        order_id: orderRef,
+      },
+      orderReference: orderRef,
+      orderId,
+    });
+
+    newOrder.capi_events.purchase = {
+      sent: purchaseCapiResult.success,
+      event_id: purchaseEventId,
+      sent_at: new Date().toISOString(),
+      status: purchaseCapiResult.dispatched ? "dispatched" : "logged_offline",
+      meta_trace_id: purchaseCapiResult.metaResult?.fbtrace_id,
+      error: purchaseCapiResult.error,
+    };
 
     // 2. Persist order into CRM
     const orders = readOrders();

@@ -169,47 +169,63 @@ export const WarrantyAfterSales: React.FC<WarrantyAfterSalesProps> = ({
                   Need guidance for your cabinet installer on the 870×480mm countertop cutout, LPG regulator connection, or 220V plug setup? Call or WhatsApp our in-house technical support line for live step-by-step assistance.
                 </p>
 
-                {/* Prominent Direct Hotline Number Box */}
-                <div className="p-3.5 rounded-xl bg-black/50 border border-white/15 mb-4 flex items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-emerald-500 text-slate-950 flex items-center justify-center shrink-0">
-                      <PhoneCall className="w-4 h-4 stroke-[2.5]" />
+                {/* Prominent Direct Hotline Box — Revealed only after order */}
+                {hasSubmittedOrder ? (
+                  <div className="p-3.5 rounded-xl bg-black/50 border border-white/15 mb-4 flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-9 h-9 rounded-lg bg-emerald-500 text-slate-950 flex items-center justify-center shrink-0">
+                        <PhoneCall className="w-4 h-4 stroke-[2.5]" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">
+                          TECHNICAL &amp; AFTER-SALES HOTLINE
+                        </span>
+                        <a
+                          href={CALL_PHONE_TEL}
+                          onClick={handleCallSupport}
+                          className="font-mono font-black text-base sm:text-lg text-white hover:text-emerald-400 transition-colors tracking-wide"
+                        >
+                          {WHATSAPP_PHONE_DISPLAY}
+                        </a>
+                      </div>
+                    </div>
+                    <div className="text-right hidden sm:block">
+                      <span className="text-[10px] text-emerald-400 font-bold block">
+                        Mon – Sat
+                      </span>
+                      <span className="text-[10px] text-slate-400 block">
+                        8:00 AM – 7:00 PM
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-3.5 rounded-xl bg-black/50 border border-white/15 mb-4 flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-lg bg-yellow-400 text-slate-950 flex items-center justify-center shrink-0">
+                      <ShieldCheck className="w-4 h-4 stroke-[2.5]" />
                     </div>
                     <div>
                       <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block">
-                        TECHNICAL &amp; AFTER-SALES HOTLINE
+                        POST-ORDER TECHNICAL DESK
                       </span>
-                      <a
-                        href={CALL_PHONE_TEL}
-                        onClick={handleCallSupport}
-                        className="font-mono font-black text-base sm:text-lg text-white hover:text-emerald-400 transition-colors tracking-wide"
-                      >
-                        {WHATSAPP_PHONE_DISPLAY}
-                      </a>
+                      <span className="text-xs sm:text-sm font-bold text-white">
+                        Direct engineer hotline &amp; WhatsApp provided upon order placement
+                      </span>
                     </div>
                   </div>
-                  <div className="text-right hidden sm:block">
-                    <span className="text-[10px] text-emerald-400 font-bold block">
-                      Mon – Sat
-                    </span>
-                    <span className="text-[10px] text-slate-400 block">
-                      8:00 AM – 7:00 PM
-                    </span>
-                  </div>
-                </div>
+                )}
               </div>
 
-              {/* Action Buttons: Call Support or Post-Order WhatsApp */}
-              <div className={`grid grid-cols-1 ${hasSubmittedOrder ? "sm:grid-cols-2" : ""} gap-2.5`}>
-                <a
-                  href={CALL_PHONE_TEL}
-                  onClick={handleCallSupport}
-                  className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold bg-white text-slate-950 hover:bg-slate-100 transition-all shadow-md"
-                >
-                  <PhoneCall className="w-3.5 h-3.5 text-emerald-700" />
-                  <span>Call Tech Support</span>
-                </a>
-                {hasSubmittedOrder && (
+              {/* Action Buttons: Revealed only after order submission */}
+              {hasSubmittedOrder ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <a
+                    href={CALL_PHONE_TEL}
+                    onClick={handleCallSupport}
+                    className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold bg-white text-slate-950 hover:bg-slate-100 transition-all shadow-md"
+                  >
+                    <PhoneCall className="w-3.5 h-3.5 text-emerald-700" />
+                    <span>Call Tech Support</span>
+                  </a>
                   <a
                     href={supportWhatsAppUrl}
                     target="_blank"
@@ -220,8 +236,16 @@ export const WarrantyAfterSales: React.FC<WarrantyAfterSalesProps> = ({
                     <MessageCircle className="w-3.5 h-3.5" />
                     <span>WhatsApp Engineer</span>
                   </a>
-                )}
-              </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={onOrderClick}
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-extrabold bg-[#E8132E] hover:bg-red-700 text-white transition-all shadow-md cursor-pointer uppercase tracking-wider"
+                >
+                  <span>Order Now to Activate 1-Year Warranty</span>
+                </button>
+              )}
             </div>
           </div>
 
