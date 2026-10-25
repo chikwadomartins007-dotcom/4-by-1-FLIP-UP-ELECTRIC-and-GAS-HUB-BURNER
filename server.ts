@@ -988,7 +988,7 @@ app.post("/api/orders", async (req: Request, res: Response) => {
     writeOrders(orders);
 
     // 3. Asynchronously forward to Formspree for email notification backup
-    fetch("https://formspree.io/f/xaeyaklo", {
+    fetch("https://formspree.io/f/mjyyggdb", {
       method: "POST",
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       body: JSON.stringify({
