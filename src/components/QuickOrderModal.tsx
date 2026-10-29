@@ -193,7 +193,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
           }
         } else {
           // Backup fallback to Formspree
-          await fetch("https://formspree.io/f/mjyyggdb", {
+          await fetch("https://formspree.io/f/xljjleoy", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -204,7 +204,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
         }
       } catch (crmErr) {
         console.warn("Direct CRM route notice, utilizing backup dispatch:", crmErr);
-        await fetch("https://formspree.io/f/mjyyggdb", {
+        await fetch("https://formspree.io/f/xljjleoy", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

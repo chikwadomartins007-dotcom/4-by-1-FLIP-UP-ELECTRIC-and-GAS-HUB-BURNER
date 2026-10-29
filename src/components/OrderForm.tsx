@@ -182,7 +182,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
           }
         } else {
           // Fallback to Formspree if CRM server route responds with non-200
-          await fetch("https://formspree.io/f/mjyyggdb", {
+          await fetch("https://formspree.io/f/xljjleoy", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -194,7 +194,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
       } catch (crmErr) {
         // Safe network fallback directly to Formspree
         console.warn("Direct CRM route notice, utilizing backup dispatch:", crmErr);
-        await fetch("https://formspree.io/f/mjyyggdb", {
+        await fetch("https://formspree.io/f/xljjleoy", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
