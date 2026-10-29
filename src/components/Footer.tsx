@@ -5,9 +5,10 @@ import { Analytics } from "../utils/analytics";
 
 interface FooterProps {
   onOpenCrm?: () => void;
+  hasSubmittedOrder?: boolean;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onOpenCrm }) => {
+export const Footer: React.FC<FooterProps> = ({ onOpenCrm, hasSubmittedOrder = false }) => {
   return (
     <footer className="bg-slate-50 border-t border-slate-200 py-12 text-slate-600 text-xs">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -23,16 +24,23 @@ export const Footer: React.FC<FooterProps> = ({ onOpenCrm }) => {
             </span>
           </div>
 
-          {/* Contact Details */}
+          {/* Contact Details — Revealed after order submission */}
           <div className="flex flex-wrap items-center justify-center gap-6">
-            <a
-              href={CALL_PHONE_TEL}
-              onClick={() => Analytics.trackContact("phone", "footer_call_link")}
-              className="flex items-center gap-2 text-slate-700 hover:text-slate-900 font-medium transition-colors"
-            >
-              <Phone className="w-4 h-4 text-[#8D6D27]" />
-              <span>Customer Care Hotline: {WHATSAPP_PHONE_DISPLAY}</span>
-            </a>
+            {hasSubmittedOrder ? (
+              <a
+                href={CALL_PHONE_TEL}
+                onClick={() => Analytics.trackContact("phone", "footer_call_link")}
+                className="flex items-center gap-2 text-slate-700 hover:text-slate-900 font-medium transition-colors"
+              >
+                <Phone className="w-4 h-4 text-[#8D6D27]" />
+                <span>Customer Care Hotline: {WHATSAPP_PHONE_DISPLAY}</span>
+              </a>
+            ) : (
+              <div className="flex items-center gap-2 text-slate-500">
+                <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                <span>Zero Risk • Inspection Allowed Before Payment</span>
+              </div>
+            )}
           </div>
         </div>
 

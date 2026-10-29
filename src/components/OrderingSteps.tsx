@@ -13,7 +13,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import { WHATSAPP_PHONE_DISPLAY } from "../utils/whatsapp";
+
 
 interface TimelineStage {
   id: string;
@@ -54,7 +54,7 @@ export const OrderingSteps: React.FC = () => {
       shortDesc: "Protective boxing & courier handover",
       duration: "Within 24 Hours",
       details:
-        "Safely padded in heavy-duty foam shock-absorbers with tracking notification sent directly to your phone via SMS and WhatsApp.",
+        "Safely padded in heavy-duty foam shock-absorbers with tracking notification sent directly to your phone via SMS.",
       icon: PackageCheck,
     },
     {

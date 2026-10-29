@@ -161,7 +161,37 @@ export const OrderForm: React.FC<OrderFormProps> = ({
       const purchaseEventId = `purchase_${generatedOrderRef}_${Date.now()}`;
       let finalOrderRef = generatedOrderRef;
 
-      // 1. Submit directly to CRM & Server-side Meta Conversions API
+      // Prepare dedicated Formspree email payload
+      const formspreePayload: Record<string, any> = {
+        _subject: `🔥 NEW ORDER: ${generatedOrderRef} - ${formData.fullName.trim()} (${formatNaira(currentPricing.total)})`,
+        "Order Reference": generatedOrderRef,
+        "Customer Name": formData.fullName.trim(),
+        "Phone Number": formData.phone.trim(),
+        "Delivery Address": formData.deliveryAddress.trim(),
+        "State": formData.state,
+        "Quantity": `${currentPricing.quantity} Unit(s)`,
+        "Unit Price": formatNaira(currentPricing.unitPrice),
+        "Total Amount": formatNaira(currentPricing.total),
+        "Payment Method": formData.paymentPreference || "Payment on Delivery",
+        "Special Instructions": formData.additionalMessage?.trim() || "None",
+        "Delivery Estimate": selectedStateObj.deliveryTime,
+        "Order Time": submissionTimestamp,
+      };
+      if (formData.email && formData.email.trim() && formData.email.includes("@")) {
+        formspreePayload.email = formData.email.trim();
+      }
+
+      // 1. Immediately send to Formspree from browser to ensure instant email delivery
+      const formspreeDispatch = fetch("https://formspree.io/f/xljjleoy", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(formspreePayload),
+      }).catch((e) => console.warn("Client Formspree dispatch notice:", e));
+
+      // 2. Submit directly to CRM & Server-side Meta Conversions API
       try {
         const crmResponse = await fetch("/api/orders", {
           method: "POST",
@@ -180,29 +210,13 @@ export const OrderForm: React.FC<OrderFormProps> = ({
           if (crmData.orderReference) {
             finalOrderRef = crmData.orderReference;
           }
-        } else {
-          // Fallback to Formspree if CRM server route responds with non-200
-          await fetch("https://formspree.io/f/xljjleoy", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify(payload),
-          }).catch(() => {});
         }
       } catch (crmErr) {
-        // Safe network fallback directly to Formspree
-        console.warn("Direct CRM route notice, utilizing backup dispatch:", crmErr);
-        await fetch("https://formspree.io/f/xljjleoy", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify(payload),
-          }).catch(() => {});
+        console.warn("Direct CRM route notice:", crmErr);
       }
+
+      // Ensure Formspree promise completes
+      await formspreeDispatch.catch(() => {});
 
       setIsSuccess(true);
       setOrderReference(finalOrderRef);
@@ -796,29 +810,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                       </>
                     )}
                   </button>
-                </div>
-
-                {/* Option to Call Hotline Directly */}
-                <div className="rounded-2xl p-4 sm:p-5 bg-slate-50 border-2 border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div>
-                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded bg-amber-100 text-[#8D6D27] inline-block mb-1">
-                      QUESTIONS BEFORE ORDERING?
-                    </span>
-                    <h4 className="font-heading font-black text-sm sm:text-base text-slate-900">
-                      Call Customer Care Hotline
-                    </h4>
-                    <p className="text-xs text-slate-600">
-                      Prefer speaking with an agent before ordering? Call our Lagos office directly.
-                    </p>
-                  </div>
-                  <a
-                    href={CALL_PHONE_TEL}
-                    onClick={() => Analytics.trackContact("phone", "order_form_after_address_call")}
-                    className="shrink-0 py-3.5 px-6 rounded-xl font-heading font-black text-xs sm:text-sm bg-slate-900 hover:bg-slate-800 text-white flex items-center justify-center gap-2 cursor-pointer shadow-sm transition-all"
-                  >
-                    <Phone className="w-4 h-4 text-yellow-400" />
-                    <span>CALL {WHATSAPP_PHONE_DISPLAY}</span>
-                  </a>
                 </div>
 
               </div>

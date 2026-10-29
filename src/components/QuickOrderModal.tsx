@@ -172,7 +172,37 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
       const purchaseEventId = `purchase_${generatedRef}_${Date.now()}`;
       let finalOrderRef = generatedRef;
 
-      // 1. Submit directly to CRM & Server-side Meta Conversions API
+      // Prepare dedicated Formspree email payload
+      const formspreePayload: Record<string, any> = {
+        _subject: `🔥 NEW ORDER: ${generatedRef} - ${formData.fullName.trim()} (${formatNaira(currentPricing.total)})`,
+        "Order Reference": generatedRef,
+        "Customer Name": formData.fullName.trim(),
+        "Phone Number": formData.phone.trim(),
+        "Delivery Address": formData.deliveryAddress.trim(),
+        "State": formData.state,
+        "Quantity": `${currentPricing.quantity} Unit(s)`,
+        "Unit Price": formatNaira(currentPricing.unitPrice),
+        "Total Amount": formatNaira(currentPricing.total),
+        "Payment Method": formData.paymentPreference || "Payment on Delivery",
+        "Special Instructions": formData.additionalMessage?.trim() || "None",
+        "Delivery Estimate": selectedStateObj.deliveryTime,
+        "Order Time": submissionTimestamp,
+      };
+      if (formData.email && formData.email.trim() && formData.email.includes("@")) {
+        formspreePayload.email = formData.email.trim();
+      }
+
+      // 1. Send immediately to Formspree from browser to ensure instant email delivery
+      const formspreeDispatch = fetch("https://formspree.io/f/xljjleoy", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(formspreePayload),
+      }).catch((e) => console.warn("Client Formspree dispatch notice:", e));
+
+      // 2. Submit directly to CRM & Server-side Meta Conversions API
       try {
         const crmResponse = await fetch("/api/orders", {
           method: "POST",
@@ -191,28 +221,13 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
           if (crmData.orderReference) {
             finalOrderRef = crmData.orderReference;
           }
-        } else {
-          // Backup fallback to Formspree
-          await fetch("https://formspree.io/f/xljjleoy", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify(payload),
-          }).catch(() => {});
         }
       } catch (crmErr) {
-        console.warn("Direct CRM route notice, utilizing backup dispatch:", crmErr);
-        await fetch("https://formspree.io/f/xljjleoy", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify(payload),
-          }).catch(() => {});
+        console.warn("Direct CRM route notice:", crmErr);
       }
+
+      // Ensure Formspree dispatch finishes
+      await formspreeDispatch.catch(() => {});
 
       setIsSuccess(true);
       setOrderRef(finalOrderRef);
@@ -650,16 +665,6 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
                         </>
                       )}
                     </button>
-
-                    {/* Mode 2: Call Hotline */}
-                    <a
-                      href={CALL_PHONE_TEL}
-                      onClick={() => Analytics.trackContact("phone", "quick_modal_call_after_address")}
-                      className="w-full py-2.5 px-4 rounded-xl font-heading font-bold text-xs bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 transition-colors flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <Phone className="w-3.5 h-3.5 text-[#8D6D27]" />
-                      <span>OR CALL HOTLINE DIRECTLY: {WHATSAPP_PHONE_DISPLAY}</span>
-                    </a>
                   </div>
 
                 </form>

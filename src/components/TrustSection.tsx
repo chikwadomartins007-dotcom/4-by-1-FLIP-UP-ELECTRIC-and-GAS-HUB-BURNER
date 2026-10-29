@@ -31,7 +31,7 @@ export const TrustSection: React.FC = () => {
       name: "MRS. NGOZI ADELEKE",
       location: "PORT HARCOURT, RIVERS STATE",
       review:
-        "Top quality 90cm tempered glass cooktop. Looks like an imported ₦600k hob. Genuine supplier and direct WhatsApp support was very helpful.",
+        "Top quality 90cm tempered glass cooktop. Looks like an imported ₦600k hob. Genuine supplier and dedicated customer support was very helpful.",
       initials: "NA",
     },
   ];

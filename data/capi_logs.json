@@ -1,5 +1,270 @@
 [
   {
+    "id": "log_1793261582155_3e84t",
+    "created_at": "2026-10-29T08:13:02.155Z",
+    "event_name": "Purchase",
+    "event_id": "purchase_MAX-582154",
+    "event_time": 1793261582,
+    "order_reference": "MAX-582154",
+    "order_id": "MAX-582154",
+    "user_match_keys": [
+      "em",
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1690563088540181",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1793261582154_v8fuf",
+    "created_at": "2026-10-29T08:13:02.154Z",
+    "event_name": "Lead",
+    "event_id": "lead_MAX-582154",
+    "event_time": 1793261582,
+    "order_reference": "MAX-582154",
+    "order_id": "MAX-582154",
+    "user_match_keys": [
+      "em",
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1690563088540181",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1793261302240_hgvn6",
+    "created_at": "2026-10-29T08:08:22.240Z",
+    "event_name": "Purchase",
+    "event_id": "purchase_MAX-302237",
+    "event_time": 1793261302,
+    "order_reference": "MAX-302237",
+    "order_id": "MAX-302237",
+    "user_match_keys": [
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1690563088540181",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1793261302239_d2bvl",
+    "created_at": "2026-10-29T08:08:22.239Z",
+    "event_name": "Lead",
+    "event_id": "lead_MAX-302237",
+    "event_time": 1793261302,
+    "order_reference": "MAX-302237",
+    "order_id": "MAX-302237",
+    "user_match_keys": [
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1690563088540181",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1793261097043_l14ut",
+    "created_at": "2026-10-29T08:04:57.043Z",
+    "event_name": "Lead",
+    "event_id": "lead_MAX-097806_1793261097841",
+    "event_time": 1793261098,
+    "user_match_keys": [
+      "em",
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1690563088540181",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1793261097041_qdctv",
+    "created_at": "2026-10-29T08:04:57.041Z",
+    "event_name": "Purchase",
+    "event_id": "purchase_MAX-097806_1793261097841",
+    "event_time": 1793261098,
+    "user_match_keys": [
+      "em",
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1690563088540181",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1793261096851_objsd",
+    "created_at": "2026-10-29T08:04:56.851Z",
+    "event_name": "AddPaymentInfo",
+    "event_id": "addpaymentinfo_1793261097818_dzbmcx6",
+    "event_time": 1793261097,
+    "user_match_keys": [
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1690563088540181",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1793261096827_y8avx",
+    "created_at": "2026-10-29T08:04:56.827Z",
+    "event_name": "Purchase",
+    "event_id": "purchase_MAX-097806_1793261097841",
+    "event_time": 1793261096,
+    "order_reference": "MAX-096825",
+    "order_id": "MAX-096825",
+    "user_match_keys": [
+      "em",
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1690563088540181",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1793261096827_lu0lo",
+    "created_at": "2026-10-29T08:04:56.827Z",
+    "event_name": "Lead",
+    "event_id": "lead_MAX-097806_1793261097841",
+    "event_time": 1793261096,
+    "order_reference": "MAX-096825",
+    "order_id": "MAX-096825",
+    "user_match_keys": [
+      "em",
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1690563088540181",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
     "id": "log_1792177021829_cas49",
     "created_at": "2026-10-16T18:57:01.829Z",
     "event_name": "Purchase",

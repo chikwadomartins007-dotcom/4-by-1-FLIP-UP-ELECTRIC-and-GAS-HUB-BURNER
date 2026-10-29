@@ -166,7 +166,7 @@ export const WarrantyAfterSales: React.FC<WarrantyAfterSalesProps> = ({
                 </div>
 
                 <p className="text-xs text-slate-300 leading-relaxed mb-4">
-                  Need guidance for your cabinet installer on the 870×480mm countertop cutout, LPG regulator connection, or 220V plug setup? Call or WhatsApp our in-house technical support line for live step-by-step assistance.
+                  Need guidance for your cabinet installer on the 870×480mm countertop cutout, LPG regulator connection, or 220V plug setup? Our in-house technical support team provides live step-by-step assistance upon order completion.
                 </p>
 
                 {/* Prominent Direct Hotline Box — Revealed only after order */}

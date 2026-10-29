@@ -987,18 +987,41 @@ app.post("/api/orders", async (req: Request, res: Response) => {
     orders.unshift(newOrder);
     writeOrders(orders);
 
-    // 3. Asynchronously forward to Formspree for email notification backup
-    fetch("https://formspree.io/f/xljjleoy", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify({
-        ...req.body,
-        order_reference: orderRef,
-        total_amount: pricing.total,
-        quantity: pricing.quantity,
-        submission_time: nowIso,
-      }),
-    }).catch((e) => console.warn("Formspree backup notification notice:", e.message));
+    // 3. Forward to Formspree for instant email notification to merchant
+    const formspreeData: Record<string, any> = {
+      _subject: `🔥 NEW ORDER: ${orderRef} - ${customer_name.trim()} (₦${pricing.total.toLocaleString()})`,
+      "Order Reference": orderRef,
+      "Customer Name": customer_name.trim(),
+      "Phone Number": customer_phone.trim(),
+      "Delivery Address": delivery_address.trim(),
+      "State": state.trim(),
+      "Quantity": `${pricing.quantity} Unit(s)`,
+      "Unit Price": `₦${pricing.unitPrice.toLocaleString()}`,
+      "Total Amount": `₦${pricing.total.toLocaleString()}`,
+      "Payment Method": payment_preference || "Payment on Delivery",
+      "Special Instructions": additional_instructions?.trim() || "None",
+      "Delivery Estimate": delivery_estimate || "24 - 48 Hours",
+      "Order Time": nowIso,
+    };
+    if (customer_email && customer_email.trim() && customer_email.includes("@")) {
+      formspreeData.email = customer_email.trim();
+    }
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000);
+      const fsRes = await fetch("https://formspree.io/f/xljjleoy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(formspreeData),
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+      const fsJson = await fsRes.json().catch(() => ({}));
+      console.log(`[Formspree] Status: ${fsRes.status}, Response:`, fsJson);
+    } catch (fsErr: any) {
+      console.warn("[Formspree] Dispatch notice:", fsErr.message);
+    }
 
     res.json({
       success: true,

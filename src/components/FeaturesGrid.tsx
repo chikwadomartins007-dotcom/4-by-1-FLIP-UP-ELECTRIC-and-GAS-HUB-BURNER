@@ -14,7 +14,7 @@ import {
   Check,
   AlertCircle,
 } from "lucide-react";
-import { WHATSAPP_PHONE_DISPLAY, CALL_PHONE_TEL } from "../utils/whatsapp";
+
 
 export const FeaturesGrid: React.FC = () => {
   const [unitMode, setUnitMode] = useState<"mm" | "cm" | "in">("mm");
@@ -300,7 +300,7 @@ export const FeaturesGrid: React.FC = () => {
               <div className="flex items-start gap-2.5">
                 <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0 mt-0.5" />
                 <p className="text-xs text-emerald-950 leading-snug">
-                  <strong>Working with a carpenter or marble installer?</strong> Copy the exact aperture dimensions to send to them on WhatsApp.
+                  <strong>Working with a carpenter or marble installer?</strong> Copy the exact aperture dimensions to send to your installer.
                 </p>
               </div>
               <button

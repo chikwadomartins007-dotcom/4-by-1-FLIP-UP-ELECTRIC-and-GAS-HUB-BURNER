@@ -113,7 +113,10 @@ export const App: React.FC = () => {
       </main>
 
       {/* 10. Footer with Meta/Facebook Disclaimer & Staff CRM link */}
-      <Footer onOpenCrm={() => setIsCrmOpen(true)} />
+      <Footer
+        onOpenCrm={() => setIsCrmOpen(true)}
+        hasSubmittedOrder={Boolean(submittedOrderRef)}
+      />
 
       {/* 11. Responsive Mobile Sticky Conversion Bar */}
       <MobileStickyBar
