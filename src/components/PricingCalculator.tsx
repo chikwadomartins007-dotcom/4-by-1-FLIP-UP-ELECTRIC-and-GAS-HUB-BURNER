@@ -83,7 +83,7 @@ export const PricingCalculator: React.FC<PricingCalculatorProps> = ({
                 )}
               </div>
               <h3 className="font-heading font-black text-2xl text-slate-900 mb-1">
-                ₦280,000
+                ₦260,000
               </h3>
               <p className="text-xs text-slate-500">1 Piece Standard Price</p>
             </div>

@@ -219,11 +219,11 @@ export const Analytics = {
     }
   },
 
-  trackViewContent: (price: number = 280000) => {
+  trackViewContent: (price: number = 260000) => {
     if (hasViewContentFired) return;
     hasViewContentFired = true;
 
-    const val = Number(price) || 280000;
+    const val = Number(price) || 260000;
 
     trackTikTokEvent("ViewContent", {
       content_id: "MAX-COOKTOP-5B",
@@ -264,7 +264,7 @@ export const Analytics = {
 
   trackAddToCart: (quantity: number, total: number) => {
     const qty = Math.max(1, Number(quantity) || 1);
-    const totalVal = Number(total) || 280000;
+    const totalVal = Number(total) || 260000;
     const unitPrice = Math.round(totalVal / qty);
 
     trackTikTokEvent("AddToCart", {
@@ -310,7 +310,7 @@ export const Analytics = {
     if (hasInitiatedCheckoutFired) return;
     hasInitiatedCheckoutFired = true;
     const qty = Math.max(1, Number(quantity) || 1);
-    const totalVal = Number(total) || 280000;
+    const totalVal = Number(total) || 260000;
     const unitPrice = Math.round(totalVal / qty);
 
     trackTikTokEvent("InitiateCheckout", {
@@ -353,7 +353,7 @@ export const Analytics = {
 
   trackAddPaymentInfo: (quantity: number, total: number, paymentType: string = "Payment on Delivery") => {
     const qty = Math.max(1, Number(quantity) || 1);
-    const totalVal = Number(total) || 280000;
+    const totalVal = Number(total) || 260000;
     const unitPrice = Math.round(totalVal / qty);
 
     trackTikTokEvent("AddPaymentInfo", {
@@ -405,7 +405,7 @@ export const Analytics = {
     eventId?: string;
   }) => {
     const qty = Math.max(1, Number(formData.quantity) || 1);
-    const totalVal = Number(formData.total) || 280000;
+    const totalVal = Number(formData.total) || 260000;
     const unitPrice = Math.round(totalVal / qty);
     const names = (formData.name || "").trim().split(" ");
     const firstName = names[0] || "";
@@ -502,7 +502,7 @@ export const Analytics = {
     eventId?: string;
   }) => {
     const qty = Math.max(1, Number(orderData.quantity || 1));
-    const totalVal = Math.max(0, Number(orderData.total || 280000));
+    const totalVal = Math.max(0, Number(orderData.total || 260000));
     const unitPrice = Math.round(totalVal / qty);
     const names = (orderData.name || "").trim().split(" ");
     const firstName = names[0] || "";

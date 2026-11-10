@@ -29,7 +29,7 @@ Please confirm my order and dispatch timeline.`;
   } else {
     message =
       pricing.quantity === 1
-        ? `Hello MAX Luxury Bathrooms, I'm interested in the 5-Burner Built-In Gas + Electric Cooker. Quantity: 1 (₦280,000). Please confirm availability and delivery details.`
+        ? `Hello MAX Luxury Bathrooms, I'm interested in the 5-Burner Built-In Gas + Electric Cooker. Quantity: 1 (₦260,000). Please confirm availability and delivery details.`
         : `Hello MAX Luxury Bathrooms, I want to order the 5-Burner Built-In Gas + Electric Cooker. Quantity: ${pricing.quantity}. Total: ${formattedTotal} (${formatNaira(pricing.unitPrice)} each). Please confirm availability and delivery details.`;
   }
 

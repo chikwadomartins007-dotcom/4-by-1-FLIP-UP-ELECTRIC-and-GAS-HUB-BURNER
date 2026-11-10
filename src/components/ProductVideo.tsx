@@ -102,7 +102,7 @@ export const ProductVideo: React.FC<ProductVideoProps> = ({ onOrderClick }) => {
             onClick={handleOrderClick}
             className="w-full py-3 px-5 rounded-xl font-heading font-extrabold text-sm sm:text-base bg-[#1abc9c] hover:bg-[#16a288] text-white shadow-md transition-all transform hover:-translate-y-0.5 cursor-pointer uppercase tracking-wider flex items-center justify-center gap-2"
           >
-            <span>ORDER THIS EXACT 5-BURNER UNIT — ₦280,000</span>
+            <span>ORDER THIS EXACT 5-BURNER UNIT — ₦260,000</span>
             <ArrowDown className="w-4 h-4" />
           </button>
         </div>

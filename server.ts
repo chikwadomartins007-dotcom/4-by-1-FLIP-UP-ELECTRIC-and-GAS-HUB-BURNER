@@ -34,16 +34,16 @@ const LOGS_FILE = path.join(dataDir, "capi_logs.json");
 // Helper to calculate pricing on the server
 export function calculatePricing(quantity: number) {
   const qty = Math.max(1, Math.floor(quantity || 1));
-  let unitPrice = 280000;
+  let unitPrice = 260000;
   if (qty === 2) {
-    unitPrice = 275000;
+    unitPrice = 255000;
   } else if (qty === 3) {
-    unitPrice = 270000;
+    unitPrice = 250000;
   } else if (qty >= 4) {
-    unitPrice = 265000;
+    unitPrice = 245000;
   }
   const total = qty * unitPrice;
-  const normalTotal = qty * 280000;
+  const normalTotal = qty * 260000;
   const savings = normalTotal - total;
   return {
     quantity: qty,
@@ -465,7 +465,7 @@ async function sendMetaCapiEvent(options: DispatchCapiOptions): Promise<{
   };
 
   if (eventName === "Purchase") {
-    const totalVal = Math.max(0, Number(resolvedCustomData.value || 280000));
+    const totalVal = Math.max(0, Number(resolvedCustomData.value || 260000));
     resolvedCustomData.value = totalVal;
     if (!resolvedCustomData.contents || !Array.isArray(resolvedCustomData.contents) || resolvedCustomData.contents.length === 0) {
       const qty = Math.max(1, Number(resolvedCustomData.num_items || 1));
@@ -721,7 +721,7 @@ app.post("/api/crm/test-event", async (req: Request, res: Response) => {
       },
       customData: {
         currency: "NGN",
-        value: 280000,
+        value: 260000,
         content_name: "5-Burner Built-In Gas + Electric Cooktop",
         content_ids: ["MAX-COOKTOP-5B"],
         content_type: "product",

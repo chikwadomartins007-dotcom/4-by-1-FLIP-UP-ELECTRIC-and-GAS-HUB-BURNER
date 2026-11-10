@@ -410,7 +410,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                         </div>
                       </div>
                       <div className={`font-heading font-black text-xl mb-1 ${formData.quantity === 1 ? "text-yellow-300" : "text-slate-900"}`}>
-                        ₦280,000
+                        ₦260,000
                       </div>
                       <span className={`text-[11px] block ${formData.quantity === 1 ? "text-slate-300" : "text-slate-500"}`}>
                         Normal: <s className="text-red-400">₦350,000</s>
@@ -443,10 +443,10 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                         </div>
                       </div>
                       <div className={`font-heading font-black text-xl mb-1 ${formData.quantity === 2 ? "text-yellow-300" : "text-slate-900"}`}>
-                        ₦550,000
+                        ₦510,000
                       </div>
                       <span className={`text-[11px] block ${formData.quantity === 2 ? "text-slate-300" : "text-slate-500"}`}>
-                        (₦275,000 each)
+                        (₦255,000 each)
                       </span>
                       <span className={`text-[10px] font-bold block mt-1 ${formData.quantity === 2 ? "text-emerald-300" : "text-emerald-700"}`}>
                         Duplex / Main + Wet Kitchen
@@ -476,10 +476,10 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                         </div>
                       </div>
                       <div className={`font-heading font-black text-xl mb-1 ${formData.quantity === 3 ? "text-yellow-300" : "text-slate-900"}`}>
-                        ₦810,000
+                        ₦750,000
                       </div>
                       <span className={`text-[11px] block ${formData.quantity === 3 ? "text-slate-300" : "text-slate-500"}`}>
-                        (₦270,000 each)
+                        (₦250,000 each)
                       </span>
                       <span className={`text-[10px] font-bold block mt-1 ${formData.quantity === 3 ? "text-emerald-300" : "text-emerald-700"}`}>
                         Estate / Contractor Deal

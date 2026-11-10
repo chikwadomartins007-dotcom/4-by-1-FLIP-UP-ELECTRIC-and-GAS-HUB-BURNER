@@ -9,7 +9,7 @@ interface LivelyOrderButtonProps {
 
 export const LivelyOrderButton: React.FC<LivelyOrderButtonProps> = ({
   onClick,
-  subtext = "🔥 Special Promo Price: ₦280,000 • Pay on Confirmation / Delivery • Nationwide",
+  subtext = "🔥 Special Promo Price: ₦260,000 • Pay on Confirmation / Delivery • Nationwide",
   className = "",
 }) => {
   return (

@@ -20,9 +20,9 @@ export const SavingsCalculator: React.FC<SavingsCalculatorProps> = ({
       qty: 1,
       label: "1 Unit",
       title: "Single Unit",
-      unitPrice: 280000,
-      total: 280000,
-      normalTotal: 280000,
+      unitPrice: 260000,
+      total: 260000,
+      normalTotal: 260000,
       savings: 0,
       unitSavings: 0,
       badge: "Standard Price",
@@ -32,9 +32,9 @@ export const SavingsCalculator: React.FC<SavingsCalculatorProps> = ({
       qty: 2,
       label: "2 Units",
       title: "Buy 2 Units",
-      unitPrice: 275000,
-      total: 550000,
-      normalTotal: 560000,
+      unitPrice: 255000,
+      total: 510000,
+      normalTotal: 520000,
       savings: 10000,
       unitSavings: 5000,
       badge: "SAVE ₦10,000",
@@ -44,9 +44,9 @@ export const SavingsCalculator: React.FC<SavingsCalculatorProps> = ({
       qty: 3,
       label: "3 Units",
       title: "Buy 3 Units",
-      unitPrice: 270000,
-      total: 810000,
-      normalTotal: 840000,
+      unitPrice: 250000,
+      total: 750000,
+      normalTotal: 780000,
       savings: 30000,
       unitSavings: 10000,
       badge: "SAVE ₦30,000",
@@ -56,8 +56,8 @@ export const SavingsCalculator: React.FC<SavingsCalculatorProps> = ({
       qty: 4,
       label: "4+ Units",
       title: "Buy 4+ Units",
-      unitPrice: 265000,
-      total: 1060000,
+      unitPrice: 245000,
+      total: 980000,
       normalTotal: 1120000,
       savings: 60000,
       unitSavings: 15000,
@@ -103,7 +103,7 @@ export const SavingsCalculator: React.FC<SavingsCalculatorProps> = ({
             HOW MUCH DO YOU SAVE BUYING MULTIPLE UNITS?
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 mt-2 mb-3">
-            See your exact cash discount when purchasing 2, 3, or 4+ units compared to standard single-unit pricing (₦280,000/pc).
+            See your exact cash discount when purchasing 2, 3, or 4+ units compared to standard single-unit pricing (₦260,000/pc).
           </p>
           <StockUrgencyWidget variant="pill" className="shadow-xs" />
         </div>

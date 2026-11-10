@@ -776,10 +776,10 @@ export const CrmPortal: React.FC<CrmPortalProps> = ({ isOpen, onClose }) => {
                       onClick={() => handleSendTestEvent("Purchase")}
                       disabled={isTestingCapi}
                       className="px-3.5 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 shadow-sm"
-                      title="Send test Purchase event (₦280,000) to Meta Events Manager"
+                      title="Send test Purchase event (₦260,000) to Meta Events Manager"
                     >
                       <DollarSign className="w-3.5 h-3.5" />
-                      <span>{isTestingCapi ? "Sending..." : "Test Purchase (₦280k)"}</span>
+                      <span>{isTestingCapi ? "Sending..." : "Test Purchase (₦260k)"}</span>
                     </button>
                     <button
                       type="button"

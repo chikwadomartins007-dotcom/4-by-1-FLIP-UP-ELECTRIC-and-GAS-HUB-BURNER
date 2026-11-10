@@ -18,7 +18,7 @@ export const TopAnnouncementBar: React.FC = () => {
           <Flame className="w-4 h-4 text-yellow-300 fill-yellow-300 shrink-0 animate-pulse" />
           <span>
             LIMITED PROMO:{" "}
-            <strong className="text-yellow-300 font-black">₦280,000</strong>{" "}
+            <strong className="text-yellow-300 font-black">₦260,000</strong>{" "}
             — 5-BURNER GAS + ELECTRIC HYBRID COOKTOP
           </span>
           <span className="hidden md:inline-flex items-center gap-1 bg-neutral-950 text-yellow-300 border-2 border-yellow-400 px-2 py-0.5 rounded text-[11px] font-mono">

@@ -54,7 +54,7 @@ export const App: React.FC = () => {
 
     // 2. Track PageView & ViewContent
     Analytics.trackPageView();
-    Analytics.trackViewContent(280000);
+    Analytics.trackViewContent(260000);
   }, []);
 
   const pricing = calculatePricing(quantity);

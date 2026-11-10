@@ -23,7 +23,7 @@ export const Hero: React.FC<HeroProps> = ({
   onQuickOrderClick,
 }) => {
   const normalPrice = 350000;
-  const promoPrice = 280000;
+  const promoPrice = 260000;
   const savings = normalPrice - promoPrice;
   const discountPercent = Math.round((savings / normalPrice) * 100);
 
@@ -120,14 +120,14 @@ export const Hero: React.FC<HeroProps> = ({
                   </span>
                 </div>
                 <div className="bg-[#E8132E] text-white text-[11px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-xs">
-                  <span>SAVE ₦70,000</span>
+                  <span>SAVE ₦90,000</span>
                   <span>({discountPercent}% OFF)</span>
                 </div>
               </div>
 
               <div className="flex flex-wrap items-baseline gap-3">
                 <span className="text-3xl sm:text-4xl font-black text-neutral-950 tracking-tight font-mono">
-                  ₦280,000
+                  ₦260,000
                 </span>
                 <span className="text-xs text-neutral-950 font-extrabold bg-yellow-300 px-2.5 py-1 rounded border border-yellow-400">
                   FREE NATIONWIDE DELIVERY • PAY ON DELIVERY

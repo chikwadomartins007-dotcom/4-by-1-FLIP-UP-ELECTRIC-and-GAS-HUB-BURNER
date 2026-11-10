@@ -30,7 +30,7 @@ export const FinalSalesSection: React.FC<FinalSalesSectionProps> = ({ onOrderCli
           </p>
           <div className="p-4 rounded-xl bg-emerald-50 border-2 border-emerald-500 max-w-xl mx-auto shadow-xs">
             <p className="font-extrabold text-base sm:text-xl text-emerald-800 uppercase tracking-tight leading-snug">
-              ORDER HERE AND NOW FOR ₦280,000 (PROMO PRICE) INSTEAD OF ₦350,000 (NORMAL PRICE) + FREE DELIVERY &amp; PAY ON DELIVERY
+              ORDER HERE AND NOW FOR ₦260,000 (PROMO PRICE) INSTEAD OF ₦350,000 (NORMAL PRICE) + FREE DELIVERY &amp; PAY ON DELIVERY
             </p>
 
             {/* 3-Day Countdown Badge */}
@@ -66,7 +66,7 @@ export const FinalSalesSection: React.FC<FinalSalesSectionProps> = ({ onOrderCli
           </div>
           <div className="text-center font-bold text-xs sm:text-sm text-slate-900">
             <p className="text-emerald-700 font-extrabold">
-              5-BURNER BUILT-IN COOKTOP WITH TIMER &amp; AUTO-OFF — ₦280,000
+              5-BURNER BUILT-IN COOKTOP WITH TIMER &amp; AUTO-OFF — ₦260,000
             </p>
             <p className="text-slate-500 text-xs font-semibold mt-0.5">
               PREMIUM BLACK TEMPERED GLASS • 4 GAS + 1 CERAMIC ELECTRIC

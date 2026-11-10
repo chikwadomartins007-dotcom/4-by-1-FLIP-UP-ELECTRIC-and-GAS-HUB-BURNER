@@ -1,5 +1,87 @@
 [
   {
+    "id": "log_1794294864554_zwibw",
+    "created_at": "2026-11-10T07:14:24.554Z",
+    "event_name": "Purchase",
+    "event_id": "purchase_MAX-864550",
+    "event_time": 1794294864,
+    "order_reference": "MAX-864550",
+    "order_id": "MAX-864550",
+    "user_match_keys": [
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 260000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1690563088540181",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1794294864552_xyhkt",
+    "created_at": "2026-11-10T07:14:24.552Z",
+    "event_name": "Lead",
+    "event_id": "lead_MAX-864550",
+    "event_time": 1794294864,
+    "order_reference": "MAX-864550",
+    "order_id": "MAX-864550",
+    "user_match_keys": [
+      "ph",
+      "fn",
+      "ln",
+      "ct",
+      "st",
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 260000,
+      "num_items": 1
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1690563088540181",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
+    "id": "log_1794294801906_fw8hn",
+    "created_at": "2026-11-10T07:13:21.906Z",
+    "event_name": "ViewContent",
+    "event_id": "viewcontent_1794294701344_t2sqcxn",
+    "event_time": 1794294701,
+    "user_match_keys": [
+      "country",
+      "client_ip",
+      "client_user_agent"
+    ],
+    "custom_data_summary": {
+      "currency": "NGN",
+      "value": 280000
+    },
+    "status": "logged_offline",
+    "meta_response": {
+      "note": "META_ACCESS_TOKEN not yet added in CRM settings. Event formatted with SHA-256 hashes and ready for dispatch.",
+      "pixelId": "1690563088540181",
+      "testEventCode": "TEST12345"
+    }
+  },
+  {
     "id": "log_1793261582155_3e84t",
     "created_at": "2026-10-29T08:13:02.155Z",
     "event_name": "Purchase",

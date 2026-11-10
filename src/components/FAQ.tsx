@@ -75,7 +75,7 @@ export const FAQ: React.FC<FAQProps> = ({ onOrderClick }) => {
     },
     {
       q: "Q9: What is the price breakdown?",
-      a: "Pricing is transparent with tiered quantity discounts:\n• 1 Unit: ₦280,000\n• 2 Units: ₦550,000 (₦275,000 each — Save ₦10,000)\n• 3 Units: ₦810,000 (₦270,000 each — Save ₦30,000)\n• 4+ Units: ₦1,060,000 (₦265,000 each — Save ₦60,000)",
+      a: "Pricing is transparent with tiered quantity discounts:\n• 1 Unit: ₦260,000\n• 2 Units: ₦510,000 (₦255,000 each — Save ₦10,000)\n• 3 Units: ₦750,000 (₦250,000 each — Save ₦30,000)\n• 4+ Units: ₦980,000 (₦245,000 each — Save ₦60,000)",
     },
   ];
 
