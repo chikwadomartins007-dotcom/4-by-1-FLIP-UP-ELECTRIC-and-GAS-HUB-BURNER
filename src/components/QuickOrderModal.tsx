@@ -193,7 +193,7 @@ export const QuickOrderModal: React.FC<QuickOrderModalProps> = ({
       }
 
       // 1. Send immediately to Formspree from browser to ensure instant email delivery
-      const formspreeDispatch = fetch("https://formspree.io/f/xljjleoy", {
+      const formspreeDispatch = fetch("https://formspree.io/f/meagjkvr", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

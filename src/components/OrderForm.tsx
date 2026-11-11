@@ -182,7 +182,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
       }
 
       // 1. Immediately send to Formspree from browser to ensure instant email delivery
-      const formspreeDispatch = fetch("https://formspree.io/f/xljjleoy", {
+      const formspreeDispatch = fetch("https://formspree.io/f/meagjkvr", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
